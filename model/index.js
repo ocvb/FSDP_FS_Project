@@ -1,48 +1,60 @@
 const { Sequelize, Model, DataTypes } = require("sequelize");
 const process = require("process");
-const sequelize = new Sequelize({
+const db = new Sequelize({
   dialect: "sqlite",
-  storage: process.env.db_file,
+  storage: __dirname + "/" + process.env.db_file,
+  logging: false,
 }); // Example for sqlite
 
-class User extends Model {}
-
-class Post extends Model {}
-
-User.init(
-  {
-    username: DataTypes.STRING,
-    birthday: DataTypes.DATE,
+const Users = db.define("users", {
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
-  { sequelize, modelName: "user" }
-);
-
-Post.init(
-  {
-    title: DataTypes.STRING,
-    body: DataTypes.TEXT,
+  birthday: {
+    type: DataTypes.DATE,
+    allowNull: false,
   },
-  { sequelize, modelName: "post" }
-);
+});
 
-(async function () {
-  try {
-    await sequelize.sync();
+// class User extends Model {}
 
-    const jane = await User.create({
-      username: "janedoe",
-      birthday: new Date(1980, 6, 20),
-    });
-    console.log(jane.toJSON());
+// class Post extends Model {}
 
-    const post = await Post.create({
-      title: "First Post",
-      body: "This is the first post in the blog",
-    });
-    console.log(post.toJSON());
-  } catch (error) {
-    console.error("Error:", error);
-  }
-})();
+// User.init(
+//   {
+//     username: DataTypes.STRING,
+//     birthday: DataTypes.DATE,
+//   },
+//   { sequelize, modelName: "user" }
+// );
 
-module.exports = sql;
+// Post.init(
+//   {
+//     title: DataTypes.STRING,
+//     body: DataTypes.TEXT,
+//   },
+//   { sequelize, modelName: "post" }
+// );
+
+// (async function () {
+//   try {
+//     await sequelize.sync();
+
+//     const jane = await User.create({
+//       username: "janedoe",
+//       birthday: new Date(1980, 6, 20),
+//     });
+//     console.log(jane.toJSON());
+
+//     const post = await Post.create({
+//       title: "First Post",
+//       body: "This is the first post in the blog",
+//     });
+//     console.log(post.toJSON());
+//   } catch (error) {
+//     console.error("Error:", error);
+//   }
+// })();
+
+module.exports = { db, Users };

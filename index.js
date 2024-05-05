@@ -5,7 +5,7 @@ const express = require("express");
 const port = process.env.PORT || 3001;
 const path = require("path");
 const app = express();
-// const sql = require("./model");
+const { db } = require("./model");
 
 app.use(express.json());
 app.use(
@@ -20,7 +20,13 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/build/index.html"));
 });
 
-// sql.sequelize.sync().then(() => {});
+db.sync()
+  .then(() => {
+    console.log("Database is ready");
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
 
 app.listen(port, () => {
   console.log(`Server is running on port http://localhost:${port}`);
