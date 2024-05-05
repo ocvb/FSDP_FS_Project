@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 
+
 # Front-end dependencies
 /front-end/node_modules
 /front-end/.pnp
@@ -16,6 +17,8 @@
 # testing
 /coverage
 
+# Database
+/model/Database.db
 
 # misc
 .DS_Store
