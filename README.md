@@ -1,14 +1,11 @@
-Enter `front-end` directory and install deps then go back to main directory
-
 ### `cd front-end && npm i` then `cd ..`
 
-Installs deps and begin the server.
+Enter `front-end` directory and install deps then go back to main directory
 
 ### `npm i && npm start`
 
-Ignore the rest if you dont all of that.
+Installs deps and begin the server.
 
 ### `npm start`
 
-
-
+Ignore the rest if you dont all of that.
