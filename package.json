@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "BROWSER=none concurrently \"cd front-end && npm start\" \"nodemon index.js\"",
+    "start": "concurrently \"cd front-end && npm start\" \"nodemon index.js\"",
     "prestart": "cd front-end && npm install && npm run build"
   },
   "dependencies": {

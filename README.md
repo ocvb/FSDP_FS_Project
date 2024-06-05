@@ -1,8 +1,7 @@
 ### `npm start`
-
-Ignore the rest if you done all of that.
+run to start app
 
 
 #### `cd front-end && npm i && cd .. && npm i`
-One liner build
+One liner build, first run
 
