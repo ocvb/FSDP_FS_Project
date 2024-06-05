@@ -12,13 +12,22 @@ app.use(
   cors({
     origin: "*",
     methods: "GET, POST, PUT, DELETE",
-  })
+  }),
 );
 app.use(express.static(path.join(__dirname, "/client/build")));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/build/index.html"));
 });
+
+//API endpoint for the front-end to get images
+// app.get("/api/data", (req, res) => {
+//   const data = {
+//     assets: process.env.REACT_APP_ASSET_FOLDER,
+//     components: process.env.PORT,
+//   };
+//   res.json(data);
+// });
 
 db.sync()
   .then(() => {

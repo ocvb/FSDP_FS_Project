@@ -1,0 +1,41 @@
+.container {
+  position: relative;
+  height: 100vh;
+  padding: 1rem 2rem;
+}
+
+.header {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+}
+
+.header .img {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: inherit;
+  object-fit: cover;
+}
+
+.header_details {
+  position: relative;
+  transform: translateY(20%);
+  height: 100%;
+  color: white;
+  text-shadow: -3px 3px 3px rgba(0, 0, 0, 0.21);
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 700;
+
+  text-align: center;
+}
+
+p {
+  font-size: 1.5rem;
+  font-weight: 400;
+  text-align: center;
+}

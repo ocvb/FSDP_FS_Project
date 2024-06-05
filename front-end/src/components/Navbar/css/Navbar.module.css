@@ -1,0 +1,11 @@
+.navbar {
+  position: relative;
+  top: 0;
+  width: auto;
+  max-width: 500px;
+  display: flex;
+  margin: 0 auto;
+  left: 0 !important;
+  border-radius: 13px;
+  transform: translateY(15px);
+}
