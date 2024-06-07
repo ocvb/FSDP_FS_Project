@@ -21,10 +21,10 @@
 
 .header_details {
   position: relative;
-  transform: translateY(20%);
-  height: 100%;
+  top: 50%;
   color: white;
   text-shadow: -3px 3px 3px rgba(0, 0, 0, 0.21);
+  
 }
 
 h1 {
@@ -35,7 +35,9 @@ h1 {
 }
 
 p {
-  font-size: 1.5rem;
+  width: auto;
+  font-size: 2rem;
   font-weight: 400;
   text-align: center;
+  margin-block-end: 0;
 }
