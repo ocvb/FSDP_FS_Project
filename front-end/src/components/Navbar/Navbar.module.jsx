@@ -18,13 +18,15 @@ export default function navbar(props) {
       <AppBar position="fixed" className={styles.navbar} >
         <Toolbar className={styles.toolbar}>
           <div style={{ flexGrow: 1 }}>
-            <img src={props.imgUrl} width={"45px"} />
+            <a href={navigation[0].href}>
+              <img src={props.imgUrl} width={"45px"} />
+            </a>
           </div>
           {/* <Typography style={{ flexGrow: 1}} className={styles.fontLato}>
           </Typography> */}
           {navigation.map((item, index) => (
             <div className={styles.buttonWrapper} key={index}>
-              <Button color="inherit" key={index} href={item.href} className={styles.fontLato} >
+              <Button color="inherit" key={index} href={item.href}>
                 {item.name}
               </Button>
             </div>
