@@ -17,32 +17,6 @@ const Users = db.define("users", {
   },
 });
 
-const Events = db.define("events", {
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  description: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  location: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  date: {
-    type: DataTypes.DATEONLY,
-    allowNull: false,
-  },
-
-  price: {
-    type: DataTypes.DOUBLE,
-    allowNull: false,
-  },
-});
-
-
-
 // class User extends Model {}
 
 // class Post extends Model {}
@@ -83,4 +57,4 @@ const Events = db.define("events", {
 //   }
 // })();
 
-module.exports = { db, Users, Events };
+module.exports = { db, Users };

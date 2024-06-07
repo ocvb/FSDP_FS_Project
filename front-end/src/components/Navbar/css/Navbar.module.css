@@ -1,26 +1,25 @@
+.fontLato {
+  font-family: "Lato" !important;
+}
+
 .navbar {
-  position: relative !important;
+  position: relative;
   top: 0;
   width: auto;
   max-width: 100%;
   display: flex;
   margin: 0 auto;
   background-color: transparent !important;
+  color: white !important;
 }
 
 .navbar a {
-  font-weight: 400;
-  /* text-shadow: 0px 3px 8px rgba(0, 0, 0, 0.50); */
-  /* color: white; */
+  font-weight: bold;
 }
 
-.navbar .buttonWrapper:nth-child(-n+6)::after {
+.navbar .buttonWrapper::after{
   content: "|";
   padding: 0 5px;
-}
-
-.navbar .buttonWrapper:nth-child(7), .navbar .buttonWrapper:nth-child(6)::after {
-  padding: 0 10px;
 }
 
 .hover {

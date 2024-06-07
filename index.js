@@ -5,7 +5,7 @@ const express = require("express");
 const port = process.env.PORT || 3001;
 const path = require("path");
 const app = express();
-const { db, Users, Events } = require("./model");
+const { db } = require("./model");
 
 app.use(express.json());
 app.use(
@@ -16,29 +16,18 @@ app.use(
 );
 app.use(express.static(path.join(__dirname, "/client/build")));
 
-app.get("/api", (req, res) => {
-  res.send("API is running");
-});
-
-app.get("/api/events", async (req, res) => {
-  const events = await Events.findAll({ raw: true });
-  res.json(events);
-});
-
-app.post("/api/events", async (req, res) => {
-  const { title, description, location, date, price } = req.body;
-  const formattedDate = new Date(date);
-  console.log(formattedDate.toLocaleString());
-  const event = await Events.create({
-    title, description, location, date: formattedDate, price
-  });
-  res.json(event);
-});
-
-
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/build/index.html"));
 });
+
+//API endpoint for the front-end to get images
+// app.get("/api/data", (req, res) => {
+//   const data = {
+//     assets: process.env.REACT_APP_ASSET_FOLDER,
+//     components: process.env.PORT,
+//   };
+//   res.json(data);
+// });
 
 db.sync()
   .then(() => {
