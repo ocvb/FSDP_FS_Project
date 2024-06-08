@@ -11,6 +11,7 @@ import "./index.css";
 import NavigationBar from "./components/Navbar/Navbar.module";
 import Home from "./routes/Home/Home";
 import Events from "./routes/Events/Events";
+import Account from "./routes/Account/Account";
 
 // Logo
 import logo from "./assets/Navbar/logo.png";
@@ -23,6 +24,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/account" element={<Account />} />
         {/* Add more routes as needed */}
       </Routes>
     </Router>
