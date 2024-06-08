@@ -2,12 +2,17 @@ import React, { useEffect, useState } from "react";
 // import { Container, Row, Col, Button } from "react-bootstrap";
 import { Container } from "@mui/material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import images from "../../assets/Home/home-bg.webp";
 
 import styles from "./css/Home.module.css";
 
+// component
+import CustomButton from "../../components/Button/CustomButton.module";
+
 export default function Home() {
+  const navigate = useNavigate();
   const [events, setEvents] = useState(0);
 
   useEffect(() => {
@@ -25,6 +30,10 @@ export default function Home() {
 
     fetchData();
   }, [events]);
+
+  const navigateToEvents = () => {
+    navigate("/events");
+  };
 
 
   return (
@@ -46,8 +55,17 @@ export default function Home() {
           </div>
         </div>
 
-        <Container style={{ padding: '2rem' }}>
-          <div className={styles.eventsF}>
+        <Container className={styles.overrideContainer} maxWidth={false} sx={
+          {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '2rem',
+          }
+
+        }>
+          <div className={styles.tile}>
             <h2 className={styles.h2}>Up-Coming Events & Facilities</h2>
             <div className={styles.row}>
               {events && events.slice(0, 3).map((item, index) => (
@@ -64,20 +82,19 @@ export default function Home() {
                 </div>
               ))}
             </div>
+            <CustomButton text="more Events →" onClick={navigateToEvents} />
           </div>
         </Container>
 
-        <div className={styles.container}>
-          <Container>
-            <h2 className={styles.h2}>About Us</h2>
-            <p className={styles.p}>
-              We are a community of people who love to meet new faces and share
-              experiences. Our goal is to bring people together and create
-              memories that will last a lifetime. Join us today and become a
-              part of our community!
-            </p>
-          </Container>
-        </div>
+        <Container>
+          <h2 className={styles.h2}>About Us</h2>
+          <p className={styles.p}>
+            We are a community of people who love to meet new faces and share
+            experiences. Our goal is to bring people together and create
+            memories that will last a lifetime. Join us today and become a
+            part of our community!
+          </p>
+        </Container>
       </div>
     </>
   );

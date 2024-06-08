@@ -1,11 +1,3 @@
-
-
-.container {
-  position: relative;
-  height: 100vh;
-  padding: 1rem 2rem;
-}
-
 .header {
   position: relative;
   top: 0;
@@ -30,11 +22,12 @@
   
 }
 
-.eventsF {
+.tile {
   display: flex !important;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
-
+  width: 100%;
 }
 
 .row {
@@ -43,6 +36,7 @@
   align-items: center;
   gap: 1rem;
   padding: 5px;
+  width: 100%;
 }
 
 .col{
@@ -56,22 +50,27 @@
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   min-height: 350px;
-  min-width: 400px;
-  max-width: 600px;
+  /* width: calc( 1vw + 100% ); */
+  width: 500px;
+  gap: 1rem;
 }
 
 .col > div {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
+  width: 100%;
 }
 
 .col > div p {
   margin: 0;
   text-align: start;
   font-size: 1.2rem;
+  width: 100%;
+  word-wrap: break-word;
 }
 
 .dateText {
@@ -96,5 +95,9 @@ p {
   .row {
     flex-direction: column;
     align-items: center;
+  }
+
+  .col {
+    width: 100%;
   }
 }
