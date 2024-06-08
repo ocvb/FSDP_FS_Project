@@ -15,14 +15,21 @@
 }
 
 .navbar .buttonWrapper:nth-child(-n+6)::after {
-  content: "|";
-  padding: 0 5px;
+  /* content: "|"; */
+  content: "";
+  position: relative;
+  top: 50%;
+  height: 6px;
+  display: inline-block;
+  border: 1px solid black;
+  border-width: 0.5px;
+  margin: auto 3px;
 }
 
 .navbar .buttonWrapper:nth-child(7), .navbar .buttonWrapper:nth-child(6)::after {
-  padding: 0 10px;
+  margin: 0 10px;
 }
-
+ 
 .hover {
   color: #f5f5f5 !important;
 }
