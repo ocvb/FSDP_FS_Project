@@ -10,6 +10,7 @@ import styles from "./css/Home.module.css";
 
 // component
 import CustomButton from "../../components/Button/CustomButton.module";
+import Footer from "../../components/Footer/Footer.module";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -44,9 +45,6 @@ export default function Home() {
           <div className={styles.header_details}>
             {/* <h1 className={styles.h1}>W</h1> */}
             <p className={styles.p}>
-              Hello
-            </p>
-            <p className={styles.p}>
               Welcome to our Community website
             </p>
             <p className={styles.p}>
@@ -55,16 +53,13 @@ export default function Home() {
           </div>
         </div>
 
-        <Container className={styles.overrideContainer} maxWidth={false} sx={
-          {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '2rem',
-          }
-
-        }>
+        <Container maxWidth={false} sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '2rem',
+        }}>
           <div className={styles.tile}>
             <h2 className={styles.h2}>Up-Coming Events & Facilities</h2>
             <div className={styles.row}>
@@ -96,6 +91,8 @@ export default function Home() {
           </p>
         </Container>
       </div>
+
+      {/* <Footer /> */}
     </>
   );
 }
