@@ -20,6 +20,11 @@ app.get("/api", (req, res) => {
   res.send("API is running");
 });
 
+app.get("/api/users", async (req, res) => {
+  const users = await Users.findAll({ raw: true });
+  res.json(users);
+});
+
 app.get("/api/events", async (req, res) => {
   const events = await Events.findAll({ raw: true });
   res.json(events);
@@ -28,7 +33,7 @@ app.get("/api/events", async (req, res) => {
 app.post("/api/events", async (req, res) => {
   const { title, description, location, date, price } = req.body;
   const formattedDate = new Date(date);
-  console.log(formattedDate.toLocaleString());
+  // console.log(formattedDate.toLocaleString());
   const event = await Events.create({
     title, description, location, date: formattedDate, price
   });
