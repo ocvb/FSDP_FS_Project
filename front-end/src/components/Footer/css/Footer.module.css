@@ -1,0 +1,33 @@
+.footer {
+    position: relative;
+    background-color: black;
+    padding: 25px 0;
+    text-align: center;
+    width: 100%;
+    bottom: 0;
+    color: white;
+    margin-top: 20px;
+    gap: 1rem;
+}
+
+.footer p {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.nagivator {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.nagivator ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    gap: 0.2rem;
+}
