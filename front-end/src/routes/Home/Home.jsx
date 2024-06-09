@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import { Container, Row, Col, Button } from "react-bootstrap";
-import { Container } from "@mui/material";
+import { Container, colors } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import axios from "axios";
@@ -50,11 +50,23 @@ export default function Home() {
           <div className={styles.header_details}>
             {/* <h1 className={styles.h1}>W</h1> */}
             <p className={styles.p}>
-              Welcome,<br />to our people's project community!
+              Welcome,<br />We are People's project community!
             </p>
             <p className={styles.p}>
               Where you can join events & meet new faces!
             </p>
+            <CustomButton text="Join Us" onClick={() => navigate("/account")} sx={{
+              display: "inline-flex",
+              borderRadius: "50px",
+              width: "fit-content",
+              boxShadow: "0px 2px 6px 0px rgba(0, 0, 0, 0.15)",
+              padding: "0.4rem 2rem",
+              color: "black",
+              backgroundColor: "white",
+              '&:hover': {
+                backgroundColor: colors.grey[300]
+              }
+            }} />
           </div>
         </div>
 
@@ -88,6 +100,7 @@ export default function Home() {
               width: "fit-content",
               boxShadow: "0px 2px 6px 0px rgba(0, 0, 0, 0.15)",
               padding: "0.5rem 2rem",
+              color: "black",
             }} />
           </div>
         </Container>
