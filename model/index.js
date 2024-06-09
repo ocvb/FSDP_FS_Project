@@ -11,8 +11,8 @@ const Users = db.define("users", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  birthday: {
-    type: DataTypes.DATE,
+  password: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
 });
