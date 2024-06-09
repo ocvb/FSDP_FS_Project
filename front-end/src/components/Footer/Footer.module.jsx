@@ -29,11 +29,11 @@ export default function Footer() {
                 <div style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    gap: '1rem',
+                    gap: '0.5rem',
                 }}>
                     <img src={logo} className={styles.logo} style={{
-                        width: "100px",
-                        height: "100px",
+                        width: "70px",
+                        height: "70px",
                         margin: "auto",
                         display: "block",
                     }} />
@@ -83,8 +83,17 @@ export default function Footer() {
                 </div>
 
             </Container>
-            <p className={styles.footer_text}>
-                © 2021 People's Project. All rights reserved.
+            <p className={styles.footer_text} style={{
+                fontSize: '0.8rem',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+            }}>
+                © 2024 People's Project. All rights reserved.
+                {/* // heartshape logo */}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" style={{ fill: 'white' }}>
+                    <path d="M12 21.35l-1.45-1.32C5.4 16.16 2 13.27 2 9.5 2 7.5 3.5 6 5.5 6c1.34 0 2.61.99 3 2.36C8.89 6.99 10.16 6 11.5 6 13.5 6 15 7.5 15 9.5c0 3.77-3.4 6.66-8.55 10.54L12 21.35z" />
+                </svg>
             </p>
         </Container >
     );

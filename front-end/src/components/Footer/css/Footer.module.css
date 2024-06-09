@@ -15,6 +15,10 @@
     margin: 0;
 }
 
+.footer_text {
+    margin: 0;
+}
+
 .nagivator {
     position: relative;
     display: flex;
