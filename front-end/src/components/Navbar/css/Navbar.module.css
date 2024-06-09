@@ -14,7 +14,7 @@
   /* color: white; */
 }
 
-.navbar .buttonWrapper:nth-child(-n+6)::after {
+.navbar .buttonWrapper:nth-child(-n+7)::after {
   /* content: "|"; */
   content: "";
   position: relative;
@@ -26,7 +26,7 @@
   margin: auto 3px;
 }
 
-.navbar .buttonWrapper:nth-child(7), .navbar .buttonWrapper:nth-child(6)::after {
+.navbar .buttonWrapper:nth-child(8), .navbar .buttonWrapper:nth-child(7)::after {
   margin: 0 10px;
 }
  
