@@ -15,6 +15,12 @@ const Users = db.define("users", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  uuid: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    allowNull: false,
+  },
+
 });
 
 const Events = db.define("events", {
