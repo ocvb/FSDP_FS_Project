@@ -9,9 +9,15 @@ import "./index.css";
 
 // Components
 import NavigationBar from "./components/Navbar/Navbar.module";
+
+// Routes
 import Home from "./routes/Home/Home";
 import Events from "./routes/Events/Events";
 import Account from "./routes/Account/Account";
+
+import Profile from './routes/Account/Profile/Profile';
+import ProfileNotifications from './routes/Account/Profile/Notifications';
+// import { ProfileEvents } from './routes/Account/Profile/Events';
 
 // Logo
 import logo from "./assets/Navbar/logo.png";
@@ -25,7 +31,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
         <Route path="/account" element={<Account />} />
-        {/* Add more routes as needed */}
+        <Route path="/account/profile/" element={<Profile />}>
+          <Route path="notifications" element={<ProfileNotifications />} />
+          {/* Uncomment the line below once you have the ProfileEvents component */}
+          {/* <Route path="events" element={<ProfileEvents />} /> */}
+        </Route>
       </Routes>
     </Router>
   </React.StrictMode>
