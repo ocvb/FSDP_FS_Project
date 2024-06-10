@@ -1,36 +1,44 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
+// Components
 import { Container, Input, colors, styled } from "@mui/material";
-
 import styles from "./css/Account.module.css";
-
 import CustomButton from "../../components/Button/CustomButton.module";
-
 import bgImage from "../../assets/Account/login-bg.jpg";
 
+
 export default function Account() {
-    const [User, setUser] = useState(0);
+    const [cookies, setCookie, removeCookie] = useCookies([]);
+
+    const [User, setUser] = useState(null);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
 
-    const postData = async () => {
+    const navigate = useNavigate();
+
+    const checkLogin = async () => {
         try {
             if (!User) {
                 const response = await axios.post("http://localhost:3001/api/login", {
                     username: username,
                     password: password
                 });
-
-                console.log("Login data sent");
                 console.log(response.data); // Debugging
 
                 if (response.data['status'] === 'success') {
-                    console.log("Login successful");
+                    setMessage("Logging in...");
                     setUser(response.data['data']);
+                    // setCookie("user", response.data['uuid'], { path: '/' });
                 } else {
-                    console.log("Login failed");
+                    setUser(null); // Reset user state (if login fails
+                    setMessage("Invalid username or password");
+                    setUsername('');
+                    setPassword('');
                 }
             }
         } catch (error) {
@@ -38,12 +46,27 @@ export default function Account() {
         }
     };
 
+    useEffect(() => {
+        setTimeout(() => {
+            if (User) {
+                // Redirect to profile page
+                navigate("/account/profile", { state: { user: User } });
+            }
+        }, 1000);
+    }, [User]);
 
-    const onLogin = () => {
-        setUsername('');
-        setPassword('');
-        postData();
-    };
+    const onSubmit = (event) => {
+        event.preventDefault();
+
+        // Logic to check if username and password are empty
+        if (username == "" || password == "") {
+            setMessage("Please fill in all fields");
+            return;
+        }
+
+        checkLogin();
+
+    }
 
     const InputStyle = {
         width: "90%",
@@ -79,19 +102,22 @@ export default function Account() {
                     <div className={styles.login}>
                         <div className={styles.loginContainer}>
                             <p>Login</p>
-                            <Input sx={InputStyle} type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)}></Input>
-                            <Input sx={InputStyle} type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}></Input>
-                            <CustomButton text="Login" onClick={onLogin} sx={{
-                                display: "inline-flex",
-                                borderRadius: "10px",
-                                width: "90%",
-                                backgroundColor: "black",
-                                padding: "0.5rem 2rem",
-                                color: "white",
-                                '&:hover': {
-                                    backgroundColor: colors.grey[900],
-                                },
-                            }} />
+                            <form onSubmit={onSubmit}>
+                                <Input sx={InputStyle} type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)}></Input>
+                                <Input sx={InputStyle} type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}></Input>
+                                <CustomButton text={User != null ? message : "login"} type='submit' sx={{
+                                    display: "inline-flex",
+                                    borderRadius: "10px",
+                                    width: "90%",
+                                    backgroundColor: "black",
+                                    padding: "0.5rem 2rem",
+                                    color: "white",
+                                    '&:hover': {
+                                        backgroundColor: colors.grey[900],
+                                    },
+                                }} />
+                                <p style={{ color: "red", fontSize: "1rem" }}>{User == null ? message : ''}</p>
+                            </form>
                         </div>
                     </div>
                 </div>
