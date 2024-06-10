@@ -9,5 +9,6 @@ run to start app
 
 cd into fsdp & run each folder seperately
 
-Server `cd Server && npm start` 
+Server `cd Server && npm start`
+
 Client `cd Client && npm start`
