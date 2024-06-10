@@ -1,0 +1,7 @@
+.header p {
+    margin: 0;
+    text-align: start;
+    font-size: 1.2rem;
+    width: 100%;
+    word-wrap: break-word;
+}
