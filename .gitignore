@@ -51,4 +51,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-Server/model/database.db
