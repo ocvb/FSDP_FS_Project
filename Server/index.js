@@ -113,8 +113,8 @@ app.post("/api/events", async (req, res) => {
 });
 
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/client/build/index.html"));
+app.get("/", (req, res) => {
+  res.send("You have reached the server. Please use the client to view the website.");
 });
 
 db.sync()
