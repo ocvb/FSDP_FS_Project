@@ -103,7 +103,7 @@ export default function Account() {
                         <div className={styles.loginContainer}>
                             <p>Login</p>
                             <form onSubmit={onSubmit}>
-                                <Input sx={InputStyle} type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)}></Input>
+                                <Input sx={InputStyle} type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} autoFocus></Input>
                                 <Input sx={InputStyle} type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}></Input>
                                 <CustomButton text={User != null ? message : "login"} type='submit' sx={{
                                     display: "inline-flex",
