@@ -30,12 +30,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/account/profile/" element={<Profile />}>
-          <Route path="notifications" element={<ProfileNotifications />} />
-          {/* Uncomment the line below once you have the ProfileEvents component */}
-          {/* <Route path="events" element={<ProfileEvents />} /> */}
-        </Route>
+        <Route path="/account/" element={<Account />} />
+        <Route path="/account/profile/" element={<Profile />} />
       </Routes>
     </Router>
   </React.StrictMode>
