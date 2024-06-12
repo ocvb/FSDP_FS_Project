@@ -14,7 +14,7 @@ app.use(
     methods: "GET, POST, PUT, DELETE",
   }),
 );
-app.use(express.static(path.join(__dirname, "/client/build")));
+// app.use(express.static(path.join(__dirname, "/client/build")));
 
 app.get("/api", async (req, res) => {
   const presetUsers = await Users.bulkCreate([
@@ -54,35 +54,46 @@ app.get("/api", async (req, res) => {
   presetUsers;
   presetEvents;
 
-  res.send("API is running");
+  res.send("API is running, preset data have been loaded.");
 });
 
+// Account APIs
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
   const user = await Users.findOne({ where: { username, password } });
   if (user) {
     res.json({ status: "success", data: user });
   } else {
-    res.json({ status: "failed" });
+    res.sendStatus(401);
   }
 });
 
+app.post("/api/register", async (req, res) => {
+  const { username, password } = req.body;
+  const findSameUsername = await Users.findOne({ where: { username } });
+  if (findSameUsername) {
+    res.json({ status: "failed", message: "Username already exists" });
+    return;
+  }
+
+  const user = await Users.create({ username, password });
+  if (user) {
+    res.json({ status: "success", data: user });
+  } else {
+    res.sendStatus(500);
+  }
+});
+
+
+
 app.get("/api/events", async (req, res) => {
   const events = await Events.findAll({ raw: true });
-  //Load preset data
-  // if (events[0] === undefined) {
-  //   // call api
-  //   presetEvents;
-  // }
-
   res.json(events);
-
 });
 
 app.post("/api/events", async (req, res) => {
   const { title, description, location, date, price } = req.body;
-  const formattedDate = new Date(date);
-  // console.log(formattedDate.toLocaleString());
+  const formattedDate = new Date(date); // console.log(formattedDate.toLocaleString());
   const event = await Events.create({
     title, description, location, date: formattedDate, price
   });
