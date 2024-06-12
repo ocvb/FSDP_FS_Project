@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, lazy, Suspense } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import { json, useLocation, useNavigate } from "react-router-dom";
 
 // Components
 import { Container, TextField, Box, Skeleton } from "@mui/material";
@@ -14,25 +13,40 @@ import styles from "./css/Profile.module.css";
 
 
 export default function Profile() {
-    const location = useLocation();
-    const user = location.state?.user;
+    const [tab, setTab] = useState(0);
+    const [notLoading, setNotloading] = useState(false);
+
+    const [user, setUser] = useState(localStorage.getItem("user"));
+
     const navigate = useNavigate();
 
-    const [tab, setTab] = useState(0);
+    useEffect(() => {
+        // Check if user has uuid
+        if (!user) {
+            navigate("/account");
+        }
+    }, [user]);
 
-    if (!user) {
-        useEffect(() => {
-            setTimeout(() => {
-                navigate("/account")
-            }, 1000)
-        }, [])
-        return (
-            <Container>
-                <p className={styles.error}>403 Not permitted, <br /> redirecting...</p>
-            </Container>
-        );
-    }
+    const handleTabChange = async (event, index) => {
+        if (event.target.textContent === tabs[index].name) {
+            setNotloading(false); // Set loading to true when a tab is clicked
+            setTab(index);
 
+            // Simulate a network request or some operation
+            // After the operation is complete, set loading to false
+            await new Promise(resolve => setTimeout(resolve, 500));
+            setNotloading(true);
+        }
+    };
+
+    useEffect(() => {
+        const loadingTimeout = setTimeout(() => {
+            setNotloading(true);
+        }, 1000);
+
+        // Clear the timeout when the component is unmounted or when stillLoading changes
+        return () => clearTimeout(loadingTimeout);
+    }, []);
 
     const buttonStyle = {
         justifyContent: "start",
@@ -51,29 +65,6 @@ export default function Profile() {
         { name: "Bookings", link: "/account/profile/bookings" },
         { name: "Rewards", link: "/account/profile/rewards" },
     ];
-
-
-    const [notLoading, setNotloading] = useState(false);
-    const handleTabChange = async (event, index) => {
-        if (event.target.textContent === tabs[index].name) {
-            setNotloading(false); // Set loading to true when a tab is clicked
-            setTab(index);
-            // navigate(tabs[index].link, { state: { user: user } });
-            // Simulate a network request or some operation
-            // After the operation is complete, set loading to false
-            await new Promise(resolve => setTimeout(resolve, 500));
-            setNotloading(true);
-        }
-    };
-
-    useEffect(() => {
-        const loadingTimeout = setTimeout(() => {
-            setNotloading(true);
-        }, 1000);
-
-        // Clear the timeout when the component is unmounted or when stillLoading changes
-        return () => clearTimeout(loadingTimeout);
-    }, []);
 
     return (
         <Box className={styles.profile} sx={{
@@ -119,8 +110,6 @@ export default function Profile() {
                     tab == 1 && notLoading ? <Notifications /> : tab == 2 && notLoading ? <Events /> :
                         <Skeleton variant="rectangular" width="100%" height="300px" />}
             </div>
-
-            {/* <Outlet /> */}
         </Box>
     );
 };
