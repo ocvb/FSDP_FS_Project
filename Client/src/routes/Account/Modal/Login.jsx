@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import CustomButton from "@/components/Button/CustomButton.module";
-import { Input, colors } from "@mui/material";
+import Button from "@/components/Button/CustomButton.module";
+import PasswordVisibility from "@/components/PasswordVIsibility/PasswordVisibility.module";
+import { TextField, colors } from "@mui/material";
 
 import styles from "./css/Modals.module.css";
 
@@ -35,7 +36,7 @@ export default function Login({ passToChangeModal }) {
         setTimeout(() => {
             if (User) {
                 // Redirect to profile page
-                navigate("/account/profile", { state: { user: User } });
+                navigate('/account/profile', { state: { user: User } });
             }
         }, 1000);
     }, [User]);
@@ -43,7 +44,7 @@ export default function Login({ passToChangeModal }) {
     const checkLogin = async () => {
         try {
             if (!User) {
-                const response = await axios.post("http://localhost:3001/api/login", {
+                const response = await axios.post("http://localhost:3001/api/user", {
                     username: username,
                     password: password
                 });
@@ -52,6 +53,7 @@ export default function Login({ passToChangeModal }) {
                 if (response.data['status'] === 'success') {
                     setMessage("Logging in...");
                     setUser(response.data['data']);
+                    localStorage.setItem("user", response.data['data']['uuid']);
                     // setCookie("user", response.data['uuid'], { path: '/' });
                 } else {
                     setUser(null);
@@ -77,13 +79,20 @@ export default function Login({ passToChangeModal }) {
         checkLogin();
     }
 
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value);
+    }
+
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    };
+
     const InputStyle = {
         width: "100%",
         margin: "0.5rem 0",
         color: "black",
         backgroundColor: "white",
-        fontSize: "1.2rem",
-        fontFamily: "Lato",
+        fontSize: "1.6rem",
         '&::after': {
             borderColor: colors.grey[700],
         },
@@ -97,8 +106,9 @@ export default function Login({ passToChangeModal }) {
 
     return (
         <form onSubmit={onSubmit} className={styles.modal}>
-            <Input sx={InputStyle} type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} autoFocus></Input>
-            <Input sx={InputStyle} type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}></Input>
+            <TextField sx={InputStyle} type="text" label="Username" variant="standard" value={username} onChange={handleUsernameChange} autoFocus={true} />
+            {/* <InputModel2 sx={InputStyle} type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}></InputModel2> */}
+            <PasswordVisibility sx={InputStyle} label="Password" password={password} handlePassword={handlePasswordChange} />
 
             <div className={styles.buttonsContainer} style={{
                 display: "flex",
@@ -106,7 +116,7 @@ export default function Login({ passToChangeModal }) {
                 gap: "0.5rem",
                 width: "100%",
             }}>
-                <CustomButton text={User != null ? message : "login"} type='submit' sx={{
+                <Button text={User != null ? message : "login"} type='submit' sx={{
                     borderRadius: "10px",
                     backgroundColor: "black",
                     padding: "0.5rem 2rem",

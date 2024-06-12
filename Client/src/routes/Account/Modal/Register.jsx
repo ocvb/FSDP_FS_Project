@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { Input, colors } from "@mui/material";
-import CustomButton from "@/components/Button/CustomButton.module";
+import { Input, TextField, colors } from "@mui/material";
+import Button from "@/components/Button/CustomButton.module";
+import PasswordVisibility from "@/components/PasswordVIsibility/PasswordVisibility.module";
 
 import styles from "./css/Modals.module.css";
 
 export default function Register({ passToChangeModal }) {
     const pressedLogin = () => {
-        
+
         // reset before changing
         setUsername('');
         setPassword('');
@@ -33,7 +34,7 @@ export default function Register({ passToChangeModal }) {
 
     const registerUser = async () => {
         try {
-            const response = await axios.post("http://localhost:3001/api/register", {
+            const response = await axios.post("http://localhost:3001/api/user/register", {
                 username: Username,
                 password: Password
             });
@@ -67,7 +68,7 @@ export default function Register({ passToChangeModal }) {
         }
 
         if (Password !== ConfirmPassword) {
-            setMessage("Please check your password is matching");
+            setMessage("Your password does not match");
             return false;
         }
 
@@ -81,6 +82,18 @@ export default function Register({ passToChangeModal }) {
         // Logic to check if username and password are empty
         checkValidationAndProceed();
     }
+
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value);
+    }
+
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    };
+
+    const handleConfirmPasswordChange = (event) => {
+        setConfirmPassword(event.target.value);
+    };
 
     const InputStyle = {
         width: "100%",
@@ -101,14 +114,14 @@ export default function Register({ passToChangeModal }) {
     };
     return (
         <form onSubmit={onSubmit} className={styles.modal}>
-            <Input sx={InputStyle} type="text" placeholder="Username" value={Username} onChange={(e) => setUsername(e.target.value)} autoFocus></Input>
+            <TextField sx={InputStyle} type="text" variant="standard" label="Username" value={Username} onChange={handleUsernameChange} autoFocus />
             <div style={{
                 display: "flex",
                 flexDirection: "row",
                 gap: "1rem",
             }}>
-                <Input sx={InputStyle} type="password" placeholder="Password" value={Password} onChange={(e) => setPassword(e.target.value)}></Input>
-                <Input sx={InputStyle} type="password" placeholder="Confirm Password" value={ConfirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}></Input>
+                <PasswordVisibility sx={InputStyle} type="password" label="Password" password={Password} handlePassword={handlePasswordChange} />
+                <PasswordVisibility sx={InputStyle} type="password" label="Confirm Password" password={ConfirmPassword} handlePassword={handleConfirmPasswordChange} />
             </div>
             <div className={styles.buttonsContainer} style={{
                 display: "flex",
@@ -116,7 +129,7 @@ export default function Register({ passToChangeModal }) {
                 gap: "0.5rem",
                 width: "100%",
             }}>
-                <CustomButton text="Register" type='submit' onClick={checkValidationAndProceed} sx={{
+                <Button text="Register" type='submit' onClick={checkValidationAndProceed} sx={{
                     display: "inline-flex",
                     borderRadius: "10px",
                     backgroundColor: "black",
