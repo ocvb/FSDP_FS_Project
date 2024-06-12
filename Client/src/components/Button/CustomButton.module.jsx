@@ -5,7 +5,6 @@ import { Button } from "@mui/material";
 const CustomButton = forwardRef(({ className, onClick, type, sx, text, onMouseDown }, ref) => {
     return (
         <Button ref={ref} sx={{
-            ...sx,
             // "&:hover": {
             //     backgroundColor: "black",
             //     color: "white",
@@ -13,6 +12,10 @@ const CustomButton = forwardRef(({ className, onClick, type, sx, text, onMouseDo
             '&:focus': {
                 outline: 'none',
             },
+            '&:hover': {
+                outline: 'none',
+            },
+            ...sx,
         }} className={className} onClick={onClick} type={type} onMouseDown={onMouseDown}>
             {text}
         </Button>
