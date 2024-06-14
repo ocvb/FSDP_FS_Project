@@ -15,6 +15,15 @@ export default function AuthProvider({ children }) {
         }
     }, []);
 
+    const fetchAuth = () => {
+        const data = {
+            User: user,
+            isAuthenticated: isAuthenticated,
+            userRole: userRole
+        }
+        return data;
+    }
+
     const checkTokenIsValid = async (token) => {
         try {
             const response = await axios.get("http://localhost:3001/api/user/auth", {
@@ -65,7 +74,7 @@ export default function AuthProvider({ children }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, checkTokenIsValid, login, logout, userRole }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, checkTokenIsValid, login, logout, userRole, fetchAuth }}>
             {children}
         </AuthContext.Provider>
     );
