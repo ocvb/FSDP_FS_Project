@@ -7,7 +7,7 @@ import styles from "./css/Navbar.module.css";
 import Dropdown from "../Dropdown/Dropdown.module";
 
 
-const navigation = [
+export const navigation = [
   { name: "Home", href: "/" },
   { name: "Events", href: "/events" },
   {
