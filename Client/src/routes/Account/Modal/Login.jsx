@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
+
+// TODO: AuthProvider and useAuth is not defined
+import { UseAuth } from "@/components/Auth/Auth";
 import Button from "@/components/Button/CustomButton.module";
 import PasswordVisibility from "@/components/PasswordVIsibility/PasswordVisibility.module";
 import { TextField, colors } from "@mui/material";
@@ -14,7 +17,6 @@ export default function Login({ passToChangeModal }) {
         setUsername('');
         setPassword('');
         setMessage('');
-        setUser(null);
 
         // Change to register modal
         passToChangeModal({
@@ -22,59 +24,42 @@ export default function Login({ passToChangeModal }) {
         });
     }
 
-    const [User, setUser] = useState(null);
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+    const [loginStatus, setloginStatus] = useState(false);
 
     const navigate = useNavigate();
+    const { state } = useLocation();
 
+    const { login, user } = UseAuth();
 
-
-    useEffect(() => {
-        setTimeout(() => {
-            if (User) {
-                // Redirect to profile page
-                navigate('/account/profile', { state: { user: User } });
-            }
-        }, 1000);
-    }, [User]);
-
-    const checkLogin = async () => {
-        try {
-            if (!User) {
-                const response = await axios.post("http://localhost:3001/api/user", {
-                    username: username,
-                    password: password
-                });
-                // console.log(response.data); // Debugging
-
-                if (response.data['status'] === 'success') {
-                    setMessage("Logging in...");
-                    setUser(response.data['data']);
-                    localStorage.setItem("user", response.data['data']['uuid']);
-                    // setCookie("user", response.data['uuid'], { path: '/' });
-                } else {
-                    setUser(null);
-                    setMessage("Invalid username or password");
-                    setUsername('');
-                    setPassword('');
-                }
-            }
-        } catch (error) {
-            console.error(error);
+    const checkLogin = () => {
+        // Logic to check if username and password are empty
+        if (username == "" || password == "") {
+            setMessage("Please fill in all fields");
+            setloginStatus(false);
+            return;
         }
+
+        login({ username, password }).then((value) => {
+            if (value) {
+                setMessage("Logging in...");
+                setloginStatus(true);
+                setTimeout(() => {
+                    navigate(state?.path ? state.path : "/account/profile");
+                }, 1000);
+            }
+            return;
+        }).catch((error) => {
+            setloginStatus(false);
+            setMessage("Invalid username or password");
+        });
+
     };
 
     const onSubmit = (event) => {
         event.preventDefault();
-
-        // Logic to check if username and password are empty
-        if (username == "" || password == "") {
-            setMessage("Please fill in all fields");
-            return;
-        }
 
         checkLogin();
     }
@@ -116,7 +101,7 @@ export default function Login({ passToChangeModal }) {
                 gap: "0.5rem",
                 width: "100%",
             }}>
-                <Button text={User != null ? message : "login"} type='submit' sx={{
+                <Button text={loginStatus ? message : "login"} type='submit' sx={{
                     borderRadius: "10px",
                     backgroundColor: "black",
                     padding: "0.5rem 2rem",
@@ -135,7 +120,7 @@ export default function Login({ passToChangeModal }) {
                 </p>
 
             </div>
-            <p style={{ color: "red", fontSize: "1rem" }}>{User == null ? message : ''}</p>
+            <p style={{ color: "red", fontSize: "1rem" }}>{!loginStatus ? message : ''}</p>
         </form>
     );
 }
