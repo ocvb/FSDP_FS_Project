@@ -1,8 +1,8 @@
 import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
 // Components
-// import { UseAuth } from "@/components/Auth/Auth";
+import { UseAuth } from "@/components/Auth/Auth";
 import { Container } from "@mui/material";
 import styles from "./css/Account.module.css";
 import bgImage from "@/assets/Account/login-bg.jpg";
@@ -20,27 +20,15 @@ export default function Account() {
         setModalChanged(data);
     }
 
-    // const navigate = useNavigate();
-
-    // const { checkTokenIsValid, user, userRole } = UseAuth();
-    // // const check = async () => {
-    // //     if (localStorage.getItem('token')) {
-    // //         const result = await checkTokenIsValid(localStorage.getItem('token'));
-    // //         return result;
-    // //     }
-    // // }
-
-    // // useEffect(() => {
-    // //     if (check()) {
-    // //         console.log(userRole);
-    // //         if (userRole === "admin") {
-    // //             navigate("/account/admin");
-    // //             return
-    // //         }
-    // //         navigate("/account/profile");
-
-    // //     }
-    // // }, []);
+    const navigate = useNavigate();
+    const { fetchAuth } = UseAuth();
+    if (fetchAuth().isAuthenticated) {
+        if (fetchAuth().userRole === "admin") {
+            return <Navigate to={"/account/admin"} />;
+        } else {
+            return <Navigate to={"/account/profile"} />;
+        }
+    }
 
     return (
         <div style={{ position: 'relative' }}>
