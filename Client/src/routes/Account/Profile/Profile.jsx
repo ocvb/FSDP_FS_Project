@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef, lazy, Suspense } from "react";
-import { json, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Components
-import { Container, TextField, Box, Skeleton } from "@mui/material";
+import { Box, Skeleton } from "@mui/material";
 import Button from "../../../components/Button/CustomButton.module";
 import UserProfile from "./UserProfile";
 import Notifications from "./Notifications";
@@ -10,22 +10,20 @@ import Events from "./Events";
 
 
 import styles from "./css/Profile.module.css";
+import { UseAuth } from "@/components/Auth/Auth";
+import Admin from "../Admin/Admin";
 
 
 export default function Profile() {
     const [tab, setTab] = useState(0);
     const [notLoading, setNotloading] = useState(false);
 
-    const [user, setUser] = useState(localStorage.getItem("user"));
 
-    const navigate = useNavigate();
+    const { userRole } = UseAuth();
 
-    useEffect(() => {
-        // Check if user has uuid
-        if (!user) {
-            navigate("/account");
-        }
-    }, [user]);
+    const [userrole, setUserRole] = useState(userRole);
+
+    const [getToken, setToken] = useState(localStorage.getItem("token"));
 
     const handleTabChange = async (event, index) => {
         if (event.target.textContent === tabs[index].name) {
@@ -66,50 +64,56 @@ export default function Profile() {
         { name: "Rewards", link: "/account/profile/rewards" },
     ];
 
-    return (
-        <Box className={styles.profile} sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "start",
-            gap: "1rem",
-            fontSize: "1rem",
-        }}>
-            <div style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-around",
-                alignItems: "start",
-                margin: "1rem 0",
-                padding: "1rem",
-                borderRadius: "10px",
-                backgroundColor: "white",
-                width: "fit-content",
-                boxShadow: "0px 2px 8px 0px rgba(0, 0, 0, 0.25)",
-            }}>
-                {tabs && tabs.map((tab, index) => (
-                    <Button key={index} text={tab.name} sx={buttonStyle} onMouseDown={(event) => handleTabChange(event, index)} />
-                ))}
-            </div>
+    console.log(userrole)
 
-            <div className={styles.profileContainer} style={{
+    return (
+        userrole != 'admin' ? (
+            <Box className={styles.profile} sx={{
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: "row",
                 justifyContent: "center",
                 alignItems: "start",
-                margin: "1rem 0",
-                backgroundColor: "white",
-                boxShadow: "0px 2px 8px 0px rgba(0, 0, 0, 0.25)",
+                gap: "1rem",
                 fontSize: "1rem",
-                width: "100%",
-                maxWidth: "460px",
-                borderRadius: "10px",
             }}>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                    alignItems: "start",
+                    margin: "1rem 0",
+                    padding: "1rem",
+                    borderRadius: "10px",
+                    backgroundColor: "white",
+                    width: "fit-content",
+                    boxShadow: "0px 2px 8px 0px rgba(0, 0, 0, 0.25)",
+                }}>
+                    {tabs && tabs.map((tab, index) => (
+                        <Button key={index} text={tab.name} sx={buttonStyle} onMouseDown={(event) => handleTabChange(event, index)} />
+                    ))}
+                </div>
 
-                {tab == 0 && notLoading ? <UserProfile user={user} /> :
-                    tab == 1 && notLoading ? <Notifications /> : tab == 2 && notLoading ? <Events /> :
-                        <Skeleton variant="rectangular" width="100%" height="300px" />}
-            </div>
-        </Box>
+                <div className={styles.profileContainer} style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "start",
+                    margin: "1rem 0",
+                    backgroundColor: "white",
+                    boxShadow: "0px 2px 8px 0px rgba(0, 0, 0, 0.25)",
+                    fontSize: "1rem",
+                    width: "100%",
+                    maxWidth: "460px",
+                    borderRadius: "10px",
+                }}>
+
+                    {tab == 0 && notLoading ? <UserProfile geToken={getToken} /> :
+                        tab == 1 && notLoading ? <Notifications /> : tab == 2 && notLoading ? <Events /> :
+                            <Skeleton variant="rectangular" width="100%" height="300px" />}
+                </div>
+            </Box>
+        ) : (
+            <Admin />
+        )
     );
 };

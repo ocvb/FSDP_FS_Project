@@ -1,46 +1,30 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
+import { UseAuth } from "@/components/Auth/Auth";
 import { TextField } from "@mui/material";
 import PasswordVisibility from "@/components/PasswordVIsibility/PasswordVisibility.module";
 import Button from "@/components/Button/CustomButton.module";
 
-import mainStyles from "./css/Profile.module.css";
-import styles from "./css/UserProfile.module.css";
-import { useNavigate } from "react-router-dom";
 
-export default function UserProfile({ user }) {
-    const [retrieveUser, setRetrieveUser] = useState({});
+import mainStyles from "./css/Profile.module.css";
+import "./css/UserProfile.module.css";
+
+export default function UserProfile({ geToken }) {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [uuid, setUuid] = useState('');
 
     const [Message, setMessage] = useState('');
 
-    const navigate = useNavigate();
-
-    const checkUser = async (user) => {
-        await axios.post(`http://localhost:3001/api/user`, {
-            uuid: user,
-        }).then((response) => {
-            if (response.status != 200) {
-                console.error("User not found");
-                navigate("/account");
-                return;
-            }
-
-            setRetrieveUser(response.data['data']);
-        });
-    };
-
+    const { login, user } = UseAuth();
     useEffect(() => {
-        checkUser(user);
-    }, [user]);
+        setUsername(user.username);
+        setPassword(user.password);
+        setUuid(user.uuid);
+    }, []);
 
-    useEffect(() => {
-        setUsername(retrieveUser.username || '');
-        setPassword(retrieveUser.password || '');
-    }, [retrieveUser]);
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);
@@ -52,24 +36,22 @@ export default function UserProfile({ user }) {
 
     const updateUser = async () => {
         let timeoutId = null;
-
         // Update user information
-        await axios.put(`http://localhost:3001/api/user/update/${retrieveUser.uuid}`, {
+        await axios.put(`http://localhost:3001/api/user/update/${uuid}`, {
             username: username,
             password: password,
+            uuid: uuid,
         }).then((response) => {
-            console.log(response.data)
 
             if (response.status === 200) {
-                setRetrieveUser(response.data['data']);
+                console.log("Updated", response.data)
                 setMessage("Updated");
+                login({ username, password });
             }
         }).catch((error) => {
             console.error(error);
         });
 
-
-        checkUser(user);
 
         // Visual feedback
         timeoutId = setTimeout(() => {
@@ -119,11 +101,11 @@ export default function UserProfile({ user }) {
                                     outline: "none",
                                 },
                             },
-                        }}></TextField>
+                        }} />
                     </div>
                     <div>
                         <p>Password</p>
-                        <PasswordVisibility password={password} handlePassword={handlePasswordChange} sx={{
+                        <PasswordVisibility variant={"outlined"} password={password} handlePassword={handlePasswordChange} sx={{
                             width: "100%",
                         }} />
                     </div>
