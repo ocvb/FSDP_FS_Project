@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+
 import { InputAdornment, TextField, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
@@ -37,7 +38,7 @@ export default function PasswordVisibility({ password, handlePassword, sx, varia
             }} sx={{
                 ...sx,
                 'input': {
-                    padding: "0.5rem",
+                    padding: variant === "outlined" ? "0.5rem" : "4px 0 5px",
                     "&:focus": {
                         outline: "none",
                     },

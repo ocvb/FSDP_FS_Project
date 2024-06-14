@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AppBar, Toolbar, Button } from "@mui/material";
 
 
@@ -52,7 +52,6 @@ export default function navbar(props) {
   const onMouseLeave = () => {
     setDropdown(null);
   }
-
 
   return (
     <>
