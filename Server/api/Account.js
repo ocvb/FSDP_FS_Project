@@ -40,6 +40,10 @@ router.get("/api/user/auth", async (req, res) => {
 
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
         console.log("Decoded:", decoded)
+        if (decoded == undefined) { 
+            res.json({ status: 404, message: "Invalid token" });
+            return;
+        }
         console.log("User:", decoded['data'].username)
         const { uuid } = decoded['data']
         let user = await Users.findOne({ where: { uuid } });
