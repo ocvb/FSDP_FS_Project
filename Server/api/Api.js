@@ -8,6 +8,7 @@ router.get("/api", async (req, res) => {
         {
             username: "admin",
             password: "admin",
+            role: "admin",
         },
         {
             username: "user",
