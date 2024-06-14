@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Select, MenuItem } from "@mui/material";
+import { Container, Select, MenuItem, Table, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
+
+import Button from "@/components/Button/CustomButton.module";
 
 export default function Editor() {
     const [data, setData] = useState([]);
@@ -20,93 +22,96 @@ export default function Editor() {
     }, []);
 
 
-    const rows = data.map((item) => ({
-        id: item.id,
-        col1: item.title,
-        col2: item.description,
-        col3: item.location,
-        col4: item.date,
-        col5: item.price,
-        col6: item.createdAt,
-        col7: item.updatedAt,
+    // const rows = data.map((item) => ({
+    //     id: item.id,
+    //     col1: item.title,
+    //     col2: item.description,
+    //     col3: item.location,
+    //     col4: item.date,
+    //     col5: item.price,
+    //     col6: item.createdAt,
+    //     col7: item.updatedAt,
 
-    }));
+    // }));
 
-    const columns = [
-
-        { field: 'id', headerName: 'ID', width: 90 },
-        {
-            field: 'col1',
-            headerName: 'Title',
-            width: 150,
-            editable: true,
-        },
-        {
-            field: 'col2',
-            headerName: 'Description',
-            width: 150,
-            editable: true,
-        },
-        {
-            field: 'col3',
-            headerName: 'Location',
-            width: 150,
-            editable: true,
-        },
-        {
-            field: 'col4',
-            headerName: 'Date',
-            width: 150,
-            editable: true,
-        },
-        {
-            field: 'col5',
-            headerName: 'Price',
-            width: 150,
-            editable: true,
-        },
-        {
-            field: 'col6',
-            headerName: 'Created At',
-            width: 150,
-            editable: true,
-        },
-        {
-            field: 'col7',
-            headerName: 'Updated At',
-            width: 150,
-            editable: true,
-        },
+    const head = [
+        { name: "ID" },
+        { name: "Title" },
+        { name: "Description" },
+        { name: "Location" },
+        { name: "Date" },
+        { name: "Price" },
+        { name: "Created At" },
+        { name: "Updated At" },
     ];
 
     return (
-        <Container sx={{
+        <div style={{
+            position: 'relative',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'start',
-            alignItems: 'start',
             gap: '1rem',
+
         }}>
-            <Select
-                variant="filled"
-                defaultValue={30}
-                label="Select"
-            >
-                <MenuItem value={10}>Users</MenuItem>
-                <MenuItem value={30}>Events</MenuItem>
-                <MenuItem value={20}>Courses</MenuItem>
-            </Select>
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={5}
-                rowsPerPageOptions={[5]}
-                checkboxSelection
-                disableSelectionOnClick
-                sx={{
+            <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                gap: '1rem',
+
+            }}>
+                <Select
+                    variant="filled"
+                    defaultValue={30}
+                    label="Select"
+                >
+                    <MenuItem value={10}>Users</MenuItem>
+                    <MenuItem value={30}>Events</MenuItem>
+                    <MenuItem value={20}>Courses</MenuItem>
+                </Select>
+
+                <Button text="Create"  />
+
+
+            </div>
+
+            <TableContainer component={Paper} sx={{
+                width: '100%',
+            }}>
+                <Table sx={{
                     backgroundColor: 'rgba(255,255,255, 0.8)',
-                }}
-            />
-        </Container>
+                }} aria-label="simple table">
+                    <TableHead sx={{
+                        backgroundColor: 'rgba(0,0,0, 0.15)',
+
+                    }}>
+                        <TableRow>
+                            {head.map((item, index) => (
+                                <TableCell key={index}>{item.name}</TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {data.map((row) => (
+                            <TableRow
+                                key={row.id}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            >
+                                <TableCell component="th" scope="row">
+                                    {row.id}
+                                </TableCell>
+                                <TableCell>{row.title}</TableCell>
+                                <TableCell>{row.description}</TableCell>
+                                <TableCell>{row.location}</TableCell>
+                                <TableCell>{row.date}</TableCell>
+                                <TableCell>{row.price}</TableCell>
+                                <TableCell>{row.createdAt}</TableCell>
+                                <TableCell>{row.updatedAt}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>
     );
 }
