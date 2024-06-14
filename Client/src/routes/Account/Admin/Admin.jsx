@@ -15,13 +15,6 @@ export default function Admin() {
     const { userRole } = UseAuth();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (userRole !== "admin") {
-            // Redirect to account page
-            navigate("/account");
-        }
-    }, [ ]);
-
     const tabs = [
         { name: "Editor", },
         { name: "Analytics", },
@@ -39,7 +32,7 @@ export default function Admin() {
     }
 
     return (
-        <Container maxWidth={true} sx={{
+        <Container maxWidth="true" sx={{
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'start',
@@ -61,7 +54,6 @@ export default function Admin() {
                 {/* TODO: EVERYTHing ;) */}
                 <div className={styles.tabs}>
                     {tabs && tabs.map((tab, index) => {
-                        console.log(tab)
                         return (
                             <div key={index} className={styles.tab}>
                                 <Button sx={InputStyle} text={tab.name}></Button>
@@ -70,9 +62,10 @@ export default function Admin() {
                     })}
                 </div>
             </Box>
-
-            <Box sx={{
+            <Box maxWidth={true} sx={{
                 padding: '1rem',
+                width: '100%',
+                gap: '1rem',
             }}>
                 <Editor />
 
