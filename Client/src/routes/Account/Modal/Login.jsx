@@ -32,7 +32,7 @@ export default function Login({ passToChangeModal }) {
     const navigate = useNavigate();
     const { state } = useLocation();
 
-    const { login, user } = UseAuth();
+    const { login } = UseAuth();
 
     const checkLogin = () => {
         // Logic to check if username and password are empty
@@ -55,7 +55,6 @@ export default function Login({ passToChangeModal }) {
             setloginStatus(false);
             setMessage("Invalid username or password");
         });
-
     };
 
     const onSubmit = (event) => {
