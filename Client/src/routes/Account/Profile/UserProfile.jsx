@@ -15,14 +15,14 @@ export default function UserProfile({ geToken }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [uuid, setUuid] = useState('');
-
     const [Message, setMessage] = useState('');
+    const { fetchAuth, checkTokenIsValid } = UseAuth();
+    const [success, setSuccess] = useState(false);
 
-    const { login, user } = UseAuth();
+
     useEffect(() => {
-        setUsername(user.username);
-        setPassword(user.password);
-        setUuid(user.uuid);
+        setUsername(fetchAuth().User.username);
+        setUuid(fetchAuth().User.uuid);
     }, []);
 
 
@@ -34,19 +34,22 @@ export default function UserProfile({ geToken }) {
         setPassword(event.target.value);
     };
 
+    // Update user information
     const updateUser = async () => {
         let timeoutId = null;
-        // Update user information
         await axios.put(`http://localhost:3001/api/user/update/${uuid}`, {
             username: username,
             password: password,
             uuid: uuid,
         }).then((response) => {
-
             if (response.status === 200) {
-                console.log("Updated", response.data)
                 setMessage("Updated");
-                login({ username, password });
+                setPassword('');
+                checkTokenIsValid(response.data.token);
+                setSuccess(true);
+            } else {
+                setMessage("Failed to update");
+                setSuccess(false);
             }
         }).catch((error) => {
             console.error(error);
@@ -63,7 +66,14 @@ export default function UserProfile({ geToken }) {
 
     const onSubmit = (event) => {
         event.preventDefault();
+        setSuccess(false);
 
+        if (password.length > 0 && password.length < 6) {
+            setMessage("Password must be at least 6 characters");
+            return;
+        }
+
+        updateUser();
     }
 
     return (
@@ -105,12 +115,12 @@ export default function UserProfile({ geToken }) {
                     </div>
                     <div>
                         <p>Password</p>
-                        <PasswordVisibility variant={"outlined"} password={password} handlePassword={handlePasswordChange} sx={{
+                        <PasswordVisibility variant={"outlined"} handlePassword={handlePasswordChange} sx={{
                             width: "100%",
                         }} />
                     </div>
 
-                    <Button text={Message ? Message : 'Save Changes'} type="submit" onClick={updateUser} sx={{
+                    <Button text={success ? Message : 'Save Changes'} type="submit" sx={{
                         fontSize: "0.8rem",
                         display: "inline-flex",
                         borderRadius: "10px",
@@ -123,6 +133,14 @@ export default function UserProfile({ geToken }) {
                             color: "white",
                         },
                     }} />
+                    <p style={{
+                        color: "red",
+                        fontSize: "1rem",
+                        textAlign: "center",
+
+                    }}>
+                        {!success ? Message : ""}
+                    </p>
                 </form>
             </div>
         </>

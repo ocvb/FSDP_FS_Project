@@ -1,9 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 
-
-// TODO: AuthProvider and useAuth is not defined
 import { UseAuth } from "@/components/Auth/Auth";
 import Button from "@/components/Button/CustomButton.module";
 import PasswordVisibility from "@/components/PasswordVIsibility/PasswordVisibility.module";
@@ -35,7 +32,6 @@ export default function Login({ passToChangeModal }) {
     const { login } = UseAuth();
 
     const checkLogin = () => {
-        // Logic to check if username and password are empty
         if (username == "" || password == "") {
             setMessage("Please fill in all fields");
             setloginStatus(false);
@@ -43,15 +39,18 @@ export default function Login({ passToChangeModal }) {
         }
 
         login({ username, password }).then((value) => {
-            if (value) {
+            if (value == true) {
                 setMessage("Logging in...");
                 setloginStatus(true);
                 setTimeout(() => {
                     navigate(state?.path ? state.path : "/account/profile");
                 }, 1000);
+            } else {
+                setloginStatus(false);
+                setMessage("Invalid username or password");
             }
-            return;
         }).catch((error) => {
+            console.log(error)
             setloginStatus(false);
             setMessage("Invalid username or password");
         });

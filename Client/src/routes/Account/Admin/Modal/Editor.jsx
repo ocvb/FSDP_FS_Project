@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Select, MenuItem, Table, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid';
+import { Select, MenuItem, Table, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 
 import Button from "@/components/Button/CustomButton.module";
 
@@ -70,9 +69,7 @@ export default function Editor() {
                     <MenuItem value={20}>Courses</MenuItem>
                 </Select>
 
-                <Button text="Create"  />
-
-
+                <Button text="Create" />
             </div>
 
             <TableContainer component={Paper} sx={{
@@ -83,7 +80,6 @@ export default function Editor() {
                 }} aria-label="simple table">
                     <TableHead sx={{
                         backgroundColor: 'rgba(0,0,0, 0.15)',
-
                     }}>
                         <TableRow>
                             {head.map((item, index) => (

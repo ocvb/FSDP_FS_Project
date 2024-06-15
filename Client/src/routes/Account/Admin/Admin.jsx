@@ -1,8 +1,5 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 // Components
-import { UseAuth } from "@/components/Auth/Auth";
 import { Box, Container } from "@mui/material";
 import Button from "@/components/Button/CustomButton.module";
 
@@ -11,9 +8,6 @@ import Editor from "./Modal/Editor";
 import styles from "./Admin.module.css";
 
 export default function Admin() {
-
-    const { userRole } = UseAuth();
-    const navigate = useNavigate();
 
     const tabs = [
         { name: "Editor", },
