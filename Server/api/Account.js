@@ -10,20 +10,34 @@ function generateToken(user) {
 
 // TODO: Password hashing
 router.post("/api/user/login", async (req, res) => {
-    console.log("User Logging In", req.body.username)
+    console.log("User login as", req.body.username)
     const { username, password } = req.body;
-    if (username == undefined || password == undefined) {
-        res.json({ status: 404, message: "Invalid username or password" });
+    console.log("Username:", username, "Password:", password)
+    if (username == undefined || password == undefined || username.length == 0 || password.length == 0) {
+        res.json({ status: 401, message: "Invalid username or password" });
         return;
     }
 
-    let user = await Users.findOne({ where: { username, password } });
-    if (user !== null) {
-        const token = generateToken(user);
-        res.status(200).json({ status: 200, data: user, token });
-    } else {
-        res.status(401).json({ status: 401, message: "Invalid username or password" })
+    let findsByUsername = await Users.findOne({ where: { username } });
+    if (!findsByUsername) {
+        res.status(401).json({ status: 401, message: "Invalid username or password" });
+        return;
     }
+
+    bcrypt.compare(password, findsByUsername.password).then(async (result) => {
+        if (result) {
+            const token = generateToken(findsByUsername);
+            res.status(200).json({ status: 200, data: findsByUsername, token });
+        } else {
+            res.status(401).json({ status: 401, message: "Invalid username or password" })
+        }
+    }).catch((err) => {
+        if (err) {
+            res.status(401).json({ status: 401, message: "Invalid username or password" });
+            return;
+        }
+    });
+
 });
 
 // Token authentication
@@ -39,8 +53,7 @@ router.get("/api/user/auth", async (req, res) => {
     }
 
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-        console.log("Decoded:", decoded)
-        if (decoded == undefined) { 
+        if (decoded == undefined) {
             res.json({ status: 404, message: "Invalid token" });
             return;
         }
@@ -67,17 +80,19 @@ router.post("/api/user/register", async (req, res) => {
     const { username, password } = req.body;
     const findSameUsername = await Users.findOne({ where: { username } });
     if (findSameUsername) {
-        res.json({ status: "failed", message: "Username already exists" });
+        res.status(409).json({ status: "failed", message: "Username already exists" });
         return;
     }
 
-    const user = await Users.create({ username, password });
-    if (user) {
-        const token = generateToken(user);
-        res.json({ status: "success", data: user, token });
-    } else {
-        res.sendStatus(500);
-    }
+    bcrypt.hash(password, 10).then(async (hash) => {
+        const user = await Users.create({ username, password: hash });
+        if (user) {
+            const token = generateToken(user);
+            res.json({ status: "success", data: user, token });
+        } else {
+            res.sendStatus(500);
+        }
+    });
 });
 
 // TODO: JWT Authentication
@@ -90,22 +105,30 @@ router.put("/api/user/update/:uuid", async (req, res) => {
         res.json({ status: 401, message: "Invalid username or password" });
         return;
     }
-
     if (uuid == undefined) {
         res.json({ status: 401, message: "Invalid uuid" });
         return;
     }
 
-    const UpdateUserStatus = await Users.update({ username, password }, { where: { uuid } }, { returning: true });
+    bcrypt.hash(password, 10).then(async (hash) => {
+        let UpdateUserStatus;
+        if (password.length == 0) {
+            console.log("Update Username only")
+            UpdateUserStatus = await Users.update({ username }, { where: { uuid } }, { returning: true });
+        } else {
+            console.log("Update Username and Password")
+            UpdateUserStatus = await Users.update({ username, password: hash }, { where: { uuid } }, { returning: true });
+        }
 
-    if (UpdateUserStatus == 1) { // update returns an array where the first element is the number of affected rows
-        const retrieveUser = await Users.findOne({ where: { uuid } });
-        const token = generateToken(retrieveUser);
+        if (UpdateUserStatus == 1) { // update returns an array where the first element is the number of affected rows
+            const retrieveUser = await Users.findOne({ where: { uuid } });
+            const token = generateToken(retrieveUser);
 
-        res.json({ status: "success", data: retrieveUser, token });
-    } else {
-        res.status(404).json({ status: "error", message: "User not found" });
-    }
+            res.json({ status: "success", data: retrieveUser, token });
+        } else {
+            res.status(404).json({ status: "error", message: "User not found" });
+        }
+    });
 });
 
 module.exports = router;
