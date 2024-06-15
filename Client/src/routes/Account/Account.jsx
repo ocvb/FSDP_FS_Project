@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 
 // Components
 import { UseAuth } from "@/components/Auth/Auth";
@@ -20,7 +20,6 @@ export default function Account() {
         setModalChanged(data);
     }
 
-    const navigate = useNavigate();
     const { fetchAuth } = UseAuth();
     if (fetchAuth().isAuthenticated) {
         if (fetchAuth().userRole === "admin") {
