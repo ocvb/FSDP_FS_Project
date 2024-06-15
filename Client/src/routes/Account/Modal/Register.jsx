@@ -33,33 +33,26 @@ export default function Register({ passToChangeModal }) {
     const [StatusSuccess, setStatusSuccess] = useState(false);
 
     const registerUser = async () => {
-        try {
-            const response = await axios.post("http://localhost:3001/api/user/register", {
-                username: Username,
-                password: Password
-            });
-
-            if (response.status != 200) {
-                setMessage("An error occured, please try again later");
-                return;
-            }
-
-            if (response.data['status'] === 'success') {
+        await axios.post("http://localhost:3001/api/user/register", {
+            username: Username,
+            password: Password
+        }).then((response) => {
+            console.log(response);
+            if (response.status == 200) {
                 setStatusSuccess(true);
                 setMessage("Registered successfully");
                 setUsername('');
                 setPassword('');
                 setConfirmPassword('');
-            } else {
-                setMessage(response.data['message']);
-                setStatusSuccess(false);
             }
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
-    useEffect(() => { console.log(Username, Password, ConfirmPassword) }), [Username, Password, ConfirmPassword];
+        }).catch((error) => {
+            setStatusSuccess(false);
+            if (error.response) {
+                setMessage(error.response.data.message);
+            }
+        });
+    }
 
     const checkValidationAndProceed = () => {
         if (Username == "" || Password == "" || ConfirmPassword == "") {
@@ -129,7 +122,7 @@ export default function Register({ passToChangeModal }) {
                 gap: "0.5rem",
                 width: "100%",
             }}>
-                <Button text="Register" type='submit' onClick={checkValidationAndProceed} sx={{
+                <Button text="Register" type='submit' sx={{
                     display: "inline-flex",
                     borderRadius: "10px",
                     backgroundColor: "black",
@@ -146,7 +139,7 @@ export default function Register({ passToChangeModal }) {
                     marginTop: "1rem",
                     textAlign: "center",
                 }}>
-                    You've an account? <span className={styles.link} onMouseDown={pressedLogin}>Login</span>
+                    You've an account? <span className={styles.link} onClick={pressedLogin}>Login</span>
                 </p>
             </div>
             <p style={{ color: StatusSuccess ? "green" : "red", fontSize: "1rem" }}>{Message != '' ? Message : ''}</p>
