@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
+import { Navigate } from "react-router-dom";
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -25,13 +26,11 @@ export default function AuthProvider({ children }) {
     }
 
     const checkTokenIsValid = async (token) => {
-        try {
-            const response = await axios.get("http://localhost:3001/api/user/auth", {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-
+        await axios.get("http://localhost:3001/api/user/auth", {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        }).then((response) => {
             if (response.status === 200) {
                 setIsAuthenticated(true);
                 setUser(response.data.data);
@@ -41,36 +40,40 @@ export default function AuthProvider({ children }) {
                 setIsAuthenticated(false);
                 return false;
             }
-        } catch (error) {
+        }).catch((error) => {
             setIsAuthenticated(false);
             return false;
-        }
+        });
+
+
     }
 
     const login = async (data) => {
-        try {
-            const response = await axios.post("http://localhost:3001/api/user/login", data);
+        await axios.post("http://localhost:3001/api/user/login", data)
+            .then((response) => {
+                if (response.status === 200) {
+                    setIsAuthenticated(true);
+                    setUser(response.data.data);
+                    setUserRole(response.data.data.role);
+                    localStorage.setItem('token', response.data.token);
+                    return true;
+                } else {
+                    setIsAuthenticated(false);
+                    return false;
 
-            if (response.status === 200) {
-                setIsAuthenticated(true);
-                setUser(response.data.data);
-                setUserRole(response.data.data.role);
-                localStorage.setItem('token', response.data.token);
-                return true;
-            } else {
+                }
+            }).catch((error) => {
                 setIsAuthenticated(false);
-                throw new Error('Failed to log in');
-            }
-        } catch (error) {
-            setIsAuthenticated(false);
-            throw error;
-        }
+                return error;
+
+            });
     }
 
     const logout = () => {
         setUser(null);
         setIsAuthenticated(false);
         localStorage.removeItem('token');
+        return <Navigate to={"/account"} />;
     };
 
     return (
