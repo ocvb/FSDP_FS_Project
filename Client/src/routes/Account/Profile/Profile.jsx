@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 // Components
 import { Box, Skeleton } from "@mui/material";
@@ -11,7 +10,6 @@ import Events from "./Events";
 
 import styles from "./css/Profile.module.css";
 import { UseAuth } from "@/components/Auth/Auth";
-import Admin from "../Admin/Admin";
 
 
 export default function Profile() {
@@ -19,6 +17,7 @@ export default function Profile() {
     const [notLoading, setNotloading] = useState(false);
 
     const [getToken, setToken] = useState(localStorage.getItem("token"));
+    const { logout } = UseAuth();
 
     const handleTabChange = async (event, index) => {
         if (event.target.textContent === tabs[index].name) {
@@ -57,6 +56,7 @@ export default function Profile() {
         { name: "Events", link: "/account/profile/events" },
         { name: "Bookings", link: "/account/profile/bookings" },
         { name: "Rewards", link: "/account/profile/rewards" },
+        { name: "Logout", action: () => { logout() } },
     ];
 
     return (
@@ -81,7 +81,7 @@ export default function Profile() {
                 boxShadow: "0px 2px 8px 0px rgba(0, 0, 0, 0.25)",
             }}>
                 {tabs && tabs.map((tab, index) => (
-                    <Button key={index} text={tab.name} sx={buttonStyle} onMouseDown={(event) => handleTabChange(event, index)} />
+                    <Button key={index} text={tab.name} sx={buttonStyle} onClick={tab.action} onMouseDown={(event) => handleTabChange(event, index)} />
                 ))}
             </div>
 
