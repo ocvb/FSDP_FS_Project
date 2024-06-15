@@ -21,6 +21,11 @@ export default function Account() {
     }
 
     const { fetchAuth } = UseAuth();
+    const [authChecked, setAuthChecked] = useState(false);
+    useEffect(() => {
+        setAuthChecked(fetchAuth().isAuthenticated);
+    }, [fetchAuth]);
+
     if (fetchAuth().isAuthenticated) {
         if (fetchAuth().userRole === "admin") {
             return <Navigate to={"/account/admin"} />;
@@ -29,27 +34,29 @@ export default function Account() {
         }
     }
 
-    return (
-        <div style={{ position: 'relative' }}>
-            <Container maxWidth={false} sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '0 !important',
-            }}>
-                <div className={styles.container}>
-                    <div className={styles.bg}>
-                        <img src={bgImage}></img>
-                    </div>
-                    <div className={styles.login}>
-                        <div className={styles.loginContainer}>
-                            <p>{modalChanged.login ? "Login" : "Register"}</p>
-                            {modalChanged.login ? <Login passToChangeModal={handleRecievedData} /> : <Register passToChangeModal={handleRecievedData} />}
+    if (authChecked === false) {
+        return (
+            <div style={{ position: 'relative' }}>
+                <Container maxWidth={false} sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: '0 !important',
+                }}>
+                    <div className={styles.container}>
+                        <div className={styles.bg}>
+                            <img src={bgImage}></img>
+                        </div>
+                        <div className={styles.login}>
+                            <div className={styles.loginContainer}>
+                                <p>{modalChanged.login ? "Login" : "Register"}</p>
+                                {modalChanged.login ? <Login passToChangeModal={handleRecievedData} /> : <Register passToChangeModal={handleRecievedData} />}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Container>
-        </div>
-    );
+                </Container>
+            </div>
+        );
+    }
 }
