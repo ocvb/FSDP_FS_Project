@@ -25,32 +25,32 @@ export const navigation = [
 ];
 
 export default function navbar(props) {
-  const [dropdown, setDropdown] = useState(null);
-
+  const [dropdown, setDropdown] = useState(false);
+  const [getIndex, setIndex] = useState(0);
   const hoveredRef = useRef(null);
+  const hoverButton = useRef(null);
 
   useEffect(() => {
     const handler = (event) => {
-      if (hoveredRef.current && !hoveredRef.current.contains(event.target)) {
+      if (hoveredRef.current.style.display == "block" && !hoverButton.current.contains(event.target) && !hoveredRef.current.contains(event.target)) {
         setDropdown(false);
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handler);
-    document.addEventListener("touchstart", handler);
-
+    document.addEventListener('mouseover', handler);
     return () => {
-      document.removeEventListener("mousedown", handler);
-      document.removeEventListener("touchstart", handler);
-    };
+      document.removeEventListener('mouseover', handler);
+    }
+
   }, []);
 
   const onMouseEnter = (index) => {
-    setDropdown(index);
+    setIndex(index);
+    setDropdown(true);
   };
 
-  const onMouseLeave = () => {
-    setDropdown(null);
+  const handlerDropdownOnMouseLeave = () => {
+    setDropdown(false);
   }
 
   return (
@@ -68,16 +68,16 @@ export default function navbar(props) {
                 color="inherit"
                 key={index}
                 href={item.href}
-                aria-expanded={dropdown === index ? "true" : "false"}
-                onMouseOver={() => onMouseEnter(index)}
-                onMouseDown={onMouseLeave}
+                aria-expanded={getIndex === index ? "true" : "false"}
+                onMouseEnter={() => onMouseEnter(index)}
+                ref={hoverButton}
                 sx={{
                   minWidth: "fit-content",
                 }}
               >
                 {item.name}
               </Button>
-              {dropdown === index && <Dropdown subitems={item.submenu} dropdown={dropdown} ref={hoveredRef} />}
+              {getIndex === index && <Dropdown subitems={item.submenu} dropdown={dropdown} ref={hoveredRef} onMouseLeave={handlerDropdownOnMouseLeave} />}
             </div>
           ))}
           <div style={{ flexGrow: 1 }}></div>
