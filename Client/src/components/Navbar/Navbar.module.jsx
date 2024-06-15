@@ -1,9 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { AppBar, Toolbar, Button } from "@mui/material";
-
-
 import styles from "./css/Navbar.module.css";
-
 import Dropdown from "../Dropdown/Dropdown.module";
 
 
@@ -58,7 +55,10 @@ export default function navbar(props) {
       <AppBar position="fixed" className={styles.navbar} >
         <Toolbar className={styles.toolbar}>
           <div style={{ flexGrow: 1 }}>
-            <a href={navigation[0].href}>
+            <a href={navigation[0].href} style={{
+              display: "flex",
+              alignItems: "center",
+            }}>
               <img src={props.imgUrl} width={"45px"} />
             </a>
           </div>
