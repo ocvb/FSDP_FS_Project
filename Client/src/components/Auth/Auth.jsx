@@ -35,6 +35,7 @@ export default function AuthProvider({ children }) {
                 setIsAuthenticated(true);
                 setUser(response.data.data);
                 setUserRole(response.data.data.role);
+                localStorage.setItem('token', response.data.token);
                 return true;
             } else {
                 setIsAuthenticated(false);
@@ -60,12 +61,10 @@ export default function AuthProvider({ children }) {
                 } else {
                     setIsAuthenticated(false);
                     return false;
-
                 }
             }).catch((error) => {
                 setIsAuthenticated(false);
                 return error;
-
             });
     }
 
@@ -77,7 +76,7 @@ export default function AuthProvider({ children }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, checkTokenIsValid, login, logout, userRole, fetchAuth }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, checkTokenIsValid, login, logout, fetchAuth }}>
             {children}
         </AuthContext.Provider>
     );
