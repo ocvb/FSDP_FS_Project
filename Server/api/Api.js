@@ -1,18 +1,26 @@
 const express = require("express");
 const router = express.Router();
 const { Users, Events } = require("../model");
+const bcrypt = require("bcrypt");
+const process = require("process");
+
+const saltRounds = process.env.SALT_ROUNDS || 10;
+
+function genHash(password) {
+    return bcrypt.hashSync(password, saltRounds);
+}
 
 // Check if the server API is running
 router.get("/api", async (req, res) => {
     const presetUsers = await Users.bulkCreate([
         {
             username: "admin",
-            password: "admin",
+            password: genHash("admin"),
             role: "admin",
         },
         {
             username: "user",
-            password: "user",
+            password: genHash("user"),
         }
     ]);
 
