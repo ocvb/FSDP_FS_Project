@@ -2,13 +2,13 @@ import { useEffect, useState, useRef } from "react";
 import { AppBar, Toolbar } from "@mui/material";
 import { navigation } from "./Navbar.module";
 
+import { UseAuth } from "../Auth/Auth";
 
 import styles from './css/Navbar.module.css';
 import { Person } from "@mui/icons-material";
 import Dropdown from "../Dropdown/Dropdown.module";
 import Button from "../Button/CustomButton.module";
-import { UseAuth } from "../Auth/Auth";
-
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function NavbarAdmin({ logo }) {
 
@@ -26,7 +26,7 @@ export default function NavbarAdmin({ logo }) {
         {
             name: "Logout", action: () => {
                 logout();
-            }
+            }, icon: <LogoutIcon />
         },
     ]
 
@@ -57,7 +57,12 @@ export default function NavbarAdmin({ logo }) {
 
     return (
         <AppBar position="fixed" className={styles.navbar} >
-            <Toolbar className={styles.toolbar}>
+            <Toolbar
+                className={styles.toolbar}
+                style={{
+                    padding: "0 2rem",
+                }}
+            >
                 <div style={{
                     display: "flex",
                     alignItems: "center",
@@ -81,19 +86,11 @@ export default function NavbarAdmin({ logo }) {
                     </p>
                 </div>
 
-                <div style={{
-                    display: "flex",
-                    gap: "1rem",
-                    alignItems: "center",
-                    justifyContent: "center",
-
-                }}>
-                    <Person />
-                    <div>
-                        <Button text="Admin" onMouseEnter={onMouseEnter} ref={hoverButton} />
-                        <Dropdown subitems={menus} dropdown={dropdown} ref={hoveredRef} onMouseLeave={handlerDropdownOnMouseLeave} />
-                    </div>
+                <div>
+                    <Button text="Admin" onMouseEnter={onMouseEnter} ref={hoverButton} startIcon={<Person />} />
+                    <Dropdown subitems={menus} dropdown={dropdown} ref={hoveredRef} onMouseLeave={handlerDropdownOnMouseLeave} />
                 </div>
+
             </Toolbar>
         </AppBar>
     );
