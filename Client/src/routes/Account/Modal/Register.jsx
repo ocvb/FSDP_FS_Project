@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 
-import { Input, TextField, colors } from "@mui/material";
+import { TextField, colors } from "@mui/material";
 import Button from "@/components/Button/CustomButton.module";
 import PasswordVisibility from "@/components/PasswordVIsibility/PasswordVisibility.module";
 
@@ -37,13 +37,14 @@ export default function Register({ passToChangeModal }) {
             username: Username,
             password: Password
         }).then((response) => {
-            console.log(response);
             if (response.status == 200) {
                 setStatusSuccess(true);
                 setMessage("Registered successfully");
-                setUsername('');
-                setPassword('');
-                setConfirmPassword('');
+
+                new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
+                    pressedLogin();
+                });
+
             }
 
         }).catch((error) => {
@@ -62,6 +63,11 @@ export default function Register({ passToChangeModal }) {
 
         if (Password !== ConfirmPassword) {
             setMessage("Your password does not match");
+            return false;
+        }
+
+        if (Password.length < 6) {
+            setMessage("Password must be at least 6 characters long");
             return false;
         }
 
