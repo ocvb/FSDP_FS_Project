@@ -1,9 +1,6 @@
 import { forwardRef } from "react";
 import PropTypes from "prop-types";
-
-
 import { Button } from "@mui/material";
-
 
 const CustomButton = forwardRef(({ className, onClick, type, sx, text, onMouseDown, onMouseLeave, onMouseEnter, startIcon, endIcon }, ref) => {
     return (
@@ -38,8 +35,5 @@ CustomButton.propTypes = {
     onMouseEnter: PropTypes.func,
     startIcon: PropTypes.element,
 };
-
-
-
 
 export default CustomButton;
