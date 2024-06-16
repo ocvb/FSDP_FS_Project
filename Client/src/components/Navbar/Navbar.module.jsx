@@ -53,7 +53,9 @@ export default function navbar(props) {
   return (
     <>
       <AppBar position="fixed" className={styles.navbar} >
-        <Toolbar className={styles.toolbar}>
+        <Toolbar className={styles.toolbar} style={{
+          padding: "0 2rem",
+        }}>
           <div style={{ flexGrow: 1 }}>
             <a href={navigation[0].href} style={{
               display: "flex",
