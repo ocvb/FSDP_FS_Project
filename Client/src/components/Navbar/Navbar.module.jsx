@@ -52,7 +52,7 @@ export default function navbar(props) {
 
   return (
     <>
-      <AppBar position="fixed" className={styles.navbar} >
+      <AppBar position="fixed" className={styles.navbar}>
         <Toolbar className={styles.toolbar} style={{
           padding: "0 2rem",
         }}>

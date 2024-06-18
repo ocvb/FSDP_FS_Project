@@ -13,6 +13,7 @@ import styles from "./css/Events.module.css";
 // component
 import CustomButton from "../../components/Button/CustomButton.module";
 import Footer from "../../components/Footer/Footer.module";
+import { idID } from "@mui/material/locale";
 
 export default function Events() {
   const navigate = useNavigate();
@@ -40,9 +41,6 @@ export default function Events() {
   if (events == "") {
     nullEvents = "There are currently no up-coming events.";
   }
-  const navigateToEvents = () => {
-    navigate("/events");
-  };
   return (
     <>
       <div styles="position: relative;">
@@ -53,14 +51,15 @@ export default function Events() {
             <p className={styles.p}>Welcome to the events page!</p>
             <p className={styles.p}>Find out about our events here!</p>
             <CustomButton
-              text="Join Us"
+              text="Search"
               onClick={() => navigate("/account")}
               sx={{
                 display: "inline-flex",
+                marginTop: "10px",
                 borderRadius: "50px",
                 width: "fit-content",
                 boxShadow: "0px 2px 6px 0px rgba(0, 0, 0, 0.15)",
-                padding: "0.4rem 2rem",
+                padding: "0.7rem 2rem",
                 color: "black",
                 backgroundColor: "white",
                 "&:hover": {
@@ -81,7 +80,7 @@ export default function Events() {
           }}
         >
           <div className={styles.tile}>
-            <h2 className={styles.h2}>Up-Coming Events & Facilities</h2>
+            <div className={styles.header2}>Up-Coming Events & Facilities</div>
             <p className={styles.p}>{nullEvents}</p>
             <div className={styles.row}>
               {events &&
@@ -95,27 +94,36 @@ export default function Events() {
                   </div>
                 ))}
             </div>
-            <CustomButton
-              text="more Events →"
-              onClick={navigateToEvents}
-              sx={{
-                display: "inline-flex",
-                borderRadius: "50px",
-                width: "fit-content",
-                boxShadow: "0px 2px 6px 0px rgba(0, 0, 0, 0.15)",
-                padding: "0.5rem 2rem",
-                color: "black",
-              }}
-            />
+            <a href="#target-element">
+              <CustomButton
+                text="more Events →"
+                href="#events"
+                sx={{
+                  display: "inline-flex",
+                  borderRadius: "50px",
+                  width: "fit-content",
+                  boxShadow: "0px 2px 6px 0px rgba(0, 0, 0, 0.15)",
+                  padding: "0.5rem 2rem",
+                  color: "black",
+                }}
+              />
+            </a>
           </div>
         </Container>
 
         <Container
+          id="target-element"
           maxWidth={false}
           sx={{
             backgroundColor: "rgba(0, 0, 0, 0.03)",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "2rem",
           }}
         >
+          <div className={styles.header2}>Events</div>
           <Container
             sx={{
               position: "relative",
@@ -123,7 +131,7 @@ export default function Events() {
               flexDirection: matches ? "column" : "row",
               justifyContent: "center",
               alignItems: "center",
-              padding: "4rem",
+              padding: "2rem",
               gap: "1rem",
             }}
           >
@@ -160,7 +168,16 @@ export default function Events() {
           </Container>
         </Container>
 
-        <Container maxWidth={false} sx={{}}>
+        <Container
+          maxWidth={false}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "2rem",
+          }}
+        >
           <Container
             sx={{
               position: "relative",
@@ -168,7 +185,7 @@ export default function Events() {
               flexDirection: matches ? "column" : "row",
               justifyContent: "center",
               alignItems: "center",
-              padding: "4rem",
+              padding: "2rem",
               gap: "1rem",
             }}
           >
@@ -191,7 +208,8 @@ export default function Events() {
                 create memories that will last a lifetime. Join us today and
                 become a part of our community!
               </p>
-            </div>            <div className={styles.box}>
+            </div>{" "}
+            <div className={styles.box}>
               <p className={styles.leadingTitle}>Leading Title</p>
               <h2 className={styles.h2}>title</h2>
               <p className={styles.p}>
