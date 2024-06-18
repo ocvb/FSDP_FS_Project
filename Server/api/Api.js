@@ -45,10 +45,12 @@ router.get("/api", async (req, res) => {
             location: "Location 3",
             date: new Date(),
             price: 0,
+            userId: 2
         },
     ]);
     presetUsers;
     presetEvents;
+
 
     res.send("API is running, preset data have been loaded.");
 });
