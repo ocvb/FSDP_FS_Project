@@ -113,7 +113,7 @@ export default function Register({ passToChangeModal }) {
     };
     return (
         <form onSubmit={onSubmit} className={styles.modal}>
-            <TextField sx={InputStyle} type="text" variant="standard" label="Username" value={Username} onChange={handleUsernameChange} autoFocus />
+            <TextField sx={InputStyle} type="text" variant="standard" label="Username" value={Username} onChange={handleUsernameChange} autoFocus={true} />
             <div style={{
                 display: "flex",
                 flexDirection: "row",
