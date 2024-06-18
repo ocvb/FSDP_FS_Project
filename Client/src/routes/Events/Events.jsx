@@ -36,108 +36,39 @@ export default function Events() {
 
     fetchData();
   }, [events]);
-
+  var nullEvents = "";
+  if (events == "") {
+    nullEvents = "There are currently no up-coming events.";
+  }
   const navigateToEvents = () => {
     navigate("/events");
   };
-  if (events != "") {
-    return (
-      <>
-        <div styles="position: relative;">
-          <div className={styles.header}>
-            <img src={images} className={styles.img}></img>
-            <div className={styles.header_details}>
-              {/* <h1 className={styles.h1}>W</h1> */}
-              <p className={styles.p}>Welcome to the events page!</p>
-              <p className={styles.p}>Find out about our events here!</p>
-              <CustomButton
-                text="Join Us"
-                onClick={() => navigate("/account")}
-                sx={{
-                  display: "inline-flex",
-                  borderRadius: "50px",
-                  width: "fit-content",
-                  boxShadow: "0px 2px 6px 0px rgba(0, 0, 0, 0.15)",
-                  padding: "0.4rem 2rem",
-                  color: "black",
-                  backgroundColor: "white",
-                  "&:hover": {
-                    backgroundColor: colors.grey[300],
-                  },
-                }}
-              />
-            </div>
+  return (
+    <>
+      <div styles="position: relative;">
+        <div className={styles.header}>
+          <img src={images} className={styles.img}></img>
+          <div className={styles.header_details}>
+            {/* <h1 className={styles.h1}>W</h1> */}
+            <p className={styles.p}>Welcome to the events page!</p>
+            <p className={styles.p}>Find out about our events here!</p>
+            <CustomButton
+              text="Join Us"
+              onClick={() => navigate("/account")}
+              sx={{
+                display: "inline-flex",
+                borderRadius: "50px",
+                width: "fit-content",
+                boxShadow: "0px 2px 6px 0px rgba(0, 0, 0, 0.15)",
+                padding: "0.4rem 2rem",
+                color: "black",
+                backgroundColor: "white",
+                "&:hover": {
+                  backgroundColor: colors.grey[300],
+                },
+              }}
+            />
           </div>
-
-          <Container
-            maxWidth={false}
-            sx={{
-              backgroundColor: "rgba(0, 0, 0, 0.03)",
-            }}
-          >
-            <Container
-              sx={{
-                position: "relative",
-                display: "flex",
-                flexDirection: matches ? "column" : "row",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "4rem",
-                gap: "1rem",
-              }}
-            >
-              <div className={styles.box}>
-                <p className={styles.leadingTitle}>Leading Title</p>
-                <h2 className={styles.h2}>title</h2>
-                <p className={styles.p}>
-                  We are a community of people who love to meet new faces and
-                  share experiences. Our goal is to bring people together and
-                  create memories that will last a lifetime. Join us today and
-                  become a part of our community!
-                </p>
-              </div>
-              <div className={styles.imageBox}>
-                {/* placeholder image */}
-                <img
-                  src="https://via.placeholder.com/500x500"
-                  className={styles.img}
-                ></img>
-              </div>
-            </Container>
-          </Container>
-
-          <Container maxWidth={false} sx={{}}>
-            <Container
-              sx={{
-                position: "relative",
-                display: "flex",
-                flexDirection: matches ? "column" : "row",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "4rem",
-                gap: "1rem",
-              }}
-            >
-              <div className={styles.imageBox}>
-                {/* placeholder image */}
-                <img
-                  src="https://via.placeholder.com/500x500"
-                  className={styles.img}
-                ></img>
-              </div>
-
-              <div className={styles.box}>
-                <p className={styles.leadingTitle}>Leading Title</p>
-                <h2 className={styles.h2}>title</h2>
-                <p className={styles.p}>
-                  We are a community of people who love to meet new faces and
-                  share experiences. Our goal is to bring people together and
-                  create memories that will last a lifetime. Join us today and
-                  become a part of our community!
-                </p>
-              </div>
-            </Container>
-          </Container>
         </div>
         <Container
           maxWidth={false}
@@ -151,6 +82,7 @@ export default function Events() {
         >
           <div className={styles.tile}>
             <h2 className={styles.h2}>Up-Coming Events & Facilities</h2>
+            <p className={styles.p}>{nullEvents}</p>
             <div className={styles.row}>
               {events &&
                 events.slice(0, 3).map((item, index) => (
@@ -178,128 +110,102 @@ export default function Events() {
           </div>
         </Container>
 
-        <Footer />
-      </>
-    );
-  } else {
-    return (
-      <>
-        <div styles="position: relative;">
-          <div className={styles.header}>
-            <img src={images} className={styles.img}></img>
-            <div className={styles.header_details}>
-              {/* <h1 className={styles.h1}>W</h1> */}
-              <p className={styles.p}>Welcome to the events page!</p>
-              <p className={styles.p}>Find out about our events here!</p>
-              <CustomButton
-                text="Join Us"
-                onClick={() => navigate("/account")}
-                sx={{
-                  display: "inline-flex",
-                  borderRadius: "50px",
-                  width: "fit-content",
-                  boxShadow: "0px 2px 6px 0px rgba(0, 0, 0, 0.15)",
-                  padding: "0.4rem 2rem",
-                  color: "black",
-                  backgroundColor: "white",
-                  "&:hover": {
-                    backgroundColor: colors.grey[300],
-                  },
-                }}
-              />
-            </div>
-          </div>
-
-          <Container
-            maxWidth={false}
-            sx={{
-              backgroundColor: "rgba(0, 0, 0, 0.03)",
-            }}
-          >
-            <Container
-              sx={{
-                position: "relative",
-                display: "flex",
-                flexDirection: matches ? "column" : "row",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "4rem",
-                gap: "1rem",
-              }}
-            >
-              <div className={styles.box}>
-                <p className={styles.leadingTitle}>Leading Title</p>
-                <h2 className={styles.h2}>title</h2>
-                <p className={styles.p}>
-                  We are a community of people who love to meet new faces and
-                  share experiences. Our goal is to bring people together and
-                  create memories that will last a lifetime. Join us today and
-                  become a part of our community!
-                </p>
-              </div>
-              <div className={styles.imageBox}>
-                {/* placeholder image */}
-                <img
-                  src="https://via.placeholder.com/500x500"
-                  className={styles.img}
-                ></img>
-              </div>
-            </Container>
-          </Container>
-
-          <Container maxWidth={false} sx={{}}>
-            <Container
-              sx={{
-                position: "relative",
-                display: "flex",
-                flexDirection: matches ? "column" : "row",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "4rem",
-                gap: "1rem",
-              }}
-            >
-              <div className={styles.imageBox}>
-                {/* placeholder image */}
-                <img
-                  src="https://via.placeholder.com/500x500"
-                  className={styles.img}
-                ></img>
-              </div>
-
-              <div className={styles.box}>
-                <p className={styles.leadingTitle}>Leading Title</p>
-                <h2 className={styles.h2}>title</h2>
-                <p className={styles.p}>
-                  We are a community of people who love to meet new faces and
-                  share experiences. Our goal is to bring people together and
-                  create memories that will last a lifetime. Join us today and
-                  become a part of our community!
-                </p>
-              </div>
-            </Container>
-          </Container>
-        </div>
         <Container
           maxWidth={false}
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "2rem",
+            backgroundColor: "rgba(0, 0, 0, 0.03)",
           }}
         >
-          <div className={styles.tile}>
-            <h2 className={styles.h2}>Up-Coming Events</h2>
-            <p className={styles.p}>
-              No Up-Coming Events... Please Check Again Next Time
-            </p>
-          </div>
+          <Container
+            sx={{
+              position: "relative",
+              display: "flex",
+              flexDirection: matches ? "column" : "row",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "4rem",
+              gap: "1rem",
+            }}
+          >
+            <div className={styles.box}>
+              <p className={styles.leadingTitle}>Leading Title</p>
+              <h2 className={styles.h2}>title</h2>
+              <p className={styles.p}>
+                We are a community of people who love to meet new faces and
+                share experiences. Our goal is to bring people together and
+                create memories that will last a lifetime. Join us today and
+                become a part of our community!
+              </p>
+            </div>
+            <div className={styles.box}>
+              <p className={styles.leadingTitle}>Leading Title</p>
+              <h2 className={styles.h2}>title</h2>
+              <p className={styles.p}>
+                We are a community of people who love to meet new faces and
+                share experiences. Our goal is to bring people together and
+                create memories that will last a lifetime. Join us today and
+                become a part of our community!
+              </p>
+            </div>
+            <div className={styles.box}>
+              <p className={styles.leadingTitle}>Leading Title</p>
+              <h2 className={styles.h2}>title</h2>
+              <p className={styles.p}>
+                We are a community of people who love to meet new faces and
+                share experiences. Our goal is to bring people together and
+                create memories that will last a lifetime. Join us today and
+                become a part of our community!
+              </p>
+            </div>
+          </Container>
         </Container>
 
-        <Footer />
-      </>
-    );
-  }
+        <Container maxWidth={false} sx={{}}>
+          <Container
+            sx={{
+              position: "relative",
+              display: "flex",
+              flexDirection: matches ? "column" : "row",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "4rem",
+              gap: "1rem",
+            }}
+          >
+            <div className={styles.box}>
+              <p className={styles.leadingTitle}>Leading Title</p>
+              <h2 className={styles.h2}>title</h2>
+              <p className={styles.p}>
+                We are a community of people who love to meet new faces and
+                share experiences. Our goal is to bring people together and
+                create memories that will last a lifetime. Join us today and
+                become a part of our community!
+              </p>
+            </div>
+            <div className={styles.box}>
+              <p className={styles.leadingTitle}>Leading Title</p>
+              <h2 className={styles.h2}>title</h2>
+              <p className={styles.p}>
+                We are a community of people who love to meet new faces and
+                share experiences. Our goal is to bring people together and
+                create memories that will last a lifetime. Join us today and
+                become a part of our community!
+              </p>
+            </div>            <div className={styles.box}>
+              <p className={styles.leadingTitle}>Leading Title</p>
+              <h2 className={styles.h2}>title</h2>
+              <p className={styles.p}>
+                We are a community of people who love to meet new faces and
+                share experiences. Our goal is to bring people together and
+                create memories that will last a lifetime. Join us today and
+                become a part of our community!
+              </p>
+            </div>
+          </Container>
+        </Container>
+      </div>
+
+      <Footer />
+    </>
+  );
 }
