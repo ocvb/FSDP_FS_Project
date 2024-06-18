@@ -3,12 +3,13 @@ const router = express.Router();
 const { Users } = require("../model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { authenticationToken } = require("./Auth/Middleware");
 
 function generateToken(user) {
     return jwt.sign({ data: user }, process.env.JWT_SECRET, { expiresIn: "1h" });
 }
 
-// TODO: Password hashing
+// User login
 router.post("/api/user/login", async (req, res) => {
     console.log("User login as", req.body.username)
     const { username, password } = req.body;
@@ -41,40 +42,26 @@ router.post("/api/user/login", async (req, res) => {
 });
 
 // Token authentication
-router.get("/api/user/auth", async (req, res) => {
+router.get("/api/user/auth", authenticationToken, async (req, res) => {
     console.log("Checking Authentication")
-    const { authorization } = req.headers
-    const token = authorization.split(" ")[1];
 
+    const { uuid } = req.user.data;
+    let user = await Users.findOne({ where: { uuid } });
 
-    if (token == undefined) {
-        res.json({ status: 404, message: "token is empty" });
+    if (!user) {
+        res.json({ status: 404, message: "User not found" });
         return;
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-        if (decoded == undefined) {
-            res.json({ status: 404, message: "Invalid token" });
-            return;
-        }
-        console.log("User:", decoded['data'].username)
-        const { uuid } = decoded['data']
-        let user = await Users.findOne({ where: { uuid } });
-        if (err) {
-            res.json({ status: 404, message: "Invalid token" });
-            return;
-        }
-        if (uuid !== user.uuid) {
-            res.json({ status: 401, message: "Invalid token" });
-            return;
-        }
+    if (uuid !== user.uuid) {
+        res.json({ status: 401, message: "Invalid token" });
+        return;
+    }
 
-        res.json({ status: 200, data: decoded.data, token });
-    });
+    res.json({ status: 200, data: req.user.data, token: req.token });
 });
 
-
-
+// User registration
 router.post("/api/user/register", async (req, res) => {
     console.log("User Registering", req.body.username)
     const { username, password } = req.body;
@@ -83,7 +70,7 @@ router.post("/api/user/register", async (req, res) => {
         res.status(409).json({ status: "failed", message: "Username already exists" });
         return;
     }
-
+    
     bcrypt.hash(password, 10).then(async (hash) => {
         const user = await Users.create({ username, password: hash });
         if (user) {
@@ -95,6 +82,7 @@ router.post("/api/user/register", async (req, res) => {
     });
 });
 
+// TODO: Add Middlewares for Authentication & Cleaner Code
 // TODO: JWT Authentication
 router.put("/api/user/update/:uuid", async (req, res) => {
     console.log("Update User", req.body.username)
