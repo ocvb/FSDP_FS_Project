@@ -3,7 +3,7 @@
 import { Box, Container } from "@mui/material";
 import Button from "@/components/Button/CustomButton.module";
 
-import Editor from "./Modal/Editor";
+import Editor from "./Modal/Editor/Editor";
 
 import styles from "./Admin.module.css";
 
@@ -32,15 +32,15 @@ export default function Admin() {
             justifyContent: 'start',
             alignItems: 'start',
             padding: '0 !important',
-            height: '100vh',
             backgroundColor: 'lightgrey',
+            height: 'calc(100vh - 64px)',
         }}>
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'start',
                 alignItems: 'start',
-                width: '200px',
+                maxWidth: '200px',
                 padding: '1rem',
                 height: '100%',
                 backgroundColor: 'white',
@@ -57,9 +57,11 @@ export default function Admin() {
                 </div>
             </Box>
             <Box maxWidth={true} sx={{
+                position: 'relative',
                 padding: '1rem',
                 width: '100%',
                 gap: '1rem',
+
             }}>
                 <Editor />
 
