@@ -6,8 +6,6 @@ import mainStyles from "./css/Profile.module.css";
 import styles from "./css/Events.module.css";
 import { Box, Container, Table, TableHead, TableBody, TableContainer, TableRow, TableCell, Paper } from "@mui/material";
 
-//TODO: Deisgn the Events page
-
 
 export default function Events() {
     const [data, setData] = useState([]);
