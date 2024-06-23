@@ -45,7 +45,6 @@ const Events = db.define("events", {
     type: DataTypes.DATEONLY,
     allowNull: false,
   },
-
   price: {
     type: DataTypes.DOUBLE,
     allowNull: false,
@@ -53,14 +52,10 @@ const Events = db.define("events", {
 });
 
 Users.hasMany(Events), {
-  foreignKey: {
-    'name': 'eventId',
-  },
+  foreignKey: 'userId',
 };
 Events.belongsTo(Users, {
-  foreignKey: {
-    'name': 'userId',
-  },
+  foreignKey: 'userId',
   constraints: false,
 });
 
