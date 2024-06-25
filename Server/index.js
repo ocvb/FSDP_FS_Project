@@ -21,10 +21,12 @@ app.use("/api", startAPI);
 const userAPI = require("./api/Account");
 const eventAPI = require("./api/Events");
 const facilitiesAPI = require("./api/Facilities");
+const eventsSearchAPI = require("./api/EventsSearch");
 
 app.use("/api/user", userAPI);
 app.use("/api/events", eventAPI);
 app.use("/api/facilities", facilitiesAPI);
+app.use("/api/eventsSearch", eventsSearchAPI);
 
 // Don't touch beyond this line
 app.get("/", (req, res) => {

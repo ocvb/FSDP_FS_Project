@@ -1,18 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Container, colors } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import axios from "axios";
 
 export default function Facilities() {
   const [facilities, setFacilities] = useState([]);
 
   useEffect(() => {
-    // Fetch facilities data from your API
-    fetch("/api/facilities")
-      .then((response) => response.json())
-      .then((data) => setFacilities(data))
-      .catch((error) => console.error(error));
-  }, []);
+    const fetchData = async () => {
+      try {
+        if (!facilities) {
+          const response = await axios.get(
+            "http://localhost:3001/api/facilities"
+          );
+          console.log("Data fetched successfully");
+          setFacilities(response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [facilities]);
 
   return (
-    <div>
+    <>
       <h1>Facilities</h1>
       {facilities.length > 0 ? (
         <ul>
@@ -23,6 +37,6 @@ export default function Facilities() {
       ) : (
         <p>Loading facilities...</p>
       )}
-    </div>
+    </>
   );
 }

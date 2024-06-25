@@ -53,7 +53,7 @@ export default function Events() {
             <p className={styles.p}>Find out about our events here!</p>
             <CustomButton
               text="Search"
-              onClick={() => navigate("/account")}
+              onClick={() => navigate("/events-search")}
               sx={{
                 display: "inline-flex",
                 marginTop: "10px",

@@ -20,6 +20,7 @@ import Admin from "./routes/Account/Admin/Admin";
 import logo from "@/assets/Navbar/logo.png";
 
 import "./index.css";
+import EventsSearch from "./routes/EventsSearch/EventsSearch";
 
 export default function App() {
   const { fetchAuth } = UseAuth();
@@ -36,6 +37,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/events-search" element={<EventsSearch />}></Route>
         <Route path="/facilities" element={<Facilities />} />
         <Route path="/skill-share" element={<SkillShare />} />
         <Route path="/account" element={<Account />} />
