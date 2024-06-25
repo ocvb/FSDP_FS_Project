@@ -1,7 +1,7 @@
 import { Box, Container } from "@mui/material";
 
 
-import "./Courses.css";
+import "./Courses.module.css";
 
 export default function Courses() {
     return (
