@@ -15,9 +15,9 @@ export const navigation = [
       { name: "Artificial Intelligence", href: "/artificial-intelligence" },
     ]
   },
-  { name: "Rewards", href: "/rewards", },
   { name: "Skill-share", href: "/skill-share" },
-  { name: "FAQ", href: "/faq" },
+  { name: "Rewards", href: "/rewards", },
+  { name: "Support", href: "/support" },
   { name: "Account", href: "/account" },
 ];
 

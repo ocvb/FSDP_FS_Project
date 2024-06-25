@@ -12,6 +12,7 @@ import Events from "./routes/Events/Events";
 import Account from "./routes/Account/Account";
 import SkillShare from "./routes/SkillShare/SkillShare";
 import Rewards from "./routes/Rewards/Rewards";
+import Support from "./routes/Support/Support";
 
 import Profile from './routes/Account/Profile/Profile';
 
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="profile" element={<Profile />} />
         </Route>
         <Route path="/rewards" element={<Rewards />} />
+        <Route path="/support" element={<Support />} />
       </Routes>
     </>
   )
