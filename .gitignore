@@ -6,19 +6,11 @@
 .pnp.js
 
 
-# Front-end dependencies
-/front-end/node_modules
-/front-end/.pnp
-/front-end/.pnp.js
-
-# Front-end production
-/front-end//build
-
 # testing
 /coverage
 
 # Database
-/model/Database.db
+/src/Models/Database.db
 
 # misc
 .DS_Store
