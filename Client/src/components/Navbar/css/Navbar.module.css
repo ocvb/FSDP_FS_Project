@@ -26,10 +26,11 @@
   margin: auto 3px;
 }
 
-.navbar .buttonWrapper:nth-child(8), .navbar .buttonWrapper:nth-child(7)::after {
-  margin: 0 10px;
-}
- 
+/* .navbar .buttonWrapper:nth-child(8),
+.navbar .buttonWrapper:nth-child(7)::after {
+  margin: 0 0 0 10px;
+} */
+
 .hover {
   color: #f5f5f5 !important;
 }

@@ -4,7 +4,7 @@ const cors = require("cors");
 const express = require("express");
 const port = process.env.PORT || 3001;
 const app = express();
-const { db, Users, Events } = require("./model");
+const { db } = require("./model");
 
 app.use(express.json());
 app.use(
@@ -15,18 +15,15 @@ app.use(
 );
 
 
-
 const startAPI = require("./api/Api");
-app.use(startAPI);
+app.use('/api', startAPI);
 
 // Add your API endpoints here
 const userAPI = require("./api/Account");
 const eventAPI = require("./api/Events");
 
-app.use(userAPI);
-app.use(eventAPI);
-
-
+app.use('/api/user', userAPI);
+app.use('/api/events', eventAPI);
 
 
 

@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import PropTypes from 'prop-types'
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -57,14 +58,14 @@ export default function AuthProvider({ children }) {
                 setIsAuthenticated(false);
                 return false;
             }
-        }).catch((error) => {
+        }).catch(() => {
             setIsAuthenticated(false);
             return false;
         });
     }
 
     const login = async (data) => {
-        return axios.post("http://localhost:3001/api/user/login", data)
+        return await axios.post("http://localhost:3001/api/user/login", data)
             .then((response) => {
                 if (response.status === 200) {
                     setIsAuthenticated(true);
@@ -98,6 +99,10 @@ export default function AuthProvider({ children }) {
             {children}
         </AuthContext.Provider>
     );
+}
+
+AuthProvider.propTypes = {
+    children: PropTypes.any,
 }
 
 export function UseAuth() {

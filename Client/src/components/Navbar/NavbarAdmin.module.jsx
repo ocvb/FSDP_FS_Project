@@ -3,7 +3,7 @@ import { AppBar, Toolbar } from "@mui/material";
 import { navigation } from "./Navbar.module";
 
 import { UseAuth } from "../Auth/Auth";
-
+import PropTypes from 'prop-types';
 import styles from './css/Navbar.module.css';
 import { Person } from "@mui/icons-material";
 import Dropdown from "../Dropdown/Dropdown.module";
@@ -56,7 +56,9 @@ export default function NavbarAdmin({ logo }) {
     }
 
     return (
-        <AppBar position="fixed" className={styles.navbar} >
+        <AppBar position="fixed" className={styles.navbar} sx={{
+            boxShadow: '0px 2px 3px -1px rgba(0,0,0,0.09), 0px 4px 3px 0px rgba(0,0,0,0.05)',
+        }} >
             <Toolbar
                 className={styles.toolbar}
                 style={{
@@ -94,4 +96,8 @@ export default function NavbarAdmin({ logo }) {
             </Toolbar>
         </AppBar>
     );
+}
+
+NavbarAdmin.propTypes = {
+    logo: PropTypes.string,
 }

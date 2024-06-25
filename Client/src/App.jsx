@@ -10,6 +10,7 @@ import ProtectedRoute from "@/components/Auth/RequireAuth";
 import Home from "./routes/Home/Home";
 import Events from "./routes/Events/Events";
 import Account from "./routes/Account/Account";
+import SkillShare from "./routes/SkillShare/SkillShare";
 
 import Profile from './routes/Account/Profile/Profile';
 
@@ -30,6 +31,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/skill-share" element={<SkillShare />} />
         <Route path="/account" element={<Account />} />
         <Route path="/account/*" element={<ProtectedRoute />}>
           <Route path="admin" element={<Admin />} />

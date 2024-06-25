@@ -10,11 +10,11 @@ import Button from "@/components/Button/CustomButton.module";
 import mainStyles from "./css/Profile.module.css";
 import "./css/UserProfile.module.css";
 
-export default function UserProfile({ geToken }) {
+export default function UserProfile() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [uuid, setUuid] = useState('');
+    const [userId, setUserId] = useState('');
     const [Message, setMessage] = useState('');
     const { fetchAuth, checkTokenIsValid } = UseAuth();
     const [success, setSuccess] = useState(false);
@@ -22,7 +22,7 @@ export default function UserProfile({ geToken }) {
 
     useEffect(() => {
         setUsername(fetchAuth().User.username);
-        setUuid(fetchAuth().User.uuid);
+        setUserId(fetchAuth().User.id);
     }, []);
 
 
@@ -37,11 +37,15 @@ export default function UserProfile({ geToken }) {
     // Update user information
     const updateUser = async () => {
         let timeoutId = null;
-        await axios.put(`http://localhost:3001/api/user/update/${uuid}`, {
+        await axios.put(`http://localhost:3001/api/user/update/${userId}`, {
             username: username,
             password: password,
-            uuid: uuid,
-        }).then((response) => {
+        }, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        ).then((response) => {
             if (response.status === 200) {
                 setMessage("Updated");
                 setPassword('');
