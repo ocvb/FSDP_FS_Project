@@ -1,10 +1,10 @@
-const { Sequelize, Model, DataTypes } = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
 const process = require("process");
 const db = new Sequelize({
   dialect: "sqlite",
   storage: __dirname + "/" + process.env.db_file,
   logging: false,
-}); // Example for sqlite
+});
 
 const Users = db.define("users", {
   username: {
