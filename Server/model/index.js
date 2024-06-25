@@ -59,4 +59,29 @@ Events.belongsTo(Users, {
   constraints: false,
 });
 
-module.exports = { db, Users, Events };
+const Rewards = db.define("rewards", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  points: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  claimed: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
+});
+
+module.exports = { db, Users, Events, Rewards };

@@ -11,6 +11,7 @@ import Home from "./routes/Home/Home";
 import Events from "./routes/Events/Events";
 import Account from "./routes/Account/Account";
 import SkillShare from "./routes/SkillShare/SkillShare";
+import Rewards from "./routes/Rewards/Rewards";
 
 import Profile from './routes/Account/Profile/Profile';
 
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="admin" element={<Admin />} />
           <Route path="profile" element={<Profile />} />
         </Route>
+        <Route path="/rewards" element={<Rewards />} />
       </Routes>
     </>
   )
