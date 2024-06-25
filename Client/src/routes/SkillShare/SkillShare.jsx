@@ -1,7 +1,7 @@
 import { Box, Container } from "@mui/material";
 import Button from "@/components/Button/CustomButton.module";
 
-import styles from "./SkillShare.module.css";
+import "./SkillShare.module.css";
 
 export default function SkillShare() {
     return (
