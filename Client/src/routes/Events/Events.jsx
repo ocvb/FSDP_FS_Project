@@ -5,6 +5,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Carousel from "react-material-ui-carousel";
 
 import images from "../../assets/Events/event-bg.jpg";
 
@@ -21,6 +22,7 @@ export default function Events() {
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
+  const itemsPerSlide = 3;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,16 +85,33 @@ export default function Events() {
             <div className={styles.header2}>Up-Coming Events & Facilities</div>
             <p className={styles.p}>{nullEvents}</p>
             <div className={styles.row}>
-              {events &&
-                events.slice(0, 3).map((item, index) => (
-                  <div className={styles.col} key={index}>
-                    <div>
-                      <h3 className={styles.h3}>{item.title}</h3>
-                      <p className={styles.p}>{item.description}</p>
+              <Carousel
+                itemsPerSlide={itemsPerSlide}
+                navButtonsAlwaysVisible={true}
+                autoPlay={false}
+                animation="slide"
+                indicatorIconButtonProps={{
+                  style: {
+                    padding: "5px", // 1
+                  },
+                }}
+                indicatorContainerProps={{
+                  style: {
+                    marginTop: "10px",
+                  },
+                }}
+              >
+                {events &&
+                  events.slice(0, 10).map((item, index) => (
+                    <div className={styles.carcol} key={index}>
+                      <div>
+                        <h3 className={styles.h3}>{item.title}</h3>
+                        <p className={styles.p}>{item.description}</p>
+                      </div>
+                      <p className={styles.dateText}>{item.date}</p>
                     </div>
-                    <p className={styles.dateText}>{item.date}</p>
-                  </div>
-                ))}
+                  ))}
+              </Carousel>
             </div>
             <a href="#target-element">
               <CustomButton
@@ -135,35 +154,17 @@ export default function Events() {
               gap: "1rem",
             }}
           >
-            <div className={styles.box}>
-              <p className={styles.leadingTitle}>Leading Title</p>
-              <h2 className={styles.h2}>title</h2>
-              <p className={styles.p}>
-                We are a community of people who love to meet new faces and
-                share experiences. Our goal is to bring people together and
-                create memories that will last a lifetime. Join us today and
-                become a part of our community!
-              </p>
-            </div>
-            <div className={styles.box}>
-              <p className={styles.leadingTitle}>Leading Title</p>
-              <h2 className={styles.h2}>title</h2>
-              <p className={styles.p}>
-                We are a community of people who love to meet new faces and
-                share experiences. Our goal is to bring people together and
-                create memories that will last a lifetime. Join us today and
-                become a part of our community!
-              </p>
-            </div>
-            <div className={styles.box}>
-              <p className={styles.leadingTitle}>Leading Title</p>
-              <h2 className={styles.h2}>title</h2>
-              <p className={styles.p}>
-                We are a community of people who love to meet new faces and
-                share experiences. Our goal is to bring people together and
-                create memories that will last a lifetime. Join us today and
-                become a part of our community!
-              </p>
+            <div className={styles.row}>
+              {events &&
+                events.slice(0, 3).map((item, index) => (
+                  <div className={styles.col} key={index}>
+                    <div>
+                      <h3 className={styles.h3}>{item.title}</h3>
+                      <p className={styles.p}>{item.description}</p>
+                    </div>
+                    <p className={styles.dateText}>{item.date}</p>
+                  </div>
+                ))}
             </div>
           </Container>
         </Container>
@@ -189,35 +190,17 @@ export default function Events() {
               gap: "1rem",
             }}
           >
-            <div className={styles.box}>
-              <p className={styles.leadingTitle}>Leading Title</p>
-              <h2 className={styles.h2}>title</h2>
-              <p className={styles.p}>
-                We are a community of people who love to meet new faces and
-                share experiences. Our goal is to bring people together and
-                create memories that will last a lifetime. Join us today and
-                become a part of our community!
-              </p>
-            </div>
-            <div className={styles.box}>
-              <p className={styles.leadingTitle}>Leading Title</p>
-              <h2 className={styles.h2}>title</h2>
-              <p className={styles.p}>
-                We are a community of people who love to meet new faces and
-                share experiences. Our goal is to bring people together and
-                create memories that will last a lifetime. Join us today and
-                become a part of our community!
-              </p>
-            </div>{" "}
-            <div className={styles.box}>
-              <p className={styles.leadingTitle}>Leading Title</p>
-              <h2 className={styles.h2}>title</h2>
-              <p className={styles.p}>
-                We are a community of people who love to meet new faces and
-                share experiences. Our goal is to bring people together and
-                create memories that will last a lifetime. Join us today and
-                become a part of our community!
-              </p>
+            <div className={styles.row}>
+              {events &&
+                events.slice(0, 3).map((item, index) => (
+                  <div className={styles.col} key={index}>
+                    <div>
+                      <h3 className={styles.h3}>{item.title}</h3>
+                      <p className={styles.p}>{item.description}</p>
+                    </div>
+                    <p className={styles.dateText}>{item.date}</p>
+                  </div>
+                ))}
             </div>
           </Container>
         </Container>
