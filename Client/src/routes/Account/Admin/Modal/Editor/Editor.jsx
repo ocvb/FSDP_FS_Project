@@ -8,6 +8,7 @@ import Alert from '@mui/material/Alert';
 import Events from "./Modal/Event";
 import Users from "./Modal/Users";
 import Courses from "./Modal/Courses";
+import Support from "./Modal/Support";
 
 export default function Editor() {
     const [snackbar, setSnackbar] = useState(null);
@@ -49,11 +50,13 @@ export default function Editor() {
                     <MenuItem value={0}>Users</MenuItem>
                     <MenuItem value={1}>Events</MenuItem>
                     <MenuItem value={2}>Courses</MenuItem>
+                    <MenuItem value={4}>Support</MenuItem>
                 </Select>
             </div>
             <div style={{ position: 'relative', height: 'calc(100vh - 135px - 2rem)', width: '100%', backgroundColor: "white" }}>
                 {selected == 0 ? <Users postSnackbar={handleSnackbarFromModal} /> : selected == 1 ? <Events postSnackbar={handleSnackbarFromModal} /> : <Courses />}
-
+                {selected == 4 ? <Support postSnackbar={handleSnackbarFromModal} /> : null}
+                
                 {!!snackbar && (
                     <Snackbar open anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                         autoHideDuration={3000} onClose={() => setSnackbar(null)}>
