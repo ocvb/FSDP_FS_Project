@@ -1,18 +1,21 @@
+import { useState } from "react";
 
 // Components
 import { Box, Container } from "@mui/material";
 import Button from "@/components/Button/CustomButton.module";
 
-import Editor from "./Modal/Editor/Editor";
-
 import styles from "./Admin.module.css";
 
+import Editor from "./Modal/Editor/Editor";
+import Analytics from "./Modal/Analytics/Analytics";
+
 export default function Admin() {
+    const [activeTab, setActiveTab] = useState(0);
 
     const tabs = [
-        { name: "Editor", },
-        { name: "Analytics", },
-        { name: "Account", }
+        { name: "Editor", index: 0, action: () => { setActiveTab(0) } },
+        { name: "Analytics", index: 1, action: () => { setActiveTab(1) } },
+        { name: "Account", index: 2, action: () => { setActiveTab(2) } }
     ]
 
     const InputStyle = {
@@ -32,7 +35,7 @@ export default function Admin() {
             justifyContent: 'start',
             alignItems: 'start',
             padding: '0 !important',
-            backgroundColor: 'lightgrey',
+            backgroundColor: '#f8f8f8',
             height: 'calc(100vh - 64px)',
         }}>
             <Box sx={{
@@ -44,13 +47,26 @@ export default function Admin() {
                 padding: '1rem',
                 height: '100%',
                 backgroundColor: 'white',
+                borderRight: '1px solid #f0f0f0',
             }}>
-                {/* TODO: EVERYTHing ;) */}
-                <div className={styles.tabs}>
+                <div className={styles.tabs} style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '5px',
+
+                }}>
                     {tabs && tabs.map((tab, index) => {
                         return (
                             <div key={index} className={styles.tab}>
-                                <Button sx={InputStyle} text={tab.name}></Button>
+                                <Button sx={{
+                                    ...InputStyle,
+                                    backgroundColor: activeTab == index ? '#dbdbdb' : 'white',
+                                    color: activeTab == index ? 'black' : '#212121',
+                                    '&:hover': {
+                                        backgroundColor: '#dbdbdb',
+                                        color: 'black',
+                                    }
+                                }} text={tab.name} onClick={tab.action}></Button>
                             </div>
                         );
                     })}
@@ -63,7 +79,7 @@ export default function Admin() {
                 gap: '1rem',
 
             }}>
-                <Editor />
+                {activeTab == 0 ? <Editor /> : <Analytics />}
 
             </Box>
         </Container>
