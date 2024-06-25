@@ -1,9 +1,18 @@
+import { Box, Container } from "@mui/material";
 
+
+import "./Courses.css";
 
 export default function Courses() {
     return (
-        <div>
-            <h1>Courses</h1>
-        </div>
+        <Box
+            component={Container}
+            maxWidth={true}>
+            <Container>
+                <div>
+                    <h1>Courses</h1>
+                </div>
+            </Container>
+        </Box>
     );
 }
