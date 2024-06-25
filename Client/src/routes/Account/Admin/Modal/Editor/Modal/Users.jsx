@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { Select } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
+import CancelIcon from '@mui/icons-material/Cancel';
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@/components/Button/CustomButton.module";
 import PropTypes from 'prop-types';
@@ -19,6 +19,9 @@ import {
     DataGrid,
     useGridApiContext,
 } from '@mui/x-data-grid';
+import { FlareSharp, MoreHoriz } from "@mui/icons-material";
+import Dropdown from "@/components/Dropdown/Dropdown.module";
+
 
 export default function Users({ postSnackbar }) {
     Users.propTypes = {
@@ -95,10 +98,10 @@ export default function Users({ postSnackbar }) {
 
             }}>
                 <Button text="Add record" color="primary" startIcon={<AddIcon sx={{ marginLeft: 0 }} />} onClick={handleClick} sx={{
-                    backgroundColor: '#74bd90',
+                    backgroundColor: 'black',
                     color: 'white',
                     '&:hover': {
-                        backgroundColor: '#74c693',
+                        backgroundColor: '#2a2a2a',
                     }
 
                 }} />
@@ -150,6 +153,8 @@ export default function Users({ postSnackbar }) {
         }
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View, ignoreModifications: true } });
     }
+
+
 
     function SelectEditInputCell(props) {
         const { id, value, field } = props;
@@ -212,24 +217,52 @@ export default function Users({ postSnackbar }) {
             getActions: ({ id }) => {
                 const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
+                const [dropdown, setDropdown] = useState(false)
+                const buttons = [
+                    {
+                        submenu: [
+                            { name: "Save" },
+                            { name: "Cancel" }
+                        ],
+                    }, {
+                        submenu: [
+                            {
+                                name: "Edit",
+                                action: handleEditClick(id),
+
+                            },
+                            {
+                                name: "Delete",
+                                action: handleDeleteClick(id),
+
+                            }
+                        ]
+                    }
+
+                ]
+
+
+
+                const handleOpenDropdown = () => {
+                    setDropdown(!dropdown)
+                }
+
+
                 if (isInEditMode) {
                     return [
                         <GridActionsCellItem
                             key={"Save"}
-                            icon={<SaveIcon />}
+                            icon={<SaveIcon sx={{ color: '#0c9878', fontSize: 25 }} />}
                             label="Save"
-                            sx={{
-                                color: 'primary.main',
-                            }}
                             onClick={handleSaveClick(id)}
                         />,
                         <GridActionsCellItem
                             key={"Cancel"}
-                            icon={<CancelIcon />}
+                            icon={<CancelIcon sx={{ color: 'darkred', fontSize: 25 }} />}
                             label="Cancel"
                             className="textPrimary"
                             onClick={handleCancelClick(id)}
-                            color="inherit"
+
                         />,
                     ];
                 }
@@ -237,18 +270,16 @@ export default function Users({ postSnackbar }) {
                 return [
                     <GridActionsCellItem
                         key={"Edit"}
-                        icon={<EditIcon />}
+                        icon={< EditIcon sx={{ color: '#0c9878', fontSize: 25 }} />}
                         label="Edit"
                         className="textPrimary"
                         onClick={handleEditClick(id)}
-                        color="inherit"
                     />,
                     <GridActionsCellItem
                         key={"Delete"}
-                        icon={<DeleteIcon />}
+                        icon={<DeleteIcon sx={{ color: 'darkred', fontSize: 25 }} />}
                         label="Delete"
                         onClick={handleDeleteClick(id)}
-                        color="inherit"
                     />,
                 ];
             },
@@ -283,10 +314,10 @@ export default function Users({ postSnackbar }) {
 
                 },
                 '& .MuiDataGrid-cell--editing': {
+                    borderRight: '1px solid #e0e0e0',
                     p: '0.3rem !important',
                 },
                 '& .MuiDataGrid-cell--editable': {
-                    borderRight: '1px solid #e0e0e0',
                     bgcolor: (theme) => {
                         return theme.palette.mode === 'dark' ? '#376331' : 'rgb(252 252 252)'
                     },

@@ -4,9 +4,9 @@ import { Link } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
+import CancelIcon from '@mui/icons-material/Cancel';
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@/components/Button/CustomButton.module";
 import PropTypes from 'prop-types';
@@ -18,6 +18,7 @@ import {
     GridRowEditStopReasons,
     DataGrid,
 } from '@mui/x-data-grid';
+
 
 export default function Events({ postSnackbar }) {
     Events.propTypes = {
@@ -94,10 +95,10 @@ export default function Events({ postSnackbar }) {
 
             }}>
                 <Button text="Add record" color="primary" startIcon={<AddIcon sx={{ marginLeft: 0 }} />} onClick={handleClick} sx={{
-                    backgroundColor: '#74bd90',
+                    backgroundColor: 'black',
                     color: 'white',
                     '&:hover': {
-                        backgroundColor: '#7cb592',
+                        backgroundColor: '#2a2a2a',
                     }
 
                 }} />
@@ -245,20 +246,17 @@ export default function Events({ postSnackbar }) {
                     return [
                         <GridActionsCellItem
                             key={"Save"}
-                            icon={<SaveIcon />}
+                            icon={<SaveIcon sx={{ color: '#0c9878', fontSize: 25 }} />}
                             label="Save"
-                            sx={{
-                                color: 'primary.main',
-                            }}
                             onClick={handleSaveClick(id)}
                         />,
                         <GridActionsCellItem
                             key={"Cancel"}
-                            icon={<CancelIcon />}
+                            icon={<CancelIcon sx={{ color: 'darkred', fontSize: 25 }} />}
                             label="Cancel"
                             className="textPrimary"
                             onClick={handleCancelClick(id)}
-                            color="inherit"
+
                         />,
                     ];
                 }
@@ -266,18 +264,16 @@ export default function Events({ postSnackbar }) {
                 return [
                     <GridActionsCellItem
                         key={"Edit"}
-                        icon={<EditIcon />}
+                        icon={<EditIcon sx={{ color: '#0c9878', fontSize: 25 }} />}
                         label="Edit"
                         className="textPrimary"
                         onClick={handleEditClick(id)}
-                        color="inherit"
                     />,
                     <GridActionsCellItem
                         key={"Delete"}
-                        icon={<DeleteIcon />}
+                        icon={<DeleteIcon sx={{ color: 'darkred', fontSize: 25 }} />}
                         label="Delete"
                         onClick={handleDeleteClick(id)}
-                        color="inherit"
                     />,
                 ];
             },
@@ -320,6 +316,7 @@ export default function Events({ postSnackbar }) {
                 },
                 '& .MuiDataGrid-cell--editing': {
                     p: '0.3rem !important',
+                    borderRight: '1px solid #e0e0e0',
                 },
                 '& .MuiDataGrid-cell--editable': {
                     bgcolor: (theme) => {
@@ -327,7 +324,10 @@ export default function Events({ postSnackbar }) {
                     },
                 },
                 '& .MuiDataGrid-row--editing': {
-                    backgroundColor: 'transparent',
+                    '& .MuiDataGrid-cell': {
+                        backgroundColor: 'unset',
+
+                    }
                 },
             }}
         />
