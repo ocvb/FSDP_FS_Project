@@ -57,6 +57,7 @@ Users.hasMany(Events), {
 Events.belongsTo(Users, {
   foreignKey: 'userId',
   constraints: false,
+  allowNull: true,
 });
 
 const Rewards = db.define("rewards", {

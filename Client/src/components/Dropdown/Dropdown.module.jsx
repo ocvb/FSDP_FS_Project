@@ -8,7 +8,7 @@ const Dropdown = memo(forwardRef(({ subitems = [], dropdown, onMouseLeave }, ref
     const anchorStyle = {
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "start",
         gap: "0.2rem",
     }
 

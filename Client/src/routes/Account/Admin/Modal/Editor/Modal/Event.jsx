@@ -81,8 +81,22 @@ export default function Events({ postSnackbar }) {
         };
 
         return (
-            <GridToolbarContainer>
-                <Button text="Add record" color="primary" startIcon={<AddIcon />} onClick={handleClick} />
+            <GridToolbarContainer sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '1rem',
+                alignItems: 'center',
+                padding: '1rem',
+
+            }}>
+                <Button text="Add record" color="primary" startIcon={<AddIcon sx={{ marginLeft: 0 }} />} onClick={handleClick} sx={{
+                    backgroundColor: '#74bd90',
+                    color: 'white',
+                    '&:hover': {
+                        backgroundColor: '#74c693',
+                    }
+
+                }} />
             </GridToolbarContainer>
         );
     }

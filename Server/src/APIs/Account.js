@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { Users } = require("../model");
+const { Users } = require("@models");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { TokenAuthentication } = require("./Middlewares/TokenAuthentication");
+const { TokenAuthentication } = require("@middleware/TokenAuthentication");
 
 function generateToken(user) {
     return jwt.sign({ data: user }, process.env.JWT_SECRET, { expiresIn: "1h" });

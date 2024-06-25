@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Users, Events } = require("../model");
+const { Users, Events } = require("@models");
 const bcrypt = require("bcrypt");
 const process = require("process");
 

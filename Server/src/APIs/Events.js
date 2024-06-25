@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { Events } = require("../model");
-const { TokenAuthentication } = require("./Middlewares/TokenAuthentication");
+const { Events } = require("@models");
+const { TokenAuthentication } = require("@middleware/TokenAuthentication");
+const { EventValidation } = require("@validations/EventValidation");
 
 // Events APIs
 router.get('/user', TokenAuthentication, async (req, res) => {
@@ -30,21 +31,21 @@ router.get('/', async (req, res) => {
     res.status(200).json(events);
 });
 
-router.post("/api/events", TokenAuthentication, async (req, res) => {
+router.post("/", TokenAuthentication, EventValidation, async (req, res) => {
     const { title, description, location, date, price } = req.body;
 
-    if (title.length === 0 || description.length === 0 || location.length === 0 || date.length === 0 || price.length === 0) {
+    if (title == null || description == null || location == null || date == null || price == null) {
         res.status(400).json({ message: "Please provide all the required fields" });
         return;
     }
 
-    const formattedDate = new Date(date); // console.log(formattedDate.toLocaleString());
+    const formattedDate = new Date(date);
     const event = await Events.create({
         title, description, location, date: formattedDate, price
     });
 
 
-    if (event.length > 0) {
+    if (event) {
         res.status(201).json({ message: "Event created successfully" });
     } else {
         res.status(400).json({ message: "Event creation failed" });
