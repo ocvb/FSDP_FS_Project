@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Select, MenuItem } from "@mui/material";
+import { Select, MenuItem, MenuList } from "@mui/material";
 import PropTypes from 'prop-types';
 
 import Snackbar from '@mui/material/Snackbar';
@@ -22,29 +22,34 @@ export default function Editor() {
     }
 
     return (
-        <div style={{
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-            height: 'fit-content',
-        }} >
-            <div style={{
+        <div
+            style={{
+                position: 'relative',
                 display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
+                flexDirection: 'column',
                 gap: '1rem',
-
+                height: 'fit-content',
             }}>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    gap: '1rem',
+
+                }}>
                 <Select
                     variant="outlined"
                     defaultValue={0}
+                    onChange={handleOnChangeSelect}
                     sx={{
                         width: '200px',
                         color: 'black',
                         backgroundColor: 'white',
+                        '& .MuiMenu-list': {
+                            p: '5px',
+                        }
                     }}
-                    onChange={handleOnChangeSelect}
                 >
                     <MenuItem value={0}>Users</MenuItem>
                     <MenuItem value={1}>Events</MenuItem>
