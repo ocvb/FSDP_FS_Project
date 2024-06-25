@@ -49,7 +49,6 @@ export default function Events() {
         <div className={styles.header}>
           <img src={images} className={styles.img}></img>
           <div className={styles.header_details}>
-            {/* <h1 className={styles.h1}>W</h1> */}
             <p className={styles.p}>Welcome to the events page!</p>
             <p className={styles.p}>Find out about our events here!</p>
             <CustomButton
@@ -87,7 +86,6 @@ export default function Events() {
             <div className={styles.row}>
               <Carousel
                 itemsPerSlide={itemsPerSlide}
-                navButtonsAlwaysVisible={true}
                 autoPlay={false}
                 animation="slide"
                 indicatorIconButtonProps={{
@@ -101,16 +99,42 @@ export default function Events() {
                   },
                 }}
               >
-                {events &&
-                  events.slice(0, 10).map((item, index) => (
-                    <div className={styles.carcol} key={index}>
-                      <div>
-                        <h3 className={styles.h3}>{item.title}</h3>
-                        <p className={styles.p}>{item.description}</p>
+                <div className={styles.carouselItems}>
+                  {events &&
+                    events.slice(0, 3).map((item, index) => (
+                      <div className={styles.carcol} key={index}>
+                        <div>
+                          <h3 className={styles.h3}>{item.title}</h3>
+                          <p className={styles.p}>{item.description}</p>
+                        </div>
+                        <p className={styles.dateText}>{item.date}</p>
                       </div>
-                      <p className={styles.dateText}>{item.date}</p>
-                    </div>
-                  ))}
+                    ))}
+                </div>
+                <div className={styles.carouselItems}>
+                  {events &&
+                    events.slice(3, 6).map((item, index) => (
+                      <div className={styles.carcol} key={index}>
+                        <div>
+                          <h3 className={styles.h3}>{item.title}</h3>
+                          <p className={styles.p}>{item.description}</p>
+                        </div>
+                        <p className={styles.dateText}>{item.date}</p>
+                      </div>
+                    ))}
+                </div>
+                <div className={styles.carouselItems}>
+                  {events &&
+                    events.slice(6, 9).map((item, index) => (
+                      <div className={styles.carcol} key={index}>
+                        <div>
+                          <h3 className={styles.h3}>{item.title}</h3>
+                          <p className={styles.p}>{item.description}</p>
+                        </div>
+                        <p className={styles.dateText}>{item.date}</p>
+                      </div>
+                    ))}
+                </div>
               </Carousel>
             </div>
             <a href="#target-element">

@@ -43,55 +43,65 @@ router.post("/api/events", async (req, res) => {
   res.json(event);
 });
 
-// update
-router.put("/api/events/:id", async (req, res) => {
-  const eventId = req.params.id;
+// For the PUT request
+router.put("/:id", TokenAuthentication, async (req, res) => {
+  const { id } = req.params;
   const { title, description, location, date, price } = req.body;
 
+  console.log(req.body);
+
+  if (title == "" || description == "" || location == "" || !(price >= 0)) {
+    res.status(400).json({ message: "Please provide all the required fields" });
+    return;
+  }
+
   try {
-    // Find the event to update
-    const event = await Events.findByPk(eventId);
+    const formattedDate = new Date(date);
+    const event = await Events.upsert(
+      {
+        id,
+        title,
+        description,
+        location,
+        date: formattedDate,
+        price,
+      },
+      {
+        where: { id: id },
+      }
+    );
 
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
+    if (event) {
+      res.status(200).json({ message: "Event updated successfully" });
+    } else {
+      res.status(400).json({ message: "Event update failed" });
     }
-
-    // Update event properties with new values (if provided)
-    event.title = title || event.title;
-    event.description = description || event.description;
-    // ... update other properties similarly
-
-    // Save the updated event
-    await event.save();
-
-    // Send response with updated event data
-    res.json(event);
-  } catch (error) {
-    console.error("Error updating event:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+  } catch (err) {
+    console.error("Error updating events", err.message);
+    res
+      .status(500)
+      .json({ message: "Event update failed", error: err.message });
   }
 });
 
-// delete
-router.delete("/api/events/:id", async (req, res) => {
-  const eventId = req.params.id;
-
+// For the DELETE request
+router.delete("/:id", TokenAuthentication, async (req, res) => {
+  const { id } = req.params;
   try {
-    // Find the event to delete
-    const event = await Events.findByPk(eventId);
+    const event = await Events.destroy({
+      where: { id: id }, // Make sure to use the id from req.params
+    });
 
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
+    if (event) {
+      res.status(200).json({ message: "Event deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Event not found" });
     }
-
-    // Delete the event
-    await event.destroy();
-
-    // Send successful deletion response
-    res.status(204).send(); // Or you can send a success message with 200 code
-  } catch (error) {
-    console.error("Error deleting event:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+  } catch (err) {
+    console.error("Error deleting events");
+    res
+      .status(500)
+      .json({ message: "Event deletion failed", error: err.message });
   }
 });
 

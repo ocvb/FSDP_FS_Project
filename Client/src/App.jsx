@@ -11,14 +11,15 @@ import Home from "./routes/Home/Home";
 import Events from "./routes/Events/Events";
 import Account from "./routes/Account/Account";
 import SkillShare from "./routes/SkillShare/SkillShare";
+import Facilities from "./routes/Facilities/Facilities";
 
-import Profile from './routes/Account/Profile/Profile';
+import Profile from "./routes/Account/Profile/Profile";
 
-import Admin from './routes/Account/Admin/Admin';
+import Admin from "./routes/Account/Admin/Admin";
 
 import logo from "@/assets/Navbar/logo.png";
 
-import './index.css'
+import "./index.css";
 
 export default function App() {
   const { fetchAuth } = UseAuth();
@@ -27,10 +28,15 @@ export default function App() {
   const isAdminRoute = location.pathname.includes("admin");
   return (
     <>
-      {checkIfAdmin && isAdminRoute ? <NavbarAdmin logo={logo} /> : <NavigationBar imgUrl={logo} />}
+      {checkIfAdmin && isAdminRoute ? (
+        <NavbarAdmin logo={logo} />
+      ) : (
+        <NavigationBar imgUrl={logo} />
+      )}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/facilities" element={<Facilities />} />
         <Route path="/skill-share" element={<SkillShare />} />
         <Route path="/account" element={<Account />} />
         <Route path="/account/*" element={<ProtectedRoute />}>
@@ -39,5 +45,5 @@ export default function App() {
         </Route>
       </Routes>
     </>
-  )
+  );
 }

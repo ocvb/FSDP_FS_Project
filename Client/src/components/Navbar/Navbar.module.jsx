@@ -7,15 +7,18 @@ import Dropdown from "../Dropdown/Dropdown.module";
 export const navigation = [
   { name: "Home", href: "/" },
   { name: "Events", href: "/events" },
+  { name: "Facilities", href: "/facilities" },
   {
-    name: "Courses", href: "/courses", submenu: [
+    name: "Courses",
+    href: "/courses",
+    submenu: [
       { name: "Web Development", href: "/web-dev" }, // menu items test
       { name: "Data Science", href: "/data-science" },
       { name: "Machine Learning", href: "/machine-learning" },
       { name: "Artificial Intelligence", href: "/artificial-intelligence" },
-    ]
+    ],
   },
-  { name: "Rewards", href: "/rewards", },
+  { name: "Rewards", href: "/rewards" },
   { name: "Skill-share", href: "/skill-share" },
   { name: "FAQ", href: "/faq" },
   { name: "Account", href: "/account" },
@@ -29,16 +32,19 @@ export default function navbar(props) {
 
   useEffect(() => {
     const handler = (event) => {
-      if (hoveredRef.current.style.display == "block" && !hoverButton.current.contains(event.target) && !hoveredRef.current.contains(event.target)) {
+      if (
+        hoveredRef.current.style.display == "block" &&
+        !hoverButton.current.contains(event.target) &&
+        !hoveredRef.current.contains(event.target)
+      ) {
         setDropdown(false);
       }
-    }
+    };
 
-    document.addEventListener('mouseover', handler);
+    document.addEventListener("mouseover", handler);
     return () => {
-      document.removeEventListener('mouseover', handler);
-    }
-
+      document.removeEventListener("mouseover", handler);
+    };
   }, []);
 
   const onMouseEnter = (index) => {
@@ -48,21 +54,32 @@ export default function navbar(props) {
 
   const handlerDropdownOnMouseLeave = () => {
     setDropdown(false);
-  }
+  };
 
   return (
     <>
-      <AppBar position="fixed" className={styles.navbar} sx={{
-        boxShadow: '0px 2px 3px -1px rgba(0,0,0,0.09), 0px 4px 3px 0px rgba(0,0,0,0.05)',
-      }} >
-        <Toolbar className={styles.toolbar} style={{
-          padding: "0 2rem",
-        }}>
+      <AppBar
+        position="fixed"
+        className={styles.navbar}
+        sx={{
+          boxShadow:
+            "0px 2px 3px -1px rgba(0,0,0,0.09), 0px 4px 3px 0px rgba(0,0,0,0.05)",
+        }}
+      >
+        <Toolbar
+          className={styles.toolbar}
+          style={{
+            padding: "0 2rem",
+          }}
+        >
           <div style={{ flexGrow: 1 }}>
-            <a href={navigation[0].href} style={{
-              display: "flex",
-              alignItems: "center",
-            }}>
+            <a
+              href={navigation[0].href}
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <img src={props.imgUrl} width={"45px"} />
             </a>
           </div>
@@ -81,7 +98,14 @@ export default function navbar(props) {
               >
                 {item.name}
               </Button>
-              {getIndex === index && <Dropdown subitems={item.submenu} dropdown={dropdown} ref={hoveredRef} onMouseLeave={handlerDropdownOnMouseLeave} />}
+              {getIndex === index && (
+                <Dropdown
+                  subitems={item.submenu}
+                  dropdown={dropdown}
+                  ref={hoveredRef}
+                  onMouseLeave={handlerDropdownOnMouseLeave}
+                />
+              )}
             </div>
           ))}
           <div style={{ flexGrow: 1 }}></div>
