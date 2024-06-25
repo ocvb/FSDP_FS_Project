@@ -4,26 +4,16 @@
   color: white;
 }
 
-.header-image {
+.headerImage {
   width: 100%;
   height: auto;
 }
 
-.header-text {
+.headerText {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-
-.sign-up-button {
-  background-color: #ff9800;
-  border: none;
-  padding: 10px 20px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 10px;
 }
 
 .partners {
@@ -31,19 +21,19 @@
   margin: 20px 0;
 }
 
-.partners-logos {
+.partnersLogos {
   display: flex;
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
 }
 
-.partners-logos img {
+.partnersLogos img {
   max-width: 150px;
   margin: 10px;
 }
 
-.how-it-works {
+.howItWorks {
   text-align: center;
   margin: 20px 0;
 }
@@ -68,4 +58,3 @@
   font-size: 48px;
   margin-bottom: 10px;
 }
-
