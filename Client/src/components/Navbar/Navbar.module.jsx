@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useEffect, useRef } from "react";
 import { AppBar, Toolbar, Button } from "@mui/material";
 import styles from "./css/Navbar.module.css";
 import Dropdown from "../Dropdown/Dropdown.module";
-
 
 export const navigation = [
   { name: "Home", href: "/" },
@@ -52,7 +52,9 @@ export default function navbar(props) {
 
   return (
     <>
-      <AppBar position="fixed" className={styles.navbar} >
+      <AppBar position="fixed" className={styles.navbar} sx={{
+        boxShadow: '0px 2px 3px -1px rgba(0,0,0,0.09), 0px 4px 3px 0px rgba(0,0,0,0.05)',
+      }} >
         <Toolbar className={styles.toolbar} style={{
           padding: "0 2rem",
         }}>
