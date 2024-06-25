@@ -105,7 +105,7 @@ const Support = db.define("support", {
   },
   sender: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
 
 });

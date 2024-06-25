@@ -22,9 +22,11 @@ app.use('/api', startAPI);
 // Add your API endpoints here
 const userAPI = require("@api/Account");
 const eventAPI = require("@api/Events");
+const supportAPI = require("@api/Support");
 
 app.use('/api/user', userAPI);
 app.use('/api/events', eventAPI);
+app.use('/api/support', supportAPI);
 
 
 

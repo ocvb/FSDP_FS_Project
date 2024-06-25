@@ -1,0 +1,47 @@
+.supportText {
+  text-align: left;
+  color: black;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.supportContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+  flex-direction: row;
+  padding: 40px;
+}
+
+.supportForm {
+  display: flex;
+  flex-direction: column;
+  width: 55%;
+  margin-right: 20px;
+}
+
+.dropdownWrapper {
+  position: relative;
+  margin-top: 16px;
+}
+
+.submitButton {
+  margin-top: 20px;
+  align-self: flex-start;
+}
+
+.imgContainer {
+  width: 40%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img {
+  max-width: 100%;
+  height: auto;
+}
