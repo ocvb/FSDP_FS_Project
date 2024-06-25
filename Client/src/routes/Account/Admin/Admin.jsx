@@ -60,11 +60,11 @@ export default function Admin() {
                             <div key={index} className={styles.tab}>
                                 <Button sx={{
                                     ...InputStyle,
-                                    backgroundColor: activeTab == index ? '#dbdbdb' : 'white',
-                                    color: activeTab == index ? 'black' : '#212121',
+                                    backgroundColor: activeTab == index ? 'black' : 'white',
+                                    color: activeTab == index ? 'white' : '#212121',
                                     '&:hover': {
-                                        backgroundColor: '#dbdbdb',
-                                        color: 'black',
+                                        backgroundColor: 'black',
+                                        color: 'white',
                                     }
                                 }} text={tab.name} onClick={tab.action}></Button>
                             </div>
