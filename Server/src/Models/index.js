@@ -85,4 +85,29 @@ const Rewards = db.define("rewards", {
   },
 });
 
-module.exports = { db, Users, Events, Rewards };
+const Support = db.define("support", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  location: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  urgency: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  sender: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+
+});
+
+module.exports = { db, Users, Events, Rewards, Support };
