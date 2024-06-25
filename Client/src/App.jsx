@@ -32,6 +32,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/courses" element={<Courses />} />
         <Route path="/skill-share" element={<SkillShare />} />
         <Route path="/account" element={<Account />} />
         <Route path="/account/*" element={<ProtectedRoute />}>
