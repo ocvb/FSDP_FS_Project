@@ -93,7 +93,7 @@ router.put("/update/:id", TokenAuthentication, async (req, res) => {
     const { username, password } = req.body;
     const { id } = req.params;
 
-    if (username == undefined || password == undefined) {
+    if (username == null || password == null) {
         res.json({ status: 401, message: "Invalid username or password" });
         return;
     }
@@ -121,22 +121,6 @@ router.put("/update/:id", TokenAuthentication, async (req, res) => {
             res.status(404).json({ status: "error", message: "User not found" });
         }
     });
-});
-
-router.delete('/delete/:id', TokenAuthentication, async (req, res) => {
-    console.log("Delete User", req.params.id)
-    const { id } = req.params;
-    if (!id > 0) {
-        res.json({ status: 401, message: "Invalid uuid" });
-        return;
-    }
-
-    const deleteUser = await Users.destroy({ where: { id } });
-    if (deleteUser == 1) {
-        res.json({ status: "success", message: "User deleted" });
-    } else {
-        res.status(404).json({ status: "error", message: "User not found" });
-    }
 });
 
 module.exports = router;
