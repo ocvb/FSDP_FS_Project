@@ -15,7 +15,7 @@ export default function Events() {
     const getEventData = async () => {
         checkTokenIsValid(retrieveToken).then(async (response) => {
             if (response) {
-                await axios.get("http://localhost:3001/api/user/events", {
+                await axios.get("http://localhost:3001/api/events/user", {
                     params: {
                         userId: fetchAuth().User.id,
                     },
