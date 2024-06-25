@@ -12,7 +12,7 @@
                 "src/Models/*"
             ],
             "@api/*": [
-                "src/Api/*"
+                "src/APIs/*"
             ],
             "@schema/*": [
                 "src/Schemas/*"
