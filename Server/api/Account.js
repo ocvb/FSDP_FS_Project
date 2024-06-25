@@ -3,14 +3,14 @@ const router = express.Router();
 const { Users } = require("../model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { authenticationToken } = require("./Auth/Middleware");
+const { TokenAuthentication } = require("./Middlewares/TokenAuthentication");
 
 function generateToken(user) {
     return jwt.sign({ data: user }, process.env.JWT_SECRET, { expiresIn: "1h" });
 }
 
 // User login
-router.post("/api/user/login", async (req, res) => {
+router.post("/login", async (req, res) => {
     console.log("User login as", req.body.username)
     const { username, password } = req.body;
     console.log("Username:", username, "Password:", password)
@@ -42,7 +42,7 @@ router.post("/api/user/login", async (req, res) => {
 });
 
 // Token authentication
-router.get("/api/user/auth", authenticationToken, async (req, res) => {
+router.get("/auth", TokenAuthentication, async (req, res) => {
     console.log("Checking Authentication")
 
     const { uuid } = req.user.data;
@@ -61,8 +61,14 @@ router.get("/api/user/auth", authenticationToken, async (req, res) => {
     res.json({ status: 200, data: req.user.data, token: req.token });
 });
 
+router.get('/', TokenAuthentication, async (req, res) => {
+    console.log("Get all users")
+    const users = await Users.findAll();
+    res.status(200).json(users);
+});
+
 // User registration
-router.post("/api/user/register", async (req, res) => {
+router.post("/register", async (req, res) => {
     console.log("User Registering", req.body.username)
     const { username, password } = req.body;
     const findSameUsername = await Users.findOne({ where: { username } });
@@ -70,7 +76,7 @@ router.post("/api/user/register", async (req, res) => {
         res.status(409).json({ status: "failed", message: "Username already exists" });
         return;
     }
-    
+
     bcrypt.hash(password, 10).then(async (hash) => {
         const user = await Users.create({ username, password: hash });
         if (user) {
@@ -82,18 +88,16 @@ router.post("/api/user/register", async (req, res) => {
     });
 });
 
-// TODO: Add Middlewares for Authentication & Cleaner Code
-// TODO: JWT Authentication
-router.put("/api/user/update/:uuid", async (req, res) => {
+router.put("/update/:id", TokenAuthentication, async (req, res) => {
     console.log("Update User", req.body.username)
     const { username, password } = req.body;
-    const { uuid } = req.params;
+    const { id } = req.params;
 
     if (username == undefined || password == undefined) {
         res.json({ status: 401, message: "Invalid username or password" });
         return;
     }
-    if (uuid == undefined) {
+    if (!id > 0) {
         res.json({ status: 401, message: "Invalid uuid" });
         return;
     }
@@ -102,14 +106,14 @@ router.put("/api/user/update/:uuid", async (req, res) => {
         let UpdateUserStatus;
         if (password.length == 0) {
             console.log("Update Username only")
-            UpdateUserStatus = await Users.update({ username }, { where: { uuid } }, { returning: true });
+            UpdateUserStatus = await Users.update({ username }, { where: { id } }, { returning: true });
         } else {
             console.log("Update Username and Password")
-            UpdateUserStatus = await Users.update({ username, password: hash }, { where: { uuid } }, { returning: true });
+            UpdateUserStatus = await Users.update({ username, password: hash }, { where: { id } }, { returning: true });
         }
 
         if (UpdateUserStatus == 1) { // update returns an array where the first element is the number of affected rows
-            const retrieveUser = await Users.findOne({ where: { uuid } });
+            const retrieveUser = await Users.findOne({ where: { id } });
             const token = generateToken(retrieveUser);
 
             res.json({ status: "success", data: retrieveUser, token });
@@ -117,6 +121,22 @@ router.put("/api/user/update/:uuid", async (req, res) => {
             res.status(404).json({ status: "error", message: "User not found" });
         }
     });
+});
+
+router.delete('/delete/:id', TokenAuthentication, async (req, res) => {
+    console.log("Delete User", req.params.id)
+    const { id } = req.params;
+    if (!id > 0) {
+        res.json({ status: 401, message: "Invalid uuid" });
+        return;
+    }
+
+    const deleteUser = await Users.destroy({ where: { id } });
+    if (deleteUser == 1) {
+        res.json({ status: "success", message: "User deleted" });
+    } else {
+        res.status(404).json({ status: "error", message: "User not found" });
+    }
 });
 
 module.exports = router;
