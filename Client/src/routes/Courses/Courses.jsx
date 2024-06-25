@@ -9,7 +9,8 @@ export default function Courses() {
             <div className={styles.header}>
                 <img src={images} className={styles.img}></img>
                 <div className={styles.header_details}>
-                    <h1>Courses</h1>
+                    <h1 className={styles.h1}>Courses</h1>
+                    <br></br>
                     <p className={styles.p}>Ever wanted to learn a new skill or pick up a new hobby?</p>
                     <p className={styles.p}>Then apply for one of our many courses to upgrade yourself!</p>
                 </div>
