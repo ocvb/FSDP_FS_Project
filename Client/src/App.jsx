@@ -9,6 +9,7 @@ import ProtectedRoute from "@/components/Auth/RequireAuth";
 // Routes
 import Home from "./routes/Home/Home";
 import Events from "./routes/Events/Events";
+import Courses from "./routes/Courses/Courses";
 import Account from "./routes/Account/Account";
 import SkillShare from "./routes/SkillShare/SkillShare";
 
