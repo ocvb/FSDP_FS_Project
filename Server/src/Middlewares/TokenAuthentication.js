@@ -9,7 +9,7 @@ const TokenAuthentication = (req, res, next) => {
     console.log("Checking Token Authentication...")
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.status(401);
+        if (err) return res.status(401).json({ message: "Invalid Token" });
         console.log("Passed Token Authentication...")
         req.user = user;
         req.token = token;
