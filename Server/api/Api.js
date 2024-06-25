@@ -11,7 +11,7 @@ function genHash(password) {
 }
 
 // Check if the server API is running
-router.get("/api", async (req, res) => {
+router.get("/", async (req, res) => {
     const presetUsers = await Users.bulkCreate([
         {
             username: "admin",

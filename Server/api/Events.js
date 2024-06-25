@@ -1,11 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { Events } = require("../model");
-const { authenticationToken } = require("./Auth/Middleware");
+const { TokenAuthentication } = require("./Middlewares/TokenAuthentication");
 
 // Events APIs
-
-router.get('/api/user/events', authenticationToken, async (req, res) => {
+router.get('/user', TokenAuthentication, async (req, res) => {
     const { userId } = req.query;
 
     if (userId) {
@@ -26,12 +25,12 @@ router.get('/api/user/events', authenticationToken, async (req, res) => {
     }
 });
 
-router.get('/api/events', async (req, res) => {
+router.get('/', async (req, res) => {
     const events = await Events.findAll();
     res.status(200).json(events);
 });
 
-router.post("/api/events", authenticationToken, async (req, res) => {
+router.post("/api/events", TokenAuthentication, async (req, res) => {
     const { title, description, location, date, price } = req.body;
 
     if (title.length === 0 || description.length === 0 || location.length === 0 || date.length === 0 || price.length === 0) {
@@ -54,7 +53,7 @@ router.post("/api/events", authenticationToken, async (req, res) => {
 
 
 // For the PUT request
-router.put("/api/events/:id", authenticationToken, async (req, res) => {
+router.put("/:id", TokenAuthentication, async (req, res) => {
     const { id } = req.params;
     const { title, description, location, date, price } = req.body;
 
@@ -86,7 +85,7 @@ router.put("/api/events/:id", authenticationToken, async (req, res) => {
 });
 
 // For the DELETE request
-router.delete("/api/events/:id", authenticationToken, async (req, res) => {
+router.delete("/:id", TokenAuthentication, async (req, res) => {
     const { id } = req.params;
     try {
         const event = await Events.destroy({
