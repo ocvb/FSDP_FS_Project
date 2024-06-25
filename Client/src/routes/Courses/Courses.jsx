@@ -10,6 +10,7 @@ export default function Courses() {
             <Container>
                 <div>
                     <h1>Courses</h1>
+                    <p>Ever wanted to learn a new skill or pick up a new hobby?</p>
                 </div>
             </Container>
         </Box>
