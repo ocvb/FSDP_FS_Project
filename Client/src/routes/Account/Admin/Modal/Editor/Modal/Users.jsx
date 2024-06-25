@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "@mui/material";
+import { Select } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,6 +17,7 @@ import {
     GridActionsCellItem,
     GridRowEditStopReasons,
     DataGrid,
+    useGridApiContext,
 } from '@mui/x-data-grid';
 
 export default function Users({ postSnackbar }) {
@@ -26,7 +27,7 @@ export default function Users({ postSnackbar }) {
 
     const { data: newData, isFetching, isError } = useQuery({
         queryKey: ['user'],
-        queryFn: async () => await axios.get("http://localhost:3001/api/user/", {
+        queryFn: async () => await axios.get("http://localhost:3001/api/admin/users/", {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
@@ -35,7 +36,7 @@ export default function Users({ postSnackbar }) {
 
     const handleUpdateToDatabase = async (id, updatedRow) => {
         try {
-            const response = await axios.put(`http://localhost:3001/api/user/update/${id}`, updatedRow, {
+            const response = await axios.put(`http://localhost:3001/api/admin/user/${id}`, updatedRow, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -55,7 +56,7 @@ export default function Users({ postSnackbar }) {
 
     const handleDeleteFromDatabase = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:3001/api/user/delete/${id}`, {
+            const response = await axios.delete(`http://localhost:3001/api/admin/user/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -77,7 +78,7 @@ export default function Users({ postSnackbar }) {
 
         const handleClick = () => {
             const id = Math.max(0, ...rows.map((row) => row.id)) + 1;
-            setRows((oldRows) => [...oldRows, { id, updatedAt: 'NA', createdAt: 'NA', isNew: true }]);
+            setRows((oldRows) => [...oldRows, { id, role: 'member', updatedAt: 'NA', createdAt: 'NA', isNew: true }]);
             setRowModesModel((oldModel) => ({
                 ...oldModel,
                 [id]: { mode: GridRowModes.Edit, fieldToFocus: 'title', isNew: true },
@@ -150,33 +151,33 @@ export default function Users({ postSnackbar }) {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View, ignoreModifications: true } });
     }
 
+    function SelectEditInputCell(props) {
+        const { id, value, field } = props;
+        const apiRef = useGridApiContext();
 
-    function ExpandableCell({ value }) {
-        ExpandableCell.propTypes = {
-            value: PropTypes.string.isRequired,
+        const handleChange = async (event) => {
+            await apiRef.current.setEditCellValue({ id, field, value: event.target.value });
+            apiRef.current.stopCellEditMode({ id, field });
         };
 
-        const [expanded, setExpanded] = useState(false);
-        const length = 300;
         return (
-            <div>
-                {expanded ? value : value.slice(0, length)}&nbsp;
-                {value.length > length && (
-                    <Link
-                        type="button"
-                        component="button"
-                        sx={{ fontSize: 'inherit' }}
-                        onClick={() => setExpanded(!expanded)}
-                    >
-                        {expanded ? 'view less' : 'view more'}
-                    </Link>
-                )}
-            </div>
+            <Select
+                value={value}
+                onChange={handleChange}
+                size="small"
+                sx={{ height: 1, width: '100%', }}
+                native
+                autoFocus
+            >
+                <option>member</option>
+                <option>admin</option>
+            </Select>
         );
     }
 
-
-
+    const renderSelectEditInputCell = (params) => {
+        return <SelectEditInputCell {...params} />;
+    };
 
     const columns = [
         {
@@ -199,9 +200,10 @@ export default function Users({ postSnackbar }) {
         {
             field: 'role',
             headerName: 'Role',
-            type: 'string',
+            type: 'singleSelect',
             editable: true,
             flex: 1,
+            renderEditCell: renderSelectEditInputCell,
         },
         { field: 'createdAt', headerName: 'Created At', editable: false },
         { field: 'updatedAt', headerName: 'Updated At', editable: false },
@@ -256,8 +258,6 @@ export default function Users({ postSnackbar }) {
         <DataGrid
             rows={rows}
             columns={columns}
-            getRowHeight={() => 'auto'}
-            getEstimatedRowHeight={() => 200}
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
@@ -270,14 +270,8 @@ export default function Users({ postSnackbar }) {
                 toolbar: { setRows, setRowModesModel },
             }}
             sx={{
-                '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': {
-                    py: 1,
-                },
-                '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': {
-                    py: '15px',
-                },
-                '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': {
-                    py: '22px',
+                '& .MuiDataGrid-main': {
+                    borderTop: '1px solid #e0e0e0',
                 },
                 '& .actions': {
                     display: 'flex',
@@ -286,8 +280,13 @@ export default function Users({ postSnackbar }) {
                 },
                 '& .MuiDataGrid-cell': {
                     backgroundColor: '#f4f4f4',
+
+                },
+                '& .MuiDataGrid-cell--editing': {
+                    p: '0.3rem !important',
                 },
                 '& .MuiDataGrid-cell--editable': {
+                    borderRight: '1px solid #e0e0e0',
                     bgcolor: (theme) => {
                         return theme.palette.mode === 'dark' ? '#376331' : 'rgb(252 252 252)'
                     },
