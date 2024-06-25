@@ -26,12 +26,16 @@ export default function Events({ postSnackbar }) {
 
     const { data: newData, isFetching, isError } = useQuery({
         queryKey: ['events'],
-        queryFn: async () => await axios.get("http://localhost:3001/api/events"),
+        queryFn: async () => await axios.get("http://localhost:3001/api/admin/events", {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        }),
     });
 
     const handleUpdateToDatabase = async (id, updatedRow) => {
         try {
-            const response = await axios.put(`http://localhost:3001/api/events/${id}`, updatedRow, {
+            const response = await axios.put(`http://localhost:3001/api/admin/event/${id}`, updatedRow, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -51,7 +55,7 @@ export default function Events({ postSnackbar }) {
 
     const handleDeleteFromDatabase = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:3001/api/events/${id}`, {
+            const response = await axios.delete(`http://localhost:3001/api/admin/event/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -93,7 +97,7 @@ export default function Events({ postSnackbar }) {
                     backgroundColor: '#74bd90',
                     color: 'white',
                     '&:hover': {
-                        backgroundColor: '#74c693',
+                        backgroundColor: '#7cb592',
                     }
 
                 }} />
@@ -284,7 +288,7 @@ export default function Events({ postSnackbar }) {
             rows={rows}
             columns={columns}
             getRowHeight={() => 'auto'}
-            getEstimatedRowHeight={() => 200}
+            // getEstimatedRowHeight={() => 200}
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
@@ -297,14 +301,14 @@ export default function Events({ postSnackbar }) {
                 toolbar: { setRows, setRowModesModel },
             }}
             sx={{
-                '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': {
-                    py: 1,
+                '& .MuiDataGrid-main': {
+                    borderTop: '1px solid #e0e0e0',
                 },
                 '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': {
                     py: '15px',
-                },
-                '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': {
-                    py: '22px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
                 },
                 '& .actions': {
                     display: 'flex',
@@ -313,6 +317,9 @@ export default function Events({ postSnackbar }) {
                 },
                 '& .MuiDataGrid-cell': {
                     backgroundColor: '#f4f4f4',
+                },
+                '& .MuiDataGrid-cell--editing': {
+                    p: '0.3rem !important',
                 },
                 '& .MuiDataGrid-cell--editable': {
                     bgcolor: (theme) => {
