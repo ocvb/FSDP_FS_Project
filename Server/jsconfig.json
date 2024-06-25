@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@src/*": [
+                "src/*"
+            ],
+            "@validations/*": [
+                "src/Middlewares/Validations/*"
+            ],
+            "@models/*": [
+                "src/Models/*"
+            ],
+            "@api/*": [
+                "src/Api/*"
+            ],
+            "@schema/*": [
+                "src/Schemas/*"
+            ],
+            "@middleware/*": [
+                "src/Middlewares/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ]
+}
