@@ -18,11 +18,11 @@ export default function NavbarAdmin({ logo }) {
     const { logout } = UseAuth();
 
     const menus = [
-        {
-            name: "Profile", action: () => {
-                console.log("Profile")
-            }
-        },
+        // {
+        //     name: "Profile", action: () => {
+        //         console.log("Profile")
+        //     }
+        // },
         {
             name: "Logout", action: () => {
                 logout();
