@@ -51,7 +51,7 @@ export default function Courses() {
                 padding: '2rem',
             }}>
                 <div className={styles.tile}>
-                    <h2 className={styles.h2}>These are the courses we offer.</h2>
+                    <h2 className={styles.h2}>These are the categories of courses we offer.</h2>
                     <br></br>
                     <div className={styles.row}>
                         {courses.map((course, index) => (
