@@ -34,13 +34,14 @@ export default function Rewards({ postSnackbar }) {
   });
 
   const handleUpdateToDatabase = async (id, updatedRow) => {
+    console.log(updatedRow)
     try {
       const response = await axios.put(
         `http://localhost:3001/api/rewards/${id}`,
         updatedRow,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Authorization': `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );

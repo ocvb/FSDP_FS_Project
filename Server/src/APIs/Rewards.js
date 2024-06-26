@@ -49,19 +49,32 @@ router.put("/:id", TokenAuthentication, async (req, res) => {
     res.status(400).json({ message: "Please provide all the required fields" });
     return;
   }
-
+  console.log(req.body)
   try {
-    const reward = await Rewards.findByPk(id);
-    if (reward) {
-      reward.title = title;
-      reward.description = description;
-      reward.points = points;
-      reward.claimed = claimed !== undefined ? claimed : reward.claimed;
-      await reward.save();
-      res.status(200).json({ message: "Reward updated successfully", reward });
-    } else {
-      res.status(404).json({ message: "Reward not found" });
-    }
+
+    const reward = await Rewards.upsert({
+      id,
+      title: title,
+      description: description,
+      points: points,
+      claimed: claimed || false,
+    }, {
+      where: {
+        id: id
+      }
+    })
+    res.status(200).json({ message: "Reward updated successfully", reward });
+    // const reward = await Rewards.findByPk(id);
+    // if (reward) {
+    //   reward.title = title;
+    //   reward.description = description;
+    //   reward.points = points;
+    //   reward.claimed = claimed !== undefined ? claimed : reward.claimed;
+    //   await reward.save();
+    //   console.log(reward)
+    // } else {
+    //   res.status(404).json({ message: "Reward not found" });
+    // }
   } catch (error) {
     console.error("Error updating reward:", error);
     res.status(500).json({ message: "Error updating reward", error });
