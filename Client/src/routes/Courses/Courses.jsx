@@ -3,7 +3,7 @@ import images from "@/assets/Courses/Courses.jpg";
 import styles from "./css/Courses.module.css";
 import { useState, useEffect } from "react";
 
-export default function Courses({ Courses }) {
+export default function Courses() {
     const [courses, setCourses] = useState([
         {
             title: "Health & Wellness",
