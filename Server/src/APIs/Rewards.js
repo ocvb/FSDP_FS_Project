@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Rewards } = require("@models");
+const { Rewards } = require("@models/index");
 const { TokenAuthentication } = require("@middleware/TokenAuthentication");
 
 // Retrieve all rewards
@@ -15,26 +15,29 @@ router.get("/", async (req, res) => {
 });
 
 // Create a new reward
-router.post("/", TokenAuthentication, async (req, res) => {
+router.post("/", async (req, res) => {
   const { title, description, points, claimed } = req.body;
 
   if (!title || !description || !points) {
     res.status(400).json({ message: "Please provide all the required fields" });
     return;
   }
-
+  console.log(req.body)
+  const reward = await Rewards.create({
+    title: title,
+    description: description,
+    points: points,
+    claimed: claimed || false,
+  });
   try {
-    const reward = await Rewards.create({
-      title,
-      description,
-      points,
-      claimed: claimed || false,
-    });
-    res.status(201).json({ message: "Reward created successfully", reward });
+    if (reward) {
+      return res.status(201).json({ message: "Reward created successfully", reward });
+    }
   } catch (error) {
-    console.error("Error creating reward:", error);
-    res.status(400).json({ message: "Error creating reward", error });
+
+    return res.status(400).json({ message: "Error creating reward", error });
   }
+
 });
 
 // Update a reward
