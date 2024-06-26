@@ -7,7 +7,7 @@ router.get('/user', TokenAuthentication, async (req, res) => {
     const { userId } = req.query;
 
     if (userId) {
-        const coursesByUserId = await Events.findAll({
+        const coursesByUserId = await Courses.findAll({
             where: { userId: userId },
             attributes: ['id', 'title', 'description']
         });
@@ -25,23 +25,51 @@ router.get('/user', TokenAuthentication, async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-        const courses = await courses.find();
-        res.json(courses);
+    const courses = await Courses.findAll();
+    res.json(courses);
 });
 
-router.post('api/courses', TokenAuthentication, async (req, res) => {
+router.post('/api/courses', TokenAuthentication, async (req, res) => {
     const { title, description } = req.body;
-    if (title.length == 0 || description.length == 0){
+    if (title.length == 0 || description.length == 0) {
         res.status(400).json({ message: "Please enter the title and description." });
         return;
     }
 
-    
+    const newCourse = await Courses.create({ title, description });
+    res.status(201).json(newCourse);
+});
+
+router.put("/:id", TokenAuthentication, async (req, res) => {
+    const { id } = req.params;
+    const { title, description } = req.body;
+
+    console.log(req.body)
+
+    if (title == "" || description == "") {
+        res.status(400).json({ message: "Please provide all the required fields" });
+        return;
+    }
+
+    await Courses.update({ title, description }, { where: { id: id } });
+    res.status(200).json({ message: "Course updated successfully" });
+});
+
+router.delete("/:id", TokenAuthentication, async (req, res) => {
+    const { id } = req.params;
     try {
-        const newCourse = await course.save();
-        res.status(201).json(newCourse);
+        const event = await Courses.destroy({
+            where: { id: id }
+        });
+
+        if (Courses) {
+            res.status(200).json({ message: "Course deleted successfully" });
+        } else {
+            res.status(404).json({ message: "Course not found" });
+        }
     } catch (err) {
-        res.status(400).json({ message: err.message });
+        console.error("Error deleting course");
+        res.status(500).json({ message: "Course deletion failed", error: err.message });
     }
 });
 
