@@ -1,7 +1,7 @@
-import { Container } from "@mui/material";
+import { Container, Button } from "@mui/material";
 import images from "@/assets/Courses/Courses.jpg";
 import styles from "./css/Courses.module.css";
-import { useState, useEffect } from "react"; 
+import { useState, useEffect } from "react";
 
 export default function Courses({ events }) {
     const [courses, setCourses] = useState([
@@ -37,12 +37,14 @@ export default function Courses({ events }) {
             }}>
                 <div className={styles.tile}>
                     <h2 className={styles.h2}>These are the courses we offer.</h2>
+                    <br></br>
                     <div className={styles.row}>
                         {courses.map((course, index) => (
                             <div className={styles.col} key={index}>
                                 <div className={styles.courseTile}>
                                     <h3 className={styles.h3}>{course.title}</h3>
                                     <p className={styles.p}>{course.description}</p>
+                                    <Button variant="contained" color="primary">Learn More</Button>
                                 </div>
                             </div>
                         ))}
