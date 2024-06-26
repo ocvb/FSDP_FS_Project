@@ -24,6 +24,7 @@ router.get('/user', TokenAuthentication, async (req, res) => {
     }
 });
 
+
 router.get('/', async (req, res) => {
     const courses = await Courses.findAll();
     res.json(courses);
