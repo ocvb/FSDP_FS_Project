@@ -54,8 +54,7 @@ export default function Editor() {
                 </Select>
             </div>
             <div style={{ position: 'relative', height: 'calc(100vh - 135px - 2rem)', width: '100%', backgroundColor: "white" }}>
-                {selected == 0 ? <Users postSnackbar={handleSnackbarFromModal} /> : selected == 1 ? <Events postSnackbar={handleSnackbarFromModal} /> : <Courses />}
-                {selected == 4 ? <Support postSnackbar={handleSnackbarFromModal} /> : null}
+                {selected == 0 ? <Users postSnackbar={handleSnackbarFromModal} /> : selected == 1 ? <Events postSnackbar={handleSnackbarFromModal} /> :  selected == 2 ? <Courses /> : <Support postSnackbar={handleSnackbarFromModal} />}
                 
                 {!!snackbar && (
                     <Snackbar open anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}

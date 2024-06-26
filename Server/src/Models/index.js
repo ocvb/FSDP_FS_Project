@@ -86,11 +86,6 @@ const Rewards = db.define("rewards", {
 });
 
 const Support = db.define("support", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
   location: {
     type: DataTypes.STRING,
     allowNull: false,

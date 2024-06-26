@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Support } = require("@models");
+const { Support } = require("@models/index");
 
 // Retrieve all support requests
 router.get("/", async (req, res) => {
@@ -47,18 +47,25 @@ router.put("/:id", async (req, res) => {
   }
 
   try {
-    const support = await Support.findByPk(id);
-    if (support) {
-      support.location = location;
-      support.urgency = urgency;
-      support.description = description;
-      await support.save();
+      const support = await Support.upsert({
+        id,
+        location: location,
+        urgercy: urgency,
+        description: description,
+      }, {
+        where: {
+          id: id
+        }
+      })
+    // const support = await Support.findByPk(id);
+    // if (support) {
+    //   support.location = location;
+    //   support.urgency = urgency;
+    //   support.description = description;
+    //   await support.save();
       res
         .status(200)
         .json({ message: "Support request updated successfully", support });
-    } else {
-      res.status(404).json({ message: "Support request not found" });
-    }
   } catch (error) {
     console.error("Error updating support request:", error);
     res.status(500).json({ message: "Error updating support request", error });
