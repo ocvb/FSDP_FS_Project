@@ -39,11 +39,11 @@ export default function Rewards({ postSnackbar }) {
       const response = await axios.put(
         `http://localhost:3001/api/rewards/${id}`,
         updatedRow,
-        // {
-        //   headers: {
-        //     'Authorization': `Bearer ${localStorage.getItem("token")}`,
-        //   },
-        // }
+        {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
 
       if (response.status === 200) {
