@@ -51,6 +51,17 @@ const Events = db.define("events", {
   },
 });
 
+const Courses = db.define("courses", {
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  }
+});
+
 Users.hasMany(Events), {
   foreignKey: 'userId',
 };
@@ -59,4 +70,4 @@ Events.belongsTo(Users, {
   constraints: false,
 });
 
-module.exports = { db, Users, Events };
+module.exports = { db, Users, Events, Courses };
