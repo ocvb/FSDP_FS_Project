@@ -19,7 +19,7 @@ import {
     DataGrid,
 } from '@mui/x-data-grid';
 
-export default function Events({ postSnackbar }) {
+export default function Courses({ postSnackbar }) {
     Events.propTypes = {
         postSnackbar: PropTypes.func.isRequired,
     }
