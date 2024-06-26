@@ -25,13 +25,13 @@ export default function Events({ postSnackbar }) {
     }
 
     const { data: newData, isFetching, isError } = useQuery({
-        queryKey: ['events'],
-        queryFn: async () => await axios.get("http://localhost:3001/api/events"),
+        queryKey: ['courses'],
+        queryFn: async () => await axios.get("http://localhost:3001/api/courses"),
     });
 
     const handleUpdateToDatabase = async (id, updatedRow) => {
         try {
-            const response = await axios.put(`http://localhost:3001/api/events/${id}`, updatedRow, {
+            const response = await axios.put(`http://localhost:3001/api/courses/${id}`, updatedRow, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -39,19 +39,19 @@ export default function Events({ postSnackbar }) {
 
             if (response.status === 200) {
                 setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-                postSnackbar({ children: 'Event updated successfully', severity: 'success' });
+                postSnackbar({ children: 'Course updated successfully', severity: 'success' });
             } else {
-                return new Error('Error updating the event');
+                return new Error('Error updating the course');
             }
         } catch (error) {
             setRows(rows.filter((row) => row.id !== id));
-            postSnackbar({ children: 'Error updating the event', severity: 'error' });
+            postSnackbar({ children: 'Error updating the course', severity: 'error' });
         }
     };
 
     const handleDeleteFromDatabase = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:3001/api/events/${id}`, {
+            const response = await axios.delete(`http://localhost:3001/api/courses/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -60,10 +60,10 @@ export default function Events({ postSnackbar }) {
                 setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
                 postSnackbar({ children: 'Event deleted successfully', severity: 'success' });
             } else {
-                return new Error('Error deleting the event');
+                return new Error('Error deleting the course');
             }
         } catch (error) {
-            postSnackbar({ children: 'Error deleting the event', severity: 'error' });
+            postSnackbar({ children: 'Error deleting the course', severity: 'error' });
         }
     };
 
@@ -156,9 +156,6 @@ export default function Events({ postSnackbar }) {
             </div>
         );
     }
-
-
-
 
     const columns = [
         {
