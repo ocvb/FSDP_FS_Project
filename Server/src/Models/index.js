@@ -61,11 +61,6 @@ Events.belongsTo(Users, {
 });
 
 const Rewards = db.define("rewards", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
   title: {
     type: DataTypes.STRING,
     allowNull: false,
