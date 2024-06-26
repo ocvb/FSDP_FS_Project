@@ -178,12 +178,7 @@ export default function Events({ postSnackbar }) {
             editable: true,
             renderCell: (params) => <ExpandableCell {...params} />,
         },
-        {
-            field: 'location',
-            headerName: 'Location',
-            type: 'string',
-            editable: true,
-        },
+
         {
             field: 'date',
             headerName: 'Date',
@@ -202,20 +197,7 @@ export default function Events({ postSnackbar }) {
                 return date;
             },
         },
-        {
-            field: 'price',
-            headerName: 'Price',
-            type: 'number',
-            editable: true,
-            renderCell: (params) => {
-                if (params.value === 0) {
-                    return 'Free';
-                } else if (params.value > 0) {
-                    return `$${params.value.toFixed(2)}`;
-                }
-                return params.value;
-            }
-        },
+
         { field: 'createdAt', headerName: 'Created At', editable: false },
         { field: 'updatedAt', headerName: 'Updated At', editable: false },
         {
