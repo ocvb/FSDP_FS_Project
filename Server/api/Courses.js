@@ -103,6 +103,7 @@ const router = express.Router();
 const { Courses } = require("../model");
 const { TokenAuthentication } = require("./Middlewares/TokenAuthentication");
 
+
 // Courses APIs
 
 // Get courses by user ID

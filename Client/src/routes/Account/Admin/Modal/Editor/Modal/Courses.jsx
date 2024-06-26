@@ -20,7 +20,7 @@ import {
 } from '@mui/x-data-grid';
 
 export default function Courses({ postSnackbar }) {
-    Events.propTypes = {
+    Courses.propTypes = {
         postSnackbar: PropTypes.func.isRequired,
     }
 
