@@ -161,7 +161,6 @@ export default function Users({ postSnackbar }) {
         {
             field: 'action', type: 'actions', headerName: 'Action', cellClassName: 'actions',
             getActions: ({ id }) => {
-                // const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
                 const [dropdown, setDropdown] = useState(false)
                 const buttons = [
@@ -246,6 +245,7 @@ export default function Users({ postSnackbar }) {
         setOpenEditModal(false);
         setOpenAddModal(false);
     }
+
     return (
         <>
             <DataGrid
@@ -281,14 +281,12 @@ export default function Users({ postSnackbar }) {
             />
 
 
-            {/* TODO: Modal for Add User */}
-
             <PopupModal open={openEditModal || openAddModal} handleClose={handleCloseModal}
                 title="Edit User"
                 sxBox={{
                     backgroundColor: 'background.paper'
                 }}>
-                <p style={{ fontSize: '1.4rem', textTransform: 'capitalize' }}>{openEditModal ? `Update User ${username}` : "Add User"}</p>
+                <p style={{ fontSize: '1.4rem', textTransform: 'capitalize' }}>{openEditModal ? `Update "${username}"` : "Add User"}</p>
 
                 <form onSubmit={handleSubmitUpdate}>
                     <Stack spacing={2} sx={{ width: '100%' }}>
@@ -309,17 +307,20 @@ export default function Users({ postSnackbar }) {
                             value={password}
                             onChange={handlePasswordChange}
                         />
-                        <Select
+                        <TextField
                             variant="outlined"
+                            label="Role"
                             fullWidth
-                            native
+                            SelectProps={{
+                                native: true,
+                            }}
                             size="small"
                             value={role}
                             onChange={handleSelectOptionChange}
                         >
                             <option value="member">Member</option>
                             <option value="admin">Admin</option>
-                        </Select>
+                        </TextField>
 
                         {
                             openEditModal && (
