@@ -3,6 +3,8 @@ import { useState } from "react";
 // Components
 import { Box, Container } from "@mui/material";
 import Button from "@/components/Button/CustomButton.module";
+import EditIcon from '@mui/icons-material/Edit';
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 import styles from "./Admin.module.css";
 
@@ -13,8 +15,8 @@ export default function Admin() {
     const [activeTab, setActiveTab] = useState(0);
 
     const tabs = [
-        { name: "Editor", index: 0, action: () => { setActiveTab(0) } },
-        { name: "Analytics", index: 1, action: () => { setActiveTab(1) } },
+        { name: "Editor", index: 0, action: () => { setActiveTab(0) }, icon: <EditIcon /> },
+        { name: "Analytics", index: 1, action: () => { setActiveTab(1) }, icon: <BarChartIcon /> },
         { name: "Account", index: 2, action: () => { setActiveTab(2) } }
     ]
 
@@ -35,7 +37,7 @@ export default function Admin() {
             justifyContent: 'start',
             alignItems: 'start',
             padding: '0 !important',
-            backgroundColor: '#f8f8f8',
+            // backgroundColor: '#f8f8f8',
             height: 'calc(100vh - 64px)',
         }}>
             <Box sx={{
@@ -47,7 +49,7 @@ export default function Admin() {
                 padding: '1rem',
                 height: '100%',
                 backgroundColor: 'white',
-                borderRight: '1px solid #f0f0f0',
+                borderRight: '1px solid rgba(224, 224, 224, 1)',
             }}>
                 <div className={styles.tabs} style={{
                     display: 'flex',
@@ -58,15 +60,17 @@ export default function Admin() {
                     {tabs && tabs.map((tab, index) => {
                         return (
                             <div key={index} className={styles.tab}>
-                                <Button sx={{
-                                    ...InputStyle,
-                                    backgroundColor: activeTab == index ? 'black' : 'white',
-                                    color: activeTab == index ? 'white' : '#212121',
-                                    '&:hover': {
-                                        backgroundColor: 'black',
-                                        color: 'white',
-                                    }
-                                }} text={tab.name} onClick={tab.action}></Button>
+                                <Button
+                                    startIcon={tab.icon}
+                                    sx={{
+                                        ...InputStyle,
+                                        backgroundColor: activeTab == index ? 'black' : 'white',
+                                        color: activeTab == index ? 'white' : '#212121',
+                                        '&:hover': {
+                                            backgroundColor: 'black',
+                                            color: 'white',
+                                        }
+                                    }} text={tab.name} onClick={tab.action}></Button>
                             </div>
                         );
                     })}
