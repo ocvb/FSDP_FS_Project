@@ -26,8 +26,13 @@ router.get("/user", TokenAuthentication, async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
+  console.log("Retrieving Events");
   const events = await Events.findAll();
-  res.status(200).json(events);
+  if (events != undefined) {
+    res.status(200).json(events);
+  } else {
+    res.status(404).json({ message: "Error fetching events" });
+  }
 });
 
 router.post("/api/events", async (req, res) => {
