@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-import Events from "./Modal/Event";
+import Events from "./Modal/Events";
 import Users from "./Modal/Users";
 import Courses from "./Modal/Courses";
 
