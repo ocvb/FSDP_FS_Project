@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { Select } from "@mui/material";
+import { Box, Modal, Select, Stack, TextField, IconButton, FormControl } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -10,6 +10,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@/components/Button/CustomButton.module";
 import PropTypes from 'prop-types';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 import {
     GridRowModes,
@@ -21,6 +22,7 @@ import {
 } from '@mui/x-data-grid';
 import { FlareSharp, MoreHoriz } from "@mui/icons-material";
 import Dropdown from "@/components/Dropdown/Dropdown.module";
+import PopupModal from "@/components/PopupModal/PopupModal.module";
 
 
 export default function Users({ postSnackbar }) {
@@ -28,7 +30,16 @@ export default function Users({ postSnackbar }) {
         postSnackbar: PropTypes.func.isRequired,
     }
 
-    const { data: newData, isFetching, isError } = useQuery({
+    const [rows, setRows] = useState([]);
+    const [rowModesModel, setRowModesModel] = useState({});
+    const [openAddModal, setOpenAddModal] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [selectedRow, setSelectedRow] = useState({});
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [role, setRole] = useState('member');
+
+    const { data: newData, isFetching, isError, refetch: refetchUsers } = useQuery({
         queryKey: ['user'],
         queryFn: async () => await axios.get("http://localhost:3001/api/admin/users/", {
             headers: {
@@ -75,113 +86,45 @@ export default function Users({ postSnackbar }) {
         }
     };
 
-
-    function EditToolbar(props) {
-        const { setRows, setRowModesModel } = props;
+    function EditToolbar() {
 
         const handleClick = () => {
             const id = Math.max(0, ...rows.map((row) => row.id)) + 1;
-            setRows((oldRows) => [...oldRows, { id, role: 'member', updatedAt: 'NA', createdAt: 'NA', isNew: true }]);
-            setRowModesModel((oldModel) => ({
-                ...oldModel,
-                [id]: { mode: GridRowModes.Edit, fieldToFocus: 'title', isNew: true },
-            }));
+            setOpenAddModal(true);
+            setSelectedRow({ id });
         };
 
         return (
             <GridToolbarContainer sx={{
                 display: 'flex',
-                justifyContent: 'flex-end',
+                justifyContent: 'end',
                 gap: '1rem',
                 alignItems: 'center',
                 padding: '1rem',
-
             }}>
-                <Button text="Add record" color="primary" startIcon={<AddIcon sx={{ marginLeft: 0 }} />} onClick={handleClick} sx={{
+                <IconButton onClick={() => refetchUsers()} >
+                    <RefreshIcon sx={{ fontSize: 25, color: 'black' }} />
+                </IconButton>
+                <Button text="Add record" startIcon={<AddIcon sx={{ fontSize: '25px !important' }} />} onClick={handleClick} sx={{
                     backgroundColor: 'black',
                     color: 'white',
                     '&:hover': {
                         backgroundColor: '#2a2a2a',
                     }
-
                 }} />
             </GridToolbarContainer>
         );
     }
 
-    const [rows, setRows] = useState([]);
-    const [rowModesModel, setRowModesModel] = useState({});
+
 
     useEffect(() => {
         setRows(newData?.data || [])
     }, [newData]);
 
-    const handleRowEditStop = (params, event) => {
-        if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-            event.defaultMuiPrevented = true;
-        }
-    };
-
-    const handleEditClick = (id) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-    };
-
-    const handleSaveClick = (id) => async () => {
-        const row = rows.find((row) => row.id === id);
-        handleUpdateToDatabase(id, row);
-    };
-
-    const handleRowModesModelChange = (newRowModesModel) => {
-        setRowModesModel(newRowModesModel);
-    };
-
     const handleDeleteClick = (id) => () => {
         setRows(rows.filter((row) => row.id !== id));
         handleDeleteFromDatabase(id);
-    };
-
-    const processRowUpdate = (newRow) => {
-        const updatedRow = { ...newRow, isNew: false };
-        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-        handleUpdateToDatabase(newRow.id, newRow);
-        return updatedRow;
-    };
-
-    const handleCancelClick = (id) => () => {
-        if (rowModesModel[id]?.isNew) {
-            setRows(rows.filter((row) => row.id !== id));
-        }
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View, ignoreModifications: true } });
-    }
-
-
-
-    function SelectEditInputCell(props) {
-        const { id, value, field } = props;
-        const apiRef = useGridApiContext();
-
-        const handleChange = async (event) => {
-            await apiRef.current.setEditCellValue({ id, field, value: event.target.value });
-            apiRef.current.stopCellEditMode({ id, field });
-        };
-
-        return (
-            <Select
-                value={value}
-                onChange={handleChange}
-                size="small"
-                sx={{ height: 1, width: '100%', }}
-                native
-                autoFocus
-            >
-                <option>member</option>
-                <option>admin</option>
-            </Select>
-        );
-    }
-
-    const renderSelectEditInputCell = (params) => {
-        return <SelectEditInputCell {...params} />;
     };
 
     const columns = [
@@ -192,140 +135,222 @@ export default function Users({ postSnackbar }) {
             field: 'username',
             headerName: 'Username',
             type: 'string',
-            editable: true,
+            editable: false,
             flex: 1,
         },
         {
             field: 'password',
             headerName: 'Password',
             type: 'string',
-            editable: true,
+            editable: false,
             flex: 1,
         },
         {
             field: 'role',
             headerName: 'Role',
             type: 'singleSelect',
-            editable: true,
+            editable: false,
             flex: 1,
-            renderEditCell: renderSelectEditInputCell,
+            // renderEditCell: renderSelectEditInputCell,
+            renderCell: (params) => {
+                return <span style={{ textTransform: 'capitalize' }}>{params.value}</span>
+            }
         },
         { field: 'createdAt', headerName: 'Created At', editable: false },
         { field: 'updatedAt', headerName: 'Updated At', editable: false },
         {
             field: 'action', type: 'actions', headerName: 'Action', cellClassName: 'actions',
             getActions: ({ id }) => {
-                const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+                // const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
                 const [dropdown, setDropdown] = useState(false)
                 const buttons = [
                     {
-                        submenu: [
-                            { name: "Save" },
-                            { name: "Cancel" }
-                        ],
-                    }, {
-                        submenu: [
-                            {
-                                name: "Edit",
-                                action: handleEditClick(id),
+                        name: "Edit",
+                        action: () => handleOpenEditModal(id),
+                        icon: <EditIcon />
 
-                            },
-                            {
-                                name: "Delete",
-                                action: handleDeleteClick(id),
+                    },
+                    {
+                        name: "Delete",
+                        action: handleDeleteClick(id),
+                        icon: <DeleteIcon />
 
-                            }
-                        ]
                     }
-
                 ]
-
-
 
                 const handleOpenDropdown = () => {
                     setDropdown(!dropdown)
                 }
 
-
-                if (isInEditMode) {
-                    return [
-                        <GridActionsCellItem
-                            key={"Save"}
-                            icon={<SaveIcon sx={{ color: '#0c9878', fontSize: 25 }} />}
-                            label="Save"
-                            onClick={handleSaveClick(id)}
-                        />,
-                        <GridActionsCellItem
-                            key={"Cancel"}
-                            icon={<CancelIcon sx={{ color: 'darkred', fontSize: 25 }} />}
-                            label="Cancel"
-                            className="textPrimary"
-                            onClick={handleCancelClick(id)}
-
-                        />,
-                    ];
+                const handleWhenMouseLeave = () => {
+                    setDropdown(false)
                 }
 
                 return [
-                    <GridActionsCellItem
-                        key={"Edit"}
-                        icon={< EditIcon sx={{ color: '#0c9878', fontSize: 25 }} />}
-                        label="Edit"
-                        className="textPrimary"
-                        onClick={handleEditClick(id)}
-                    />,
-                    <GridActionsCellItem
-                        key={"Delete"}
-                        icon={<DeleteIcon sx={{ color: 'darkred', fontSize: 25 }} />}
-                        label="Delete"
-                        onClick={handleDeleteClick(id)}
-                    />,
+                    <div key={"dropdown"}>
+                        <IconButton key={"IconButton"} onClick={handleOpenDropdown} sx={{
+                            '&:focus': {
+                                outline: 'none',
+                            },
+                            '&:hover': {
+                                outline: 'none',
+                            },
+                        }}>
+                            <MoreHoriz />
+                        </IconButton>
+                        <Dropdown key={"More"} dropdown={dropdown} onMouseDown={handleOpenDropdown} onMouseLeave={handleWhenMouseLeave} subitems={buttons}
+                            style={{
+                                transform: 'translateX(-50%)'
+                            }}
+                        />
+                    </div>
                 ];
             },
         }
     ];
-    return (
-        <DataGrid
-            rows={rows}
-            columns={columns}
-            editMode="row"
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={handleRowModesModelChange}
-            onRowEditStop={handleRowEditStop}
-            processRowUpdate={processRowUpdate}
-            slots={{
-                toolbar: EditToolbar,
-            }}
-            slotProps={{
-                toolbar: { setRows, setRowModesModel },
-            }}
-            sx={{
-                '& .MuiDataGrid-main': {
-                    borderTop: '1px solid #e0e0e0',
-                },
-                '& .actions': {
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                },
-                '& .MuiDataGrid-cell': {
-                    backgroundColor: '#f4f4f4',
 
-                },
-                '& .MuiDataGrid-cell--editing': {
-                    borderRight: '1px solid #e0e0e0',
-                    p: '0.3rem !important',
-                },
-                '& .MuiDataGrid-cell--editable': {
-                    bgcolor: (theme) => {
-                        return theme.palette.mode === 'dark' ? '#376331' : 'rgb(252 252 252)'
+    const handleOpenEditModal = (id) => {
+        setOpenEditModal(true);
+        setSelectedRow(rows.find((row) => row.id === id));
+        setUsername(rows.find((row) => row.id === id).username);
+        setPassword(rows.find((row) => row.id === id).password);
+        setRole(rows.find((row) => row.id === id).role);
+    }
+
+    const handleCloseModal = () => {
+        setOpenEditModal(false);
+        setOpenAddModal(false);
+        setSelectedRow({});
+        setUsername('');
+        setPassword('');
+        setRole('member');
+    }
+
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value);
+    }
+
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    }
+
+    const handleSelectOptionChange = (event) => {
+        setRole(event.target.value);
+    }
+
+    const handleSubmitUpdate = (event) => {
+        event.preventDefault();
+        handleUpdateToDatabase(selectedRow.id, { username, password, role });
+        refetchUsers()
+        setOpenEditModal(false);
+        setOpenAddModal(false);
+    }
+    return (
+        <>
+            <DataGrid
+                rows={rows}
+                columns={columns}
+                initialState={{
+                    ...rows.initialState,
+                    columns: {
+                        ...rows.initialState?.column,
+                        columnVisibilityModel: {
+                            createdAt: false,
+                            updatedAt: false
+                        },
                     },
-                },
-                '& .MuiDataGrid-row--editing': {
-                    backgroundColor: 'transparent',
-                },
-            }}
-        />
+                }}
+                slots={{
+                    toolbar: EditToolbar,
+                }}
+
+                sx={{
+                    '& .MuiDataGrid-main': {
+                        borderTop: '1px solid #e0e0e0',
+                    },
+                    '& .actions': {
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: '0.5rem',
+                    },
+                    '& .MuiDataGrid-cell--editing': {
+                        p: '0.3rem !important',
+                    },
+                }}
+            />
+
+
+            {/* TODO: Modal for Add User */}
+
+            <PopupModal open={openEditModal || openAddModal} handleClose={handleCloseModal}
+                title="Edit User"
+                sxBox={{
+                    backgroundColor: 'background.paper'
+                }}>
+                <p style={{ fontSize: '1.4rem', textTransform: 'capitalize' }}>{openEditModal ? `Update User ${username}` : "Add User"}</p>
+
+                <form onSubmit={handleSubmitUpdate}>
+                    <Stack spacing={2} sx={{ width: '100%' }}>
+                        <TextField
+                            label="Username"
+                            variant="outlined"
+                            fullWidth
+                            size="small"
+                            value={username}
+                            onChange={handleUsernameChange}
+                            autoFocus
+                        />
+                        <TextField
+                            label="Password"
+                            variant="outlined"
+                            fullWidth
+                            size="small"
+                            value={password}
+                            onChange={handlePasswordChange}
+                        />
+                        <Select
+                            variant="outlined"
+                            fullWidth
+                            native
+                            size="small"
+                            value={role}
+                            onChange={handleSelectOptionChange}
+                        >
+                            <option value="member">Member</option>
+                            <option value="admin">Admin</option>
+                        </Select>
+
+                        {
+                            openEditModal && (
+                                <Button text="Update" type="submit" fullWidth
+                                    onClick={handleSubmitUpdate}
+                                    sx={{
+                                        backgroundColor: 'black',
+                                        color: 'white',
+                                        '&:hover': {
+                                            backgroundColor: '#2a2a2a',
+                                        }
+
+                                    }} />
+                            ) || (
+                                <Button text="Add" type="submit" fullWidth
+                                    onClick={handleSubmitUpdate}
+                                    sx={{
+                                        backgroundColor: 'black',
+                                        color: 'white',
+                                        '&:hover': {
+                                            backgroundColor: '#2a2a2a',
+                                        }
+
+                                    }} />
+                            )
+                        }
+
+
+                    </Stack>
+                </form>
+            </PopupModal>
+        </>
     );
 }
