@@ -81,7 +81,7 @@ export default function navbar(props) {
               >
                 {item.name}
               </Button>
-              {getIndex === index && <Dropdown subitems={item.submenu} dropdown={dropdown} ref={hoveredRef} onMouseLeave={handlerDropdownOnMouseLeave} />}
+              {getIndex === index && <Dropdown subitems={item.submenu} allowHover={true} dropdown={dropdown} ref={hoveredRef} onMouseLeave={handlerDropdownOnMouseLeave} />}
             </div>
           ))}
           <div style={{ flexGrow: 1 }}></div>
