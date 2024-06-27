@@ -18,11 +18,6 @@ export default function NavbarAdmin({ logo }) {
     const { logout } = UseAuth();
 
     const menus = [
-        // {
-        //     name: "Profile", action: () => {
-        //         console.log("Profile")
-        //     }
-        // },
         {
             name: "Logout", action: () => {
                 logout();
@@ -30,34 +25,14 @@ export default function NavbarAdmin({ logo }) {
         },
     ]
 
-    useEffect(() => {
-        const handler = (event) => {
-            if (hoveredRef.current.style.display == "block" && !hoverButton.current.contains(event.target) && !hoveredRef.current.contains(event.target)) {
-                setDropdown(false);
-            }
-        }
-
-        document.addEventListener('mousemove', handler);
-
-        return () => {
-            document.removeEventListener('mousemove', handler);
-        }
-
-    }, []);
-
-
     const onMouseEnter = () => {
-        setDropdown(true);
-    }
-
-
-    const handlerDropdownOnMouseLeave = () => {
-        setDropdown(false);
+        setDropdown(!dropdown);
     }
 
     return (
         <AppBar position="fixed" className={styles.navbar} sx={{
-            boxShadow: '0px 2px 3px -1px rgba(0,0,0,0.09), 0px 4px 3px 0px rgba(0,0,0,0.05)',
+            boxShadow: 'none',
+            borderBottom: '1px solid rgba(224, 224, 224, 1)',
         }} >
             <Toolbar
                 className={styles.toolbar}
@@ -89,8 +64,8 @@ export default function NavbarAdmin({ logo }) {
                 </div>
 
                 <div>
-                    <Button text="Admin" onMouseEnter={onMouseEnter} ref={hoverButton} startIcon={<Person />} />
-                    <Dropdown subitems={menus} dropdown={dropdown} ref={hoveredRef} onMouseLeave={handlerDropdownOnMouseLeave} />
+                    <Button text="Admin" onClick={onMouseEnter} ref={hoverButton} startIcon={<Person />} />
+                    <Dropdown subitems={menus} dropdown={dropdown} ref={hoveredRef} onMouseLeave={onMouseEnter} />
                 </div>
 
             </Toolbar>
