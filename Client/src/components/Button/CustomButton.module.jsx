@@ -29,7 +29,7 @@ const CustomButton = forwardRef(({ className, onClick, type, sx, text, onMouseDo
     );
 });
 
-CustomButton.displayName = 'CustomButton';
+CustomButton.displayName = "CustomButton";
 
 CustomButton.propTypes = {
     className: PropTypes.string,
@@ -40,7 +40,8 @@ CustomButton.propTypes = {
     onMouseDown: PropTypes.func,
     onMouseLeave: PropTypes.func,
     onMouseEnter: PropTypes.func,
-    startIcon: PropTypes.element,
+    startIcon: PropTypes.node,
+    endIcon: PropTypes.node,
 };
 
 export default CustomButton;
