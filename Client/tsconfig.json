@@ -34,6 +34,7 @@
     },
     "include": [
         "src/**/*",
-        "types/image.types.ts"
+        "types/image.types.ts",
+        "types/typing.types.ts"
     ]
 }
