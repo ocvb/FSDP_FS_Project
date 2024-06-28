@@ -31,6 +31,6 @@
     },
     "include": [
         "src/**/*",
-        "types/custom.types.ts"
+        "types/image.types.ts"
     ]
 }
