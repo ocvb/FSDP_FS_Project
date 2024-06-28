@@ -26,7 +26,7 @@
     "@src": "src",
     "@validations": "src/Middlewares/Validations",
     "@models": "src/Models",
-    "@api": "src/APIs",
+    "@endpoints": "src/endpoints",
     "@schema": "src/Schemas",
     "@middleware": "src/Middlewares"
   }

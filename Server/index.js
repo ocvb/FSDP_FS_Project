@@ -16,14 +16,14 @@ app.use(
 );
 
 
-const startAPI = require("@api/Api");
+const startAPI = require("@endpoints/Api");
 app.use('/api', startAPI);
 
 
 // Add your API endpoints here
-const userAPI = require("@api/Account");
-const eventAPI = require("@api/Events");
-const adminAPI = require("@api/Admin");
+const userAPI = require("@endpoints/Account");
+const eventAPI = require("@endpoints/Events");
+const adminAPI = require("@endpoints/Admin");
 
 app.use('/api/user', userAPI);
 app.use('/api/events', eventAPI);

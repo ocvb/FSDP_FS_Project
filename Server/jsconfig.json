@@ -11,8 +11,8 @@
             "@models/*": [
                 "src/Models/*"
             ],
-            "@api/*": [
-                "src/APIs/*"
+            "@endpoints/*": [
+                "src/Endpoints/*"
             ],
             "@schema/*": [
                 "src/Schemas/*"
