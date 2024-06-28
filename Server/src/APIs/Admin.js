@@ -62,7 +62,7 @@ router.get("/events", TokenAuthentication, async (req, res) => {
 
 router.put("/event/:id", TokenAuthentication, async (req, res) => {
     const { id } = req.params;
-    const { title, description, location, date, price } = req.body;
+    const { title, description, location, date, price, userId } = req.body;
 
     console.log(req.body)
 
@@ -75,7 +75,7 @@ router.put("/event/:id", TokenAuthentication, async (req, res) => {
         const formattedDate = new Date(date);
         const event = await Events.upsert({
             id,
-            title, description, location, date: formattedDate, price
+            title, description, location, date: formattedDate, price, userId
         }, {
             where: { id: id }
         });
