@@ -1,22 +1,22 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 
 // Components
-import NavigationBar from "@/components/Navbar/Navbar.module";
-import NavbarAdmin from "./components/Navbar/NavbarAdmin.module";
-import { UseAuth } from "@/components/Auth/Auth";
-import ProtectedRoute from "@/components/Auth/RequireAuth";
+import NavigationBar from "@components/Navbar/Navbar";
+import NavbarAdmin from "@components/Navbar/NavbarAdmin";
+import { UseAuth } from "@components/Auth/Auth";
+import ProtectedRoute from "@components/Auth/RequireAuth";
 
 // Routes
-import Home from "./routes/Home/Home";
-import Events from "./routes/Events/Events";
-import Account from "./routes/Account/Account";
-import SkillShare from "./routes/SkillShare/SkillShare";
+import Home from "@routes/Home/Home";
+import Events from "@routes/Events/Events";
+import Account from "@routes/Account/Account";
+import SkillShare from "@routes/SkillShare/SkillShare";
 
-import Profile from './routes/Account/Profile/Profile';
+import Profile from '@routes/Account/Profile/Profile';
 
-import Admin from './routes/Account/Admin/Admin';
+import Admin from '@routes/Account/Admin/Admin';
 
-import logo from "@assets/Navbar/logo.png" ;
+import logo from "@assets/Navbar/logo.png";
 
 import './index.css'
 

@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { AppBar, Toolbar, Button } from "@mui/material";
 import styles from "./css/Navbar.module.css";
-import Dropdown from "../Dropdown/Dropdown.module";
+import Dropdown from "../Dropdown/Dropdown";
 
 export const navigation = [
   { name: "Home", href: "/" },

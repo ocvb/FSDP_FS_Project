@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from "@mui/material/Tooltip";
-import Button from "@/components/Button/CustomButton.module";
+import Button from "@components/Button/CustomButton";
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 import {
@@ -14,8 +14,8 @@ import {
     DataGrid,
 } from '@mui/x-data-grid';
 import { MoreHoriz } from "@mui/icons-material";
-import Dropdown from "@/components/Dropdown/Dropdown.module";
-import PopupModal from "@/components/PopupModal/PopupModal.module";
+import Dropdown from "@components/Dropdown/Dropdown";
+import PopupModal from "@components/PopupModal/PopupModal";
 
 export default function Users({ postSnackbar }) {
 

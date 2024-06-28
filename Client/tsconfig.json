@@ -15,6 +15,9 @@
             "@api/*": [
                 "./src/api/*"
             ],
+            "@routes/*": [
+                "./src/routes/*"
+            ],
         },
         "allowJs": true, // Allows JavaScript files to be compiled.
         "checkJs": true, // Set to true if you want TypeScript to type-check your JS files.

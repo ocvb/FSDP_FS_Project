@@ -2,7 +2,7 @@ import { useState } from "react";
 
 // Components
 import { Box, Container } from "@mui/material";
-import Button from "@/components/Button/CustomButton.module";
+import Button from "@components/Button/CustomButton";
 import EditIcon from '@mui/icons-material/Edit';
 import BarChartIcon from '@mui/icons-material/BarChart';
 

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { UseAuth } from "@/components/Auth/Auth";
-import Button from "@/components/Button/CustomButton.module";
-import PasswordVisibility from "@/components/PasswordVIsibility/PasswordVisibility.module";
+import { UseAuth } from "@components/Auth/Auth";
+import Button from "@components/Button/CustomButton";
+import PasswordVisibility from "@components/PasswordVIsibility/PasswordVisibility";
 import { TextField, colors } from "@mui/material";
 import LoginIcon from '@mui/icons-material/Login';
 import { CircularProgress } from "@mui/material";

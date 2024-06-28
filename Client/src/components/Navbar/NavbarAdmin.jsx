@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { AppBar, Toolbar } from "@mui/material";
-import { navigation } from "./Navbar.module";
+import { navigation } from "./Navbar";
 
 import { UseAuth } from "../Auth/Auth";
 import PropTypes from 'prop-types';
 import styles from './css/Navbar.module.css';
 import { Person } from "@mui/icons-material";
-import Dropdown from "../Dropdown/Dropdown.module";
-import Button from "../Button/CustomButton.module";
+import Dropdown from "../Dropdown/Dropdown";
+import Button from "../Button/CustomButton";
 import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function NavbarAdmin({ logo }) {

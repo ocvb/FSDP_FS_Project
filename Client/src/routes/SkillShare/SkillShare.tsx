@@ -1,5 +1,5 @@
 import { Box, Container } from "@mui/material";
-import Button from "@/components/Button/CustomButton.module";
+import Button from "@components/Button/CustomButton";
 
 import "./SkillShare.module.css";
 

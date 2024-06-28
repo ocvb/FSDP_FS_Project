@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import { UseAuth } from "@/components/Auth/Auth";
+import { UseAuth } from "@components/Auth/Auth";
 import mainStyles from "./css/Profile.module.css";
 import styles from "./css/Events.module.css";
 import { Box, Container, Table, TableHead, TableBody, TableContainer, TableRow, TableCell, Paper } from "@mui/material";

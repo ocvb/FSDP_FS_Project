@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Button from "@/components/Button/CustomButton.module";
+import Button from "@components/Button/CustomButton";
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 import {
@@ -13,9 +13,9 @@ import {
     DataGrid,
 } from '@mui/x-data-grid';
 import { MoreHoriz } from "@mui/icons-material";
-import Dropdown from "@/components/Dropdown/Dropdown.module";
-import PopupModal from "@/components/PopupModal/PopupModal.module";
-import Loading from "@/components/Loading/Loading";
+import Dropdown from "@components/Dropdown/Dropdown";
+import PopupModal from "@components/PopupModal/PopupModal";
+import Loading from "@components/Loading/Loading";
 
 export default function Users({ postSnackbar }) {
 

@@ -2,8 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 
 import { TextField, colors } from "@mui/material";
-import Button from "@/components/Button/CustomButton.module";
-import PasswordVisibility from "@/components/PasswordVIsibility/PasswordVisibility.module";
+import Button from "@components/Button/CustomButton";
+import PasswordVisibility from "@components/PasswordVIsibility/PasswordVisibility";
 
 import styles from "./css/Modals.module.css";
 

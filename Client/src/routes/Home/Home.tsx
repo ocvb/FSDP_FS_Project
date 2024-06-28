@@ -10,8 +10,8 @@ import images from "@/assets/Home/home-bg.jpeg";
 import styles from "./css/Home.module.css";
 
 // component
-import CustomButton from "@/components/Button/CustomButton.module";
-import Footer from "@/components/Footer/Footer.module";
+import CustomButton from "@components/Button/CustomButton";
+import Footer from "@components/Footer/Footer";
 
 export default function Home() {
   const navigate = useNavigate();

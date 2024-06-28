@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
 // Components
-import { UseAuth } from "@/components/Auth/Auth";
+import { UseAuth } from "@components/Auth/Auth";
 import { Box, Skeleton } from "@mui/material";
-import Button from "../../../components/Button/CustomButton.module";
+import Button from "@components/Button/CustomButton";
 import UserProfile from "./UserProfile";
 import Notifications from "./Notifications";
 import Events from "./Events";

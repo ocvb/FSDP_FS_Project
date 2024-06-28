@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-import { UseAuth } from "@/components/Auth/Auth";
+import { UseAuth } from "@components/Auth/Auth";
 import { TextField } from "@mui/material";
-import PasswordVisibility from "@/components/PasswordVIsibility/PasswordVisibility.module";
-import Button from "@/components/Button/CustomButton.module";
+import PasswordVisibility from "@components/PasswordVIsibility/PasswordVisibility";
+import Button from "@components/Button/CustomButton";
 
 
 import mainStyles from "./css/Profile.module.css";
