@@ -20,7 +20,7 @@ export default function Events() {
     const retrieveToken = localStorage.getItem('token');
 
     const getEventData = async () => {
-        checkTokenIsValid(retrieveToken).then(async response => {
+        checkTokenIsValid(retrieveToken).then(async (response) => {
             if (response) {
                 await axios
                     .get('http://localhost:3001/api/events/user', {
@@ -31,7 +31,7 @@ export default function Events() {
                             Authorization: `Bearer ${retrieveToken}`,
                         },
                     })
-                    .then(response => {
+                    .then((response) => {
                         setData(response.data);
                     });
                 return;
@@ -58,7 +58,8 @@ export default function Events() {
                     padding: '1rem',
                     backgroundColor: '#F9F9F9',
                     width: '100%',
-                }}>
+                }}
+            >
                 <p>Events</p>
             </div>
 
@@ -70,22 +71,26 @@ export default function Events() {
                     position: 'relative',
                     padding: '1rem',
                     width: '100%',
-                }}>
+                }}
+            >
                 <p>You have participate in these Events</p>
                 <TableContainer
                     component={Paper}
                     sx={{
                         width: '100%',
-                    }}>
+                    }}
+                >
                     <Table
                         sx={{
                             backgroundColor: 'rgba(255,255,255, 0.8)',
                         }}
-                        aria-label='simple table'>
+                        aria-label='simple table'
+                    >
                         <TableHead
                             sx={{
                                 backgroundColor: 'rgba(0,0,0, 0.15)',
-                            }}>
+                            }}
+                        >
                             <TableRow>
                                 {head.map((item, index) => (
                                     <TableCell key={index}>
@@ -95,14 +100,15 @@ export default function Events() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.map(row => (
+                            {data.map((row) => (
                                 <TableRow
                                     key={row.id}
                                     sx={{
                                         '&:last-child td, &:last-child th': {
                                             border: 0,
                                         },
-                                    }}>
+                                    }}
+                                >
                                     <TableCell component='th' scope='row'>
                                         {row.id}
                                     </TableCell>

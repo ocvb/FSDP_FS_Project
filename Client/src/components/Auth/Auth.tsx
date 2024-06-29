@@ -5,7 +5,11 @@ import axios from 'axios';
 
 const AuthContext = createContext();
 
-export default function AuthProvider({ children }) {
+type AuthContextType = {
+    children: any;
+};
+
+export default function AuthProvider({ children }: AuthContextType) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
     const [userRole, setUserRole] = useState(null);
@@ -42,14 +46,14 @@ export default function AuthProvider({ children }) {
         return data;
     };
 
-    const checkTokenIsValid = async (token) => {
+    const checkTokenIsValid = async token => {
         return await axios
             .get('http://localhost:3001/api/user/auth', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
-            .then((response) => {
+            .then(response => {
                 if (response.status === 200) {
                     setIsAuthenticated(true);
                     setUser(response.data.data);
@@ -67,10 +71,10 @@ export default function AuthProvider({ children }) {
             });
     };
 
-    const login = async (data) => {
+    const login = async data => {
         return await axios
             .post('http://localhost:3001/api/user/login', data)
-            .then((response) => {
+            .then(response => {
                 if (response.status === 200) {
                     setIsAuthenticated(true);
                     setUser(response.data.data);
@@ -89,7 +93,7 @@ export default function AuthProvider({ children }) {
                     return false;
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 setIsAuthenticated(false);
                 return error;
             });
@@ -111,8 +115,7 @@ export default function AuthProvider({ children }) {
                 login,
                 logout,
                 fetchAuth,
-            }}
-        >
+            }}>
             {children}
         </AuthContext.Provider>
     );
