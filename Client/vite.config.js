@@ -3,10 +3,19 @@ import react from "@vitejs/plugin-react";
 import path from 'path';
 
 import obfuscator from 'rollup-plugin-obfuscator';
+import eslintPlugin from 'vite-plugin-eslint';
 
 export default defineConfig({
   plugins: [
     react(),
+    eslintPlugin({
+      cache: false,
+      fix: true,
+      failOnError: false,
+      failOnWarning: false,
+      emitWarning: false,
+      emitError: false,
+    }),
     // obfuscator({
     //   global: true,
     // }),
@@ -15,8 +24,8 @@ export default defineConfig({
     hmr: {
       protocol: 'ws',
       host: 'localhost',
-      port: '3000'
-    }
+      port: '3000',
+    },
   },
   resolve: {
     alias: {
@@ -25,7 +34,7 @@ export default defineConfig({
       '@components': path.resolve(__dirname, './src/components'),
       '@assets': path.resolve(__dirname, './src/assets'),
       '@routes': path.resolve(__dirname, './src/routes'),
-    }
+    },
   },
   // build: {
   //   rollupOptions: {

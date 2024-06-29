@@ -1,24 +1,28 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Stack, TextField, IconButton, Alert, Skeleton, LinearProgress, Box } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import React, { useState } from 'react';
+import axios from 'axios';
+import {
+    Stack,
+    TextField,
+    IconButton,
+    Alert,
+    Skeleton,
+    LinearProgress,
+    Box,
+} from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Button from "@components/Button/CustomButton";
+import Button from '@components/Button/CustomButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-import {
-    GridToolbarContainer,
-    DataGrid,
-} from '@mui/x-data-grid';
-import { MoreHoriz } from "@mui/icons-material";
-import Dropdown from "@components/Dropdown/Dropdown";
-import PopupModal from "@components/PopupModal/PopupModal";
-import Loading from "@components/Loading/Loading";
+import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
+import { MoreHoriz } from '@mui/icons-material';
+import Dropdown from '@components/Dropdown/Dropdown';
+import PopupModal from '@components/PopupModal/PopupModal';
+import Loading from '@components/Loading/Loading';
 
 export default function Users({ postSnackbar }) {
-
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState({
@@ -33,29 +37,53 @@ export default function Users({ postSnackbar }) {
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('Member');
 
-    const { data: usersData, isFetching, isFetched, isError, refetch: refetchUsers } = useQuery({
+    const {
+        data: usersData,
+        isFetching,
+        isFetched,
+        isError,
+        refetch: refetchUsers,
+    } = useQuery({
         queryKey: ['users'],
-        queryFn: async () => await axios.get("http://localhost:3001/api/admin/users/", {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        }),
+        queryFn: async () =>
+            await axios.get('http://localhost:3001/api/admin/users/', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            }),
     });
 
-
-    const handleUpdateToDatabase = async (id: number, updatedRow: { username: string; password?: string; role?: string; newRow: boolean; }) => {
+    const handleUpdateToDatabase = async (
+        id: number,
+        updatedRow: {
+            username: string;
+            password?: string;
+            role?: string;
+            newRow: boolean;
+        }
+    ) => {
         try {
-            const response = await axios.put(`http://localhost:3001/api/admin/user/${id}`, updatedRow, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+            const response = await axios.put(
+                `http://localhost:3001/api/admin/user/${id}`,
+                updatedRow,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
                 }
-            });
+            );
 
             if (response.status === 200) {
                 if (updatedRow.newRow) {
-                    postSnackbar({ children: `${updatedRow.username} added successfully.`, severity: 'success' });
+                    postSnackbar({
+                        children: `${updatedRow.username} added successfully.`,
+                        severity: 'success',
+                    });
                 } else {
-                    postSnackbar({ children: `${updatedRow.username} updated successfully.`, severity: 'success' });
+                    postSnackbar({
+                        children: `${updatedRow.username} updated successfully.`,
+                        severity: 'success',
+                    });
                 }
                 refetchUsers();
             } else {
@@ -68,13 +96,19 @@ export default function Users({ postSnackbar }) {
 
     const handleDeleteFromDatabase = async (id: number) => {
         try {
-            const response = await axios.delete(`http://localhost:3001/api/admin/user/${id}`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+            const response = await axios.delete(
+                `http://localhost:3001/api/admin/user/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
                 }
-            });
+            );
             if (response.status === 200) {
-                postSnackbar({ children: `UserID (${id}) has deleted successfully`, severity: 'success' });
+                postSnackbar({
+                    children: `UserID (${id}) has deleted successfully`,
+                    severity: 'success',
+                });
                 refetchUsers();
             } else {
                 return new Error(`Failed to delete UserID: ${id}.`);
@@ -85,45 +119,64 @@ export default function Users({ postSnackbar }) {
     };
 
     function EditToolbar() {
-
         const handleClick = () => {
-            if (isFetching) return postSnackbar({ children: 'Please wait for the data to load', severity: 'info' });
-            const id = Math.max(0, ...usersData?.data.map((row: any) => row.id)) + 1;
+            if (isFetching)
+                return postSnackbar({
+                    children: 'Please wait for the data to load',
+                    severity: 'info',
+                });
+            const id =
+                Math.max(0, ...usersData?.data.map((row: any) => row.id)) + 1;
             setOpenAddModal(true);
             setSelectedRow({ id });
         };
 
         return (
-            <GridToolbarContainer sx={{
-                display: 'flex',
-                justifyContent: 'end',
-                gap: '1rem',
-                alignItems: 'center',
-                padding: '1rem',
-            }}>
-                <IconButton onClick={() => { refetchUsers(), postSnackbar({ children: 'Users refreshed', severity: 'success' }) }} >
+            <GridToolbarContainer
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'end',
+                    gap: '1rem',
+                    alignItems: 'center',
+                    padding: '1rem',
+                }}>
+                <IconButton
+                    onClick={() => {
+                        refetchUsers(),
+                            postSnackbar({
+                                children: 'Users refreshed',
+                                severity: 'success',
+                            });
+                    }}>
                     <RefreshIcon sx={{ fontSize: 25, color: 'black' }} />
                 </IconButton>
-                <Button text="Add record" startIcon={<AddIcon sx={{ fontSize: '25px !important' }} />} onClick={handleClick} sx={{
-                    backgroundColor: 'black',
-                    color: 'white',
-                    '&:hover': {
-                        backgroundColor: '#2a2a2a',
-                    }
-                }} />
+                <Button
+                    text='Add record'
+                    startIcon={<AddIcon sx={{ fontSize: '25px !important' }} />}
+                    onClick={handleClick}
+                    sx={{
+                        backgroundColor: 'black',
+                        color: 'white',
+                        '&:hover': {
+                            backgroundColor: '#2a2a2a',
+                        },
+                    }}
+                />
             </GridToolbarContainer>
         );
     }
 
-
-
-    const handleDeleteClick = (id) => () => {
+    const handleDeleteClick = id => () => {
         handleDeleteFromDatabase(id);
     };
 
     const columns = [
         {
-            field: 'id', headerName: 'ID', editable: false, width: 30, maxWidth: 70,
+            field: 'id',
+            headerName: 'ID',
+            editable: false,
+            width: 30,
+            maxWidth: 70,
         },
         {
             field: 'username',
@@ -145,70 +198,84 @@ export default function Users({ postSnackbar }) {
             type: 'singleSelect',
             editable: false,
             flex: 1,
-            renderCell: (params) => {
-                return <span style={{ textTransform: 'capitalize' }}>{params.value}</span>
-            }
+            renderCell: params => {
+                return (
+                    <span style={{ textTransform: 'capitalize' }}>
+                        {params.value}
+                    </span>
+                );
+            },
         },
         { field: 'createdAt', headerName: 'Created At', editable: false },
         { field: 'updatedAt', headerName: 'Updated At', editable: false },
         {
-            field: 'action', type: 'actions', headerName: 'Action', cellClassName: 'actions',
+            field: 'action',
+            type: 'actions',
+            headerName: 'Action',
+            cellClassName: 'actions',
             getActions: ({ id }) => {
-
-                const [dropdown, setDropdown] = useState(false)
+                const [dropdown, setDropdown] = useState(false);
                 const buttons = [
                     {
-                        name: "Edit",
+                        name: 'Edit',
                         action: () => handleOpenEditModal(id),
-                        icon: <EditIcon />
-
+                        icon: <EditIcon />,
                     },
                     {
-                        name: "Delete",
+                        name: 'Delete',
                         action: handleDeleteClick(id),
-                        icon: <DeleteIcon />
-
-                    }
-                ]
+                        icon: <DeleteIcon />,
+                    },
+                ];
 
                 const handleOpenDropdown = () => {
-                    setDropdown(!dropdown)
-                }
+                    setDropdown(!dropdown);
+                };
 
                 const handleWhenMouseLeave = () => {
-                    setDropdown(false)
-                }
+                    setDropdown(false);
+                };
 
                 return [
-                    <div key={"dropdown"}>
-                        <IconButton key={"IconButton"} onClick={handleOpenDropdown} sx={{
-                            '&:focus': {
-                                outline: 'none',
-                            },
-                            '&:hover': {
-                                outline: 'none',
-                            },
-                        }}>
+                    <div key={'dropdown'}>
+                        <IconButton
+                            key={'IconButton'}
+                            onClick={handleOpenDropdown}
+                            sx={{
+                                '&:focus': {
+                                    outline: 'none',
+                                },
+                                '&:hover': {
+                                    outline: 'none',
+                                },
+                            }}>
                             <MoreHoriz />
                         </IconButton>
-                        <Dropdown key={"More"} dropdown={dropdown} onMouseDown={handleOpenDropdown} onMouseLeave={handleWhenMouseLeave} subitems={buttons}
+                        <Dropdown
+                            key={'More'}
+                            dropdown={dropdown}
+                            onMouseDown={handleOpenDropdown}
+                            onMouseLeave={handleWhenMouseLeave}
+                            subitems={buttons}
                             style={{
-                                transform: 'translateX(-50%)'
+                                transform: 'translateX(-50%)',
                             }}
                         />
-                    </div>
+                    </div>,
                 ];
             },
-        }
+        },
     ];
 
     const handleOpenEditModal = (id: number) => {
         setOpenEditModal(true);
-        setSelectedRow(usersData?.data.find((row: { id: number; }) => row.id === id));
-        setUsername(usersData?.data.find((row) => row.id === id).username);
-        setPassword(usersData?.data.find((row) => row.id === id).password);
-        setRole(usersData?.data.find((row) => row.id === id).role);
-    }
+        setSelectedRow(
+            usersData?.data.find((row: { id: number }) => row.id === id)
+        );
+        setUsername(usersData?.data.find(row => row.id === id).username);
+        setPassword(usersData?.data.find(row => row.id === id).password);
+        setRole(usersData?.data.find(row => row.id === id).role);
+    };
 
     const handleCloseModal = () => {
         setOpenEditModal(false);
@@ -217,136 +284,144 @@ export default function Users({ postSnackbar }) {
         setUsername('');
         setPassword('');
         setRole('member');
-    }
+    };
 
     const handleUsernameChange = (event: any) => {
         setUsername(event.target.value);
-    }
+    };
 
     const handlePasswordChange = (event: any) => {
         setPassword(event.target.value);
-    }
+    };
 
     const handleSelectOptionChange = (event: any) => {
         setRole(event.target.value);
-    }
+    };
 
     const handleSubmitUpdate = (event: any) => {
         event.preventDefault();
-        handleUpdateToDatabase(selectedRow.id, { username, password, role, newRow: openAddModal });
+        handleUpdateToDatabase(selectedRow.id, {
+            username,
+            password,
+            role,
+            newRow: openAddModal,
+        });
         setOpenEditModal(false);
         setOpenAddModal(false);
         handleCloseModal();
-    }
+    };
 
     return (
         <>
-            {isError
-                ? <Alert severity="error">Error fetching data</Alert>
-                : (
-                    <DataGrid
-                        rows={usersData?.data || []}
-                        columns={columns}
-                        disableSelectionOnClick
-                        disableColumnResize
-                        loading={isFetching}
-                        initialState={{
-                            columns: {
-                                columnVisibilityModel: {
-                                    createdAt: false,
-                                    updatedAt: false
-                                },
+            {isError ? (
+                <Alert severity='error'>Error fetching data</Alert>
+            ) : (
+                <DataGrid
+                    rows={usersData?.data || []}
+                    columns={columns}
+                    disableSelectionOnClick
+                    disableColumnResize
+                    loading={isFetching}
+                    initialState={{
+                        columns: {
+                            columnVisibilityModel: {
+                                createdAt: false,
+                                updatedAt: false,
                             },
-                        }}
-                        slots={{
-                            toolbar: EditToolbar,
-                        }}
-
-                        sx={{
-                            '& .MuiDataGrid-main': {
-                                borderTop: '1px solid #e0e0e0',
-                            },
-                            '& .actions': {
-                                display: 'flex',
-                                justifyContent: 'center',
-                                gap: '0.5rem',
-                            },
-                            '& .MuiDataGrid-cell--editing': {
-                                p: '0.3rem !important',
-                            },
-                        }}
-                    />
-                )}
+                        },
+                    }}
+                    slots={{
+                        toolbar: EditToolbar,
+                    }}
+                    sx={{
+                        '& .MuiDataGrid-main': {
+                            borderTop: '1px solid #e0e0e0',
+                        },
+                        '& .actions': {
+                            display: 'flex',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                        },
+                        '& .MuiDataGrid-cell--editing': {
+                            p: '0.3rem !important',
+                        },
+                    }}
+                />
+            )}
 
             <PopupModal
                 open={openEditModal || openAddModal}
                 handleClose={handleCloseModal}
                 sxBox={{
-                    backgroundColor: 'background.paper'
+                    backgroundColor: 'background.paper',
                 }}>
-                <p style={{ fontSize: '1.4rem', textTransform: 'capitalize' }}>{openEditModal ? `Update "${username}"` : "Add User"}</p>
+                <p style={{ fontSize: '1.4rem', textTransform: 'capitalize' }}>
+                    {openEditModal ? `Update "${username}"` : 'Add User'}
+                </p>
 
                 <form onSubmit={handleSubmitUpdate}>
                     <Stack spacing={2} sx={{ width: '100%' }}>
                         <TextField
-                            label="Username"
-                            variant="outlined"
+                            label='Username'
+                            variant='outlined'
                             fullWidth
-                            size="small"
+                            size='small'
                             value={username}
                             onChange={handleUsernameChange}
                             autoFocus={true}
                         />
                         <TextField
-                            label="Password"
-                            variant="outlined"
+                            label='Password'
+                            variant='outlined'
                             fullWidth
-                            size="small"
+                            size='small'
                             value={password}
                             onChange={handlePasswordChange}
                         />
                         <TextField
-                            variant="outlined"
-                            label="Role"
+                            variant='outlined'
+                            label='Role'
                             fullWidth
                             SelectProps={{
                                 native: true,
                             }}
                             select
-                            size="small"
+                            size='small'
                             value={role}
-                            onChange={handleSelectOptionChange}
-                        >
-                            <option value="Member">Member</option>
-                            <option value="Admin">Admin</option>
+                            onChange={handleSelectOptionChange}>
+                            <option value='Member'>Member</option>
+                            <option value='Admin'>Admin</option>
                         </TextField>
 
-                        {
-                            openEditModal && (
-                                <Button text="Update" type="submit" fullWidth
-                                    onClick={handleSubmitUpdate}
-                                    sx={{
-                                        backgroundColor: 'black',
-                                        color: 'white',
-                                        '&:hover': {
-                                            backgroundColor: '#2a2a2a',
-                                        }
-
-                                    }} />
-                            ) || (
-                                <Button text="Add" type="submit" fullWidth
-                                    onClick={handleSubmitUpdate}
-                                    sx={{
-                                        backgroundColor: 'black',
-                                        color: 'white',
-                                        '&:hover': {
-                                            backgroundColor: '#2a2a2a',
-                                        }
-
-                                    }} />
-                            )
-                        }
-
+                        {(openEditModal && (
+                            <Button
+                                text='Update'
+                                type='submit'
+                                fullWidth
+                                onClick={handleSubmitUpdate}
+                                sx={{
+                                    backgroundColor: 'black',
+                                    color: 'white',
+                                    '&:hover': {
+                                        backgroundColor: '#2a2a2a',
+                                    },
+                                }}
+                            />
+                        )) || (
+                            <Button
+                                text='Add'
+                                type='submit'
+                                fullWidth
+                                onClick={handleSubmitUpdate}
+                                sx={{
+                                    backgroundColor: 'black',
+                                    color: 'white',
+                                    '&:hover': {
+                                        backgroundColor: '#2a2a2a',
+                                    },
+                                }}
+                            />
+                        )}
                     </Stack>
                 </form>
             </PopupModal>

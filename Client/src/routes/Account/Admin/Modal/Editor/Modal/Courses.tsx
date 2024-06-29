@@ -4,4 +4,4 @@ export default function Courses() {
             <h1>Courses</h1>
         </div>
     );
-}   
+}

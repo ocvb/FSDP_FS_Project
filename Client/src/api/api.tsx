@@ -1,17 +1,17 @@
 import axios from 'axios';
 
 export const fetchUsers = async () => {
-    return await axios.get("http://localhost:3001/api/admin/users/", {
+    return await axios.get('http://localhost:3001/api/admin/users/', {
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
     });
-}
+};
 
 export const fetchEvents = async () => {
-    return await axios.get("http://localhost:3001/api/admin/events/", {
+    return await axios.get('http://localhost:3001/api/admin/events/', {
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
     });
-}
+};
