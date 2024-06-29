@@ -50,8 +50,7 @@ const Dropdown = memo(
                                 zIndex: 2,
                                 // backgroundColor: "rgba(0, 0, 0, 0.1)",
                             }}
-                            onClick={onMouseLeave}
-                        ></div>
+                            onClick={onMouseLeave}></div>
                     )}
 
                     <div
@@ -65,8 +64,7 @@ const Dropdown = memo(
                             zIndex: 3,
                             fontSize: '1rem',
                             ...style,
-                        }}
-                    >
+                        }}>
                         <div className={styles.dropdownContent}>
                             {subitems.map((item, index) => (
                                 <a
@@ -74,8 +72,7 @@ const Dropdown = memo(
                                     className={styles.menuItem}
                                     href={item.href}
                                     onMouseDown={item.action}
-                                    style={anchorStyle}
-                                >
+                                    style={anchorStyle}>
                                     {item.icon} {item.name}
                                 </a>
                             ))}

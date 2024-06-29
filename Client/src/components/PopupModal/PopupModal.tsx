@@ -6,8 +6,7 @@ export default function PopupModal({ open, handleClose, children, sxBox }) {
             open={open}
             onClose={handleClose}
             aria-labelledby='simple-modal-title'
-            aria-describedby='simple-modal-description'
-        >
+            aria-describedby='simple-modal-description'>
             <Box
                 sx={{
                     position: 'absolute',
@@ -26,8 +25,7 @@ export default function PopupModal({ open, handleClose, children, sxBox }) {
                     flexDirection: 'column',
                     gap: '1rem',
                     ...sxBox,
-                }}
-            >
+                }}>
                 {children}
             </Box>
         </Modal>

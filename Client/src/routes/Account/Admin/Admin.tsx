@@ -61,8 +61,7 @@ export default function Admin() {
                 padding: '0 !important',
                 // backgroundColor: '#f8f8f8',
                 height: 'calc(100vh - 64px)',
-            }}
-        >
+            }}>
             <Box
                 sx={{
                     display: 'flex',
@@ -74,16 +73,14 @@ export default function Admin() {
                     height: '100%',
                     backgroundColor: 'white',
                     borderRight: '1px solid rgba(224, 224, 224, 1)',
-                }}
-            >
+                }}>
                 <div
                     className={styles.tabs}
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '5px',
-                    }}
-                >
+                    }}>
                     {tabs &&
                         tabs.map((tab, index) => {
                             return (
@@ -106,8 +103,7 @@ export default function Admin() {
                                             },
                                         }}
                                         text={tab.name}
-                                        onClick={tab.action}
-                                    ></Button>
+                                        onClick={tab.action}></Button>
                                 </div>
                             );
                         })}
@@ -120,8 +116,7 @@ export default function Admin() {
                     padding: '1rem',
                     width: '100%',
                     gap: '1rem',
-                }}
-            >
+                }}>
                 {activeTab == 0 ? <Editor /> : <Analytics />}
             </Box>
         </Container>

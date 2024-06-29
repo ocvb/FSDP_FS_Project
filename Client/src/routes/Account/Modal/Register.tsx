@@ -36,19 +36,19 @@ export default function Register({ passToChangeModal }) {
                 username: Username,
                 password: Password,
             })
-            .then((response) => {
+            .then(response => {
                 if (response.status == 200) {
                     setStatusSuccess(true);
                     setMessage('Registered successfully');
 
-                    new Promise((resolve) => setTimeout(resolve, 1000)).then(
+                    new Promise(resolve => setTimeout(resolve, 1000)).then(
                         () => {
                             pressedLogin();
                         }
                     );
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 setStatusSuccess(false);
                 if (error.response) {
                     setMessage(error.response.data.message);
@@ -75,22 +75,22 @@ export default function Register({ passToChangeModal }) {
         registerUser();
     };
 
-    const onSubmit = (event) => {
+    const onSubmit = event => {
         event.preventDefault();
 
         // Logic to check if username and password are empty
         checkValidationAndProceed();
     };
 
-    const handleUsernameChange = (event) => {
+    const handleUsernameChange = event => {
         setUsername(event.target.value);
     };
 
-    const handlePasswordChange = (event) => {
+    const handlePasswordChange = event => {
         setPassword(event.target.value);
     };
 
-    const handleConfirmPasswordChange = (event) => {
+    const handleConfirmPasswordChange = event => {
         setConfirmPassword(event.target.value);
     };
 
@@ -126,8 +126,7 @@ export default function Register({ passToChangeModal }) {
                     display: 'flex',
                     flexDirection: 'row',
                     gap: '1rem',
-                }}
-            >
+                }}>
                 <PasswordVisibility
                     sx={InputStyle}
                     type='password'
@@ -150,8 +149,7 @@ export default function Register({ passToChangeModal }) {
                     flexDirection: 'column',
                     gap: '0.5rem',
                     width: '100%',
-                }}
-            >
+                }}>
                 <Button
                     text='Register'
                     type='submit'
@@ -173,8 +171,7 @@ export default function Register({ passToChangeModal }) {
                         fontSize: '1rem',
                         marginTop: '1rem',
                         textAlign: 'center',
-                    }}
-                >
+                    }}>
                     You've an account?{' '}
                     <span className={styles.link} onClick={pressedLogin}>
                         Login
@@ -185,8 +182,7 @@ export default function Register({ passToChangeModal }) {
                 style={{
                     color: StatusSuccess ? 'green' : 'red',
                     fontSize: '1rem',
-                }}
-            >
+                }}>
                 {Message != '' ? Message : ''}
             </p>
         </form>
