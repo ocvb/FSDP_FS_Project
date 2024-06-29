@@ -32,11 +32,11 @@ export default function navbar(props) {
     const hoverButton = useRef(null);
 
     useEffect(() => {
-        const handler = event => {
+        const handler = (event) => {
             if (
-                hoveredRef.current.style.display == 'block' &&
-                !hoverButton.current.contains(event.target) &&
-                !hoveredRef.current.contains(event.target)
+                hoveredRef.current?.style.display == 'block' &&
+                !hoverButton.current?.contains(event.target) &&
+                !hoveredRef.current?.contains(event.target)
             ) {
                 setDropdown(false);
             }
@@ -48,7 +48,7 @@ export default function navbar(props) {
         };
     }, []);
 
-    const onMouseEnter = index => {
+    const onMouseEnter = (index) => {
         setIndex(index);
         setDropdown(true);
     };
@@ -65,19 +65,22 @@ export default function navbar(props) {
                 sx={{
                     boxShadow:
                         '0px 2px 3px -1px rgba(0,0,0,0.09), 0px 4px 3px 0px rgba(0,0,0,0.05)',
-                }}>
+                }}
+            >
                 <Toolbar
                     className={styles.toolbar}
                     style={{
                         padding: '0 2rem',
-                    }}>
+                    }}
+                >
                     <div style={{ flexGrow: 1 }}>
                         <a
                             href={navigation[0].href}
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                            }}>
+                            }}
+                        >
                             <img src={props.imgUrl} width={'45px'} />
                         </a>
                     </div>
@@ -94,7 +97,8 @@ export default function navbar(props) {
                                 ref={hoverButton}
                                 sx={{
                                     minWidth: 'fit-content',
-                                }}>
+                                }}
+                            >
                                 {item.name}
                             </Button>
                             {getIndex === index && (

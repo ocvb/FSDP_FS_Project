@@ -19,8 +19,8 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
 import { MoreHoriz } from '@mui/icons-material';
 import Dropdown from '@components/Dropdown/Dropdown';
-import PopupModal from '@components/PopupModal/PopupModal';
-import Loading from '@components/Loading/Loading';
+import PopupModal from '@/components/PopupModal/PopupModal';
+import Loading from '@/components/Loading/Loading';
 
 export default function Users({ postSnackbar }) {
     const [openAddModal, setOpenAddModal] = useState(false);
@@ -139,7 +139,8 @@ export default function Users({ postSnackbar }) {
                     gap: '1rem',
                     alignItems: 'center',
                     padding: '1rem',
-                }}>
+                }}
+            >
                 <IconButton
                     onClick={() => {
                         refetchUsers(),
@@ -147,7 +148,8 @@ export default function Users({ postSnackbar }) {
                                 children: 'Users refreshed',
                                 severity: 'success',
                             });
-                    }}>
+                    }}
+                >
                     <RefreshIcon sx={{ fontSize: 25, color: 'black' }} />
                 </IconButton>
                 <Button
@@ -166,7 +168,7 @@ export default function Users({ postSnackbar }) {
         );
     }
 
-    const handleDeleteClick = id => () => {
+    const handleDeleteClick = (id) => () => {
         handleDeleteFromDatabase(id);
     };
 
@@ -198,7 +200,7 @@ export default function Users({ postSnackbar }) {
             type: 'singleSelect',
             editable: false,
             flex: 1,
-            renderCell: params => {
+            renderCell: (params) => {
                 return (
                     <span style={{ textTransform: 'capitalize' }}>
                         {params.value}
@@ -248,7 +250,8 @@ export default function Users({ postSnackbar }) {
                                 '&:hover': {
                                     outline: 'none',
                                 },
-                            }}>
+                            }}
+                        >
                             <MoreHoriz />
                         </IconButton>
                         <Dropdown
@@ -272,9 +275,9 @@ export default function Users({ postSnackbar }) {
         setSelectedRow(
             usersData?.data.find((row: { id: number }) => row.id === id)
         );
-        setUsername(usersData?.data.find(row => row.id === id).username);
-        setPassword(usersData?.data.find(row => row.id === id).password);
-        setRole(usersData?.data.find(row => row.id === id).role);
+        setUsername(usersData?.data.find((row) => row.id === id).username);
+        setPassword(usersData?.data.find((row) => row.id === id).password);
+        setRole(usersData?.data.find((row) => row.id === id).role);
     };
 
     const handleCloseModal = () => {
@@ -354,7 +357,8 @@ export default function Users({ postSnackbar }) {
                 handleClose={handleCloseModal}
                 sxBox={{
                     backgroundColor: 'background.paper',
-                }}>
+                }}
+            >
                 <p style={{ fontSize: '1.4rem', textTransform: 'capitalize' }}>
                     {openEditModal ? `Update "${username}"` : 'Add User'}
                 </p>
@@ -388,7 +392,8 @@ export default function Users({ postSnackbar }) {
                             select
                             size='small'
                             value={role}
-                            onChange={handleSelectOptionChange}>
+                            onChange={handleSelectOptionChange}
+                        >
                             <option value='Member'>Member</option>
                             <option value='Admin'>Admin</option>
                         </TextField>

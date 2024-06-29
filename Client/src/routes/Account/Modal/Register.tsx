@@ -41,9 +41,11 @@ export default function Register({ passToChangeModal }) {
                     setStatusSuccess(true);
                     setMessage('Registered successfully');
 
-                    new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
-                        pressedLogin();
-                    });
+                    new Promise((resolve) => setTimeout(resolve, 1000)).then(
+                        () => {
+                            pressedLogin();
+                        }
+                    );
                 }
             })
             .catch((error) => {

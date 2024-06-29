@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import { UseAuth } from '@components/Auth/Auth';
@@ -22,11 +22,11 @@ export default function UserProfile() {
         setUserId(fetchAuth().User.id);
     }, []);
 
-    const handleUsernameChange = event => {
+    const handleUsernameChange = (event) => {
         setUsername(event.target.value);
     };
 
-    const handlePasswordChange = event => {
+    const handlePasswordChange = (event) => {
         setPassword(event.target.value);
     };
 
@@ -46,7 +46,7 @@ export default function UserProfile() {
                     },
                 }
             )
-            .then(response => {
+            .then((response) => {
                 if (response.status === 200) {
                     setMessage('Updated');
                     setPassword('');
@@ -57,7 +57,7 @@ export default function UserProfile() {
                     setSuccess(false);
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error(error);
             });
 
@@ -68,7 +68,7 @@ export default function UserProfile() {
         return () => clearTimeout(timeoutId);
     };
 
-    const onSubmit = event => {
+    const onSubmit = (event) => {
         event.preventDefault();
         setSuccess(false);
 
@@ -88,7 +88,8 @@ export default function UserProfile() {
                     padding: '1rem',
                     backgroundColor: '#F9F9F9',
                     width: '100%',
-                }}>
+                }}
+            >
                 <p>Profile</p>
             </div>
             <div
@@ -98,7 +99,8 @@ export default function UserProfile() {
                     position: 'relative',
                     padding: '1rem',
                     width: '100%',
-                }}>
+                }}
+            >
                 <form
                     onSubmit={onSubmit}
                     style={{
@@ -106,7 +108,8 @@ export default function UserProfile() {
                         flexDirection: 'column',
                         gap: '1rem',
                         width: '100%',
-                    }}>
+                    }}
+                >
                     {/* <div>
                         <img src="https://via.placeholder.com/80" alt="profile" />
                     </div> */}
@@ -159,7 +162,8 @@ export default function UserProfile() {
                             color: 'red',
                             fontSize: '1rem',
                             textAlign: 'center',
-                        }}>
+                        }}
+                    >
                         {!success ? Message : ''}
                     </p>
                 </form>

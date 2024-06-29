@@ -11,8 +11,9 @@ export default function SkillShare() {
                 <h1>Thousands of creative classes!</h1>
                 <h2>Request Skills Post</h2>
                 <p>
-                    Explore new skills, deepen existing passions, and get lost in
-                    creativity. What you find just might surprise and inspire you.
+                    Explore new skills, deepen existing passions, and get lost
+                    in creativity. What you find just might surprise and inspire
+                    you.
                 </p>
                 <Button text='Post a request' />
             </Container>

@@ -3,13 +3,21 @@ import React, { useState } from 'react';
 import { InputAdornment, TextField, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
+type PasswordVisibilityProps = {
+    password: string;
+    handlePassword: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    sx?: object;
+    variant?: 'standard' | 'outlined' | 'filled';
+    label: string;
+};
+
 export default function PasswordVisibility({
     password,
     handlePassword,
     sx,
     variant,
     label,
-}) {
+}: PasswordVisibilityProps) {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleClickShowPassword = () => {
@@ -34,7 +42,8 @@ export default function PasswordVisibility({
                                 '&:focus': {
                                     outline: 'none',
                                 },
-                            }}>
+                            }}
+                        >
                             {showPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                     </InputAdornment>

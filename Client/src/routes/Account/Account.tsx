@@ -16,7 +16,7 @@ export default function Account() {
         register: false,
     });
 
-    const handleRecievedData = data => {
+    const handleRecievedData = (data) => {
         setModalChanged(data);
     };
 
@@ -30,7 +30,8 @@ export default function Account() {
                     justifyContent: 'center',
                     alignItems: 'center',
                     padding: '0 !important',
-                }}>
+                }}
+            >
                 <div className={styles.container}>
                     <div className={styles.bg}>
                         <img src={bgImage}></img>

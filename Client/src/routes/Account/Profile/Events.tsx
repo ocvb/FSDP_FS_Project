@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { UseAuth } from '@components/Auth/Auth';
 import mainStyles from './css/Profile.module.css';
 import styles from './css/Events.module.css';
 import {
-    Box,
-    Container,
     Table,
     TableHead,
     TableBody,
@@ -95,7 +93,9 @@ export default function Events() {
                         >
                             <TableRow>
                                 {head.map((item, index) => (
-                                    <TableCell key={index}>{item.name}</TableCell>
+                                    <TableCell key={index}>
+                                        {item.name}
+                                    </TableCell>
                                 ))}
                             </TableRow>
                         </TableHead>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, colors } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -85,7 +85,8 @@ export default function Home() {
                         justifyContent: 'center',
                         alignItems: 'center',
                         padding: '2rem',
-                    }}>
+                    }}
+                >
                     <div className={styles.tile}>
                         <h2 className={styles.h2}>
                             Up-Coming Events & Facilities
@@ -128,7 +129,8 @@ export default function Home() {
                     maxWidth={false}
                     sx={{
                         backgroundColor: 'rgba(0, 0, 0, 0.03)',
-                    }}>
+                    }}
+                >
                     <Container
                         sx={{
                             position: 'relative',
@@ -138,7 +140,8 @@ export default function Home() {
                             alignItems: 'center',
                             padding: '4rem',
                             gap: '1rem',
-                        }}>
+                        }}
+                    >
                         <div className={styles.box}>
                             <p className={styles.leadingTitle}>Leading Title</p>
                             <h2 className={styles.h2}>title</h2>
@@ -154,7 +157,8 @@ export default function Home() {
                             {/* placeholder image */}
                             <img
                                 src='https://via.placeholder.com/500x500'
-                                className={styles.img}></img>
+                                className={styles.img}
+                            ></img>
                         </div>
                     </Container>
                 </Container>
@@ -169,12 +173,14 @@ export default function Home() {
                             alignItems: 'center',
                             padding: '4rem',
                             gap: '1rem',
-                        }}>
+                        }}
+                    >
                         <div className={styles.imageBox}>
                             {/* placeholder image */}
                             <img
                                 src='https://via.placeholder.com/500x500'
-                                className={styles.img}></img>
+                                className={styles.img}
+                            ></img>
                         </div>
 
                         <div className={styles.box}>

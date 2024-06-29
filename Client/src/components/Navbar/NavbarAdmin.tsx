@@ -40,25 +40,29 @@ export default function NavbarAdmin({ logo }: NavbarAdminProps) {
             sx={{
                 boxShadow: 'none',
                 borderBottom: '1px solid rgba(224, 224, 224, 1)',
-            }}>
+            }}
+        >
             <Toolbar
                 className={styles.toolbar}
                 style={{
                     padding: '0 2rem',
-                }}>
+                }}
+            >
                 <div
                     style={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                    }}>
+                    }}
+                >
                     <a
                         href={navigation[0].href}
                         style={{
                             display: 'inherit',
                             alignItems: 'center',
                             justifyContent: 'center',
-                        }}>
+                        }}
+                    >
                         <img src={logo} width={'45px'} />
                     </a>
                     <p
@@ -67,7 +71,8 @@ export default function NavbarAdmin({ logo }: NavbarAdminProps) {
                             fontWeight: '400',
                             fontStyle: 'italic',
                             marginLeft: '1rem',
-                        }}>
+                        }}
+                    >
                         People&apos;s <br />
                         Person
                     </p>

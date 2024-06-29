@@ -17,7 +17,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
 import { MoreHoriz } from '@mui/icons-material';
 import Dropdown from '@components/Dropdown/Dropdown';
-import PopupModal from '@components/PopupModal/PopupModal';
+import PopupModal from '@/components/PopupModal/PopupModal';
 
 export default function Users({ postSnackbar }) {
     const [openAddModal, setOpenAddModal] = useState(false);
@@ -128,7 +128,8 @@ export default function Users({ postSnackbar }) {
                     gap: '1rem',
                     alignItems: 'center',
                     padding: '1rem',
-                }}>
+                }}
+            >
                 <IconButton
                     onClick={() => {
                         refetchEvents(),
@@ -136,7 +137,8 @@ export default function Users({ postSnackbar }) {
                                 children: 'Events refreshed',
                                 severity: 'success',
                             });
-                    }}>
+                    }}
+                >
                     <RefreshIcon sx={{ fontSize: 25, color: 'black' }} />
                 </IconButton>
                 <Button
@@ -166,7 +168,8 @@ export default function Users({ postSnackbar }) {
                         type='button'
                         component='button'
                         sx={{ fontSize: 'inherit' }}
-                        onClick={() => setExpanded(!expanded)}>
+                        onClick={() => setExpanded(!expanded)}
+                    >
                         {expanded ? 'view less' : 'view more'}
                     </Link>
                 )}
@@ -234,7 +237,7 @@ export default function Users({ postSnackbar }) {
                     </Tooltip>
                 );
             },
-            valueGetter: params => {
+            valueGetter: (params) => {
                 const date = new Date(params);
                 return date;
             },
@@ -294,7 +297,8 @@ export default function Users({ postSnackbar }) {
                                 '&:hover': {
                                     outline: 'none',
                                 },
-                            }}>
+                            }}
+                        >
                             <MoreHoriz />
                         </IconButton>
                         <Dropdown
@@ -313,14 +317,16 @@ export default function Users({ postSnackbar }) {
         },
     ];
 
-    const handleOpenEditModal = id => {
+    const handleOpenEditModal = (id) => {
         setOpenEditModal(true);
-        setSelectedRow(eventsData?.data.find(row => row.id === id));
-        setTitle(eventsData?.data.find(row => row.id === id).title);
-        setDescription(eventsData?.data.find(row => row.id === id).description);
-        setDate(eventsData?.data.find(row => row.id === id).date);
-        setPrice(eventsData?.data.find(row => row.id === id).price);
-        setUserId(eventsData?.data.find(row => row.id === id).userId);
+        setSelectedRow(eventsData?.data.find((row) => row.id === id));
+        setTitle(eventsData?.data.find((row) => row.id === id).title);
+        setDescription(
+            eventsData?.data.find((row) => row.id === id).description
+        );
+        setDate(eventsData?.data.find((row) => row.id === id).date);
+        setPrice(eventsData?.data.find((row) => row.id === id).price);
+        setUserId(eventsData?.data.find((row) => row.id === id).userId);
     };
 
     const handleCloseModal = () => {
@@ -334,31 +340,31 @@ export default function Users({ postSnackbar }) {
         setUserId(null);
     };
 
-    const handleTitleChange = event => {
+    const handleTitleChange = (event) => {
         setTitle(event.target.value);
     };
 
-    const handleDescriptionChange = event => {
+    const handleDescriptionChange = (event) => {
         setDescription(event.target.value);
     };
 
-    const handlePriceChange = event => {
+    const handlePriceChange = (event) => {
         setPrice(event.target.value);
     };
 
-    const handleLocationChange = event => {
+    const handleLocationChange = (event) => {
         setLocation(event.target.value);
     };
 
-    const handleDateChange = event => {
+    const handleDateChange = (event) => {
         setDate(event.target.value);
     };
 
-    const handleUserIdChange = event => {
+    const handleUserIdChange = (event) => {
         setUserId(event.target.value);
     };
 
-    const handleSubmitUpdate = event => {
+    const handleSubmitUpdate = (event) => {
         event.preventDefault();
         handleUpdateToDatabase(selectedRow.id, {
             title,
@@ -425,7 +431,8 @@ export default function Users({ postSnackbar }) {
                 title='Edit User'
                 sxBox={{
                     backgroundColor: 'background.paper',
-                }}>
+                }}
+            >
                 <p style={{ fontSize: '1.4rem', textTransform: 'capitalize' }}>
                     {openEditModal ? `Update "${title}"` : 'Add Event'}
                 </p>
@@ -469,7 +476,8 @@ export default function Users({ postSnackbar }) {
                             size='small'
                             value={location}
                             onChange={handleLocationChange}
-                            defaultChecked='yishun'>
+                            defaultChecked='yishun'
+                        >
                             <option value='Ang Mo Kio'>Ang Mo Kio</option>
                             <option value='Yishun'>Yishun</option>
                         </TextField>

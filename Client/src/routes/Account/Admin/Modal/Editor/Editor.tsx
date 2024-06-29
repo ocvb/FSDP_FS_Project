@@ -55,14 +55,16 @@ export default function Editor() {
                 flexDirection: 'column',
                 gap: '1rem',
                 height: 'fit-content',
-            }}>
+            }}
+        >
             <div
                 style={{
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     gap: '1rem',
-                }}>
+                }}
+            >
                 <Select
                     variant='outlined'
                     defaultValue={0}
@@ -75,7 +77,8 @@ export default function Editor() {
                         '& .MuiMenu-list': {
                             p: '5px',
                         },
-                    }}>
+                    }}
+                >
                     <MenuItem onMouseOver={handlePrefetchUsers} value={0}>
                         Users
                     </MenuItem>
@@ -91,7 +94,8 @@ export default function Editor() {
                     height: 'calc(100vh - 135px - 2rem)',
                     width: '100%',
                     backgroundColor: 'white',
-                }}>
+                }}
+            >
                 {selected == 0 ? (
                     <Users postSnackbar={handleSnackbarFromModal} />
                 ) : selected == 1 ? (
@@ -108,7 +112,8 @@ export default function Editor() {
                             horizontal: 'center',
                         }}
                         autoHideDuration={3000}
-                        onClose={handleCloseSnackbar}>
+                        onClose={handleCloseSnackbar}
+                    >
                         <Alert
                             onClose={() => setSnackbar(null)}
                             {...(snackbar as object)}

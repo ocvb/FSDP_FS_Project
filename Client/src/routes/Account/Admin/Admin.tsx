@@ -92,8 +92,14 @@ export default function Admin() {
                                         startIcon={tab.icon}
                                         sx={{
                                             ...InputStyle,
-                                            backgroundColor: activeTab == index ? 'black' : 'white',
-                                            color: activeTab == index ? 'white' : '#212121',
+                                            backgroundColor:
+                                                activeTab == index
+                                                    ? 'black'
+                                                    : 'white',
+                                            color:
+                                                activeTab == index
+                                                    ? 'white'
+                                                    : '#212121',
                                             '&:hover': {
                                                 backgroundColor: 'black',
                                                 color: 'white',

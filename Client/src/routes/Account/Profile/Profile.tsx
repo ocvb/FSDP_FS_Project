@@ -28,7 +28,7 @@ export default function Profile() {
 
             // Simulate a network request or some operation
             // After the operation is complete, set loading to false
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise((resolve) => setTimeout(resolve, 500));
             setNotloading(true);
         }
     };
@@ -77,7 +77,8 @@ export default function Profile() {
                 alignItems: 'start',
                 gap: '1rem',
                 fontSize: '1rem',
-            }}>
+            }}
+        >
             <div
                 style={{
                     display: 'flex',
@@ -90,7 +91,8 @@ export default function Profile() {
                     backgroundColor: 'white',
                     width: 'fit-content',
                     boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.25)',
-                }}>
+                }}
+            >
                 {tabs &&
                     tabs.map((tab, index) => (
                         <Button
@@ -99,7 +101,9 @@ export default function Profile() {
                             sx={buttonStyle}
                             onClick={tab.action}
                             endIcon={tab.icon}
-                            onMouseDown={event => handleTabChange(event, index)}
+                            onMouseDown={(event) =>
+                                handleTabChange(event, index)
+                            }
                         />
                     ))}
             </div>
@@ -118,7 +122,8 @@ export default function Profile() {
                     width: '100%',
                     maxWidth: '460px',
                     borderRadius: '10px',
-                }}>
+                }}
+            >
                 {tab == 0 && notLoading ? (
                     <UserProfile geToken={getToken} />
                 ) : tab == 1 && notLoading ? (

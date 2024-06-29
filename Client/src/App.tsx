@@ -1,11 +1,10 @@
-import React from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 
 // Components
 import NavigationBar from '@components/Navbar/Navbar';
 import NavbarAdmin from '@components/Navbar/NavbarAdmin';
 import { UseAuth } from '@components/Auth/Auth';
-import ProtectedRoute from '@components/Auth/RequireAuth';
+import ProtectedRoute from '@/components/Auth/RequireAuth';
 
 // Routes
 import Home from '@routes/Home/Home';
