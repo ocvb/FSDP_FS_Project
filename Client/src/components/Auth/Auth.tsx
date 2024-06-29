@@ -46,14 +46,14 @@ export default function AuthProvider({ children }: AuthContextType) {
         return data;
     };
 
-    const checkTokenIsValid = async token => {
+    const checkTokenIsValid = async (token) => {
         return await axios
             .get('http://localhost:3001/api/user/auth', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
-            .then(response => {
+            .then((response) => {
                 if (response.status === 200) {
                     setIsAuthenticated(true);
                     setUser(response.data.data);
@@ -71,10 +71,10 @@ export default function AuthProvider({ children }: AuthContextType) {
             });
     };
 
-    const login = async data => {
+    const login = async (data) => {
         return await axios
             .post('http://localhost:3001/api/user/login', data)
-            .then(response => {
+            .then((response) => {
                 if (response.status === 200) {
                     setIsAuthenticated(true);
                     setUser(response.data.data);
@@ -93,7 +93,7 @@ export default function AuthProvider({ children }: AuthContextType) {
                     return false;
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 setIsAuthenticated(false);
                 return error;
             });
@@ -115,7 +115,8 @@ export default function AuthProvider({ children }: AuthContextType) {
                 login,
                 logout,
                 fetchAuth,
-            }}>
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );

@@ -62,7 +62,8 @@ const CustomButton = forwardRef(
                 onMouseEnter={onMouseEnter}
                 startIcon={startIcon}
                 endIcon={endIcon}
-                onMouseLeave={onMouseLeave}>
+                onMouseLeave={onMouseLeave}
+            >
                 {text}
             </Button>
         );
