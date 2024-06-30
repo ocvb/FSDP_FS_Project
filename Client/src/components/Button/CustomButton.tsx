@@ -4,6 +4,7 @@ import { forwardRef } from 'react';
 import { Button } from '@mui/material';
 
 type CustomButtonProps = {
+    fullWidth?: boolean | true;
     className?: string;
     onClick?: any;
     type?: 'button' | 'submit' | 'reset' | 'text' | 'password';
@@ -19,6 +20,7 @@ type CustomButtonProps = {
 const CustomButton = forwardRef(
     (
         {
+            fullWidth,
             className,
             onClick,
             type,
@@ -35,6 +37,7 @@ const CustomButton = forwardRef(
         return (
             <Button
                 ref={ref}
+                fullWidth={fullWidth}
                 sx={{
                     // "&:hover": {
                     //     backgroundColor: "black",
