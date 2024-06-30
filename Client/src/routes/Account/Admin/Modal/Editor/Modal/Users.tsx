@@ -60,7 +60,7 @@ export default function Users({ postSnackbar }) {
             password?: string;
             role?: string;
             newRow: boolean;
-        }
+        },
     ) => {
         try {
             const response = await axios.put(
@@ -70,7 +70,7 @@ export default function Users({ postSnackbar }) {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
-                }
+                },
             );
 
             if (response.status === 200) {
@@ -102,7 +102,7 @@ export default function Users({ postSnackbar }) {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
-                }
+                },
             );
             if (response.status === 200) {
                 postSnackbar({
@@ -153,7 +153,7 @@ export default function Users({ postSnackbar }) {
                     <RefreshIcon sx={{ fontSize: 25, color: 'black' }} />
                 </IconButton>
                 <Button
-                    text='Add record'
+                    text="Add record"
                     startIcon={<AddIcon sx={{ fontSize: '25px !important' }} />}
                     onClick={handleClick}
                     sx={{
@@ -273,7 +273,7 @@ export default function Users({ postSnackbar }) {
     const handleOpenEditModal = (id: number) => {
         setOpenEditModal(true);
         setSelectedRow(
-            usersData?.data.find((row: { id: number }) => row.id === id)
+            usersData?.data.find((row: { id: number }) => row.id === id),
         );
         setUsername(usersData?.data.find((row) => row.id === id).username);
         setPassword(usersData?.data.find((row) => row.id === id).password);
@@ -317,7 +317,7 @@ export default function Users({ postSnackbar }) {
     return (
         <>
             {isError ? (
-                <Alert severity='error'>Error fetching data</Alert>
+                <Alert severity="error">Error fetching data</Alert>
             ) : (
                 <DataGrid
                     rows={usersData?.data || []}
@@ -359,49 +359,54 @@ export default function Users({ postSnackbar }) {
                     backgroundColor: 'background.paper',
                 }}
             >
-                <p style={{ fontSize: '1.4rem', textTransform: 'capitalize' }}>
+                <p
+                    style={{
+                        fontSize: '1.4rem',
+                        textTransform: 'capitalize',
+                    }}
+                >
                     {openEditModal ? `Update "${username}"` : 'Add User'}
                 </p>
 
                 <form onSubmit={handleSubmitUpdate}>
                     <Stack spacing={2} sx={{ width: '100%' }}>
                         <TextField
-                            label='Username'
-                            variant='outlined'
+                            label="Username"
+                            variant="outlined"
                             fullWidth
-                            size='small'
+                            size="small"
                             value={username}
                             onChange={handleUsernameChange}
                             autoFocus={true}
                         />
                         <TextField
-                            label='Password'
-                            variant='outlined'
+                            label="Password"
+                            variant="outlined"
                             fullWidth
-                            size='small'
+                            size="small"
                             value={password}
                             onChange={handlePasswordChange}
                         />
                         <TextField
-                            variant='outlined'
-                            label='Role'
+                            variant="outlined"
+                            label="Role"
                             fullWidth
                             SelectProps={{
                                 native: true,
                             }}
                             select
-                            size='small'
+                            size="small"
                             value={role}
                             onChange={handleSelectOptionChange}
                         >
-                            <option value='Member'>Member</option>
-                            <option value='Admin'>Admin</option>
+                            <option value="Member">Member</option>
+                            <option value="Admin">Admin</option>
                         </TextField>
 
                         {(openEditModal && (
                             <Button
-                                text='Update'
-                                type='submit'
+                                text="Update"
+                                type="submit"
                                 fullWidth
                                 onClick={handleSubmitUpdate}
                                 sx={{
@@ -414,8 +419,8 @@ export default function Users({ postSnackbar }) {
                             />
                         )) || (
                             <Button
-                                text='Add'
-                                type='submit'
+                                text="Add"
+                                type="submit"
                                 fullWidth
                                 onClick={handleSubmitUpdate}
                                 sx={{

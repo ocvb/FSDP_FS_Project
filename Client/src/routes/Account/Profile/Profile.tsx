@@ -32,7 +32,6 @@ export default function Profile() {
             setNotloading(true);
         }
     };
-
     useEffect(() => {
         const loadingTimeout = setTimeout(() => {
             setNotloading(true);

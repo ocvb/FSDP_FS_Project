@@ -29,9 +29,13 @@ export default function AuthProvider({ children }: AuthContextType) {
         if (loginInEffect == false) {
             if (isAuthenticated && location.pathname === '/account') {
                 if (userRole === 'admin') {
-                    return navigate('/account/admin', { replace: true });
+                    return navigate('/account/admin', {
+                        replace: true,
+                    });
                 } else {
-                    return navigate('/account/profile', { replace: true });
+                    return navigate('/account/profile', {
+                        replace: true,
+                    });
                 }
             }
         }

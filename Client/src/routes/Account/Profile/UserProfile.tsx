@@ -44,7 +44,7 @@ export default function UserProfile() {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
-                }
+                },
             )
             .then((response) => {
                 if (response.status === 200) {

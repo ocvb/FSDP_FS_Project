@@ -44,7 +44,7 @@ export default function Register({ passToChangeModal }) {
                     new Promise((resolve) => setTimeout(resolve, 1000)).then(
                         () => {
                             pressedLogin();
-                        }
+                        },
                     );
                 }
             })

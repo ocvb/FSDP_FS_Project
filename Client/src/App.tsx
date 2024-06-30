@@ -33,13 +33,13 @@ export default function App() {
                 <NavigationBar imgUrl={logo} />
             )}
             <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='/events' element={<Events />} />
-                <Route path='/skill-share' element={<SkillShare />} />
-                <Route path='/account' element={<Account />} />
-                <Route path='/account/*' element={<ProtectedRoute />}>
-                    <Route path='admin' element={<Admin />} />
-                    <Route path='profile' element={<Profile />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/events" element={<Events />} />
+                <Route path="/skill-share" element={<SkillShare />} />
+                <Route path="/account" element={<Account />} />
+                <Route path="/account/*" element={<ProtectedRoute />}>
+                    <Route path="admin" element={<Admin />} />
+                    <Route path="profile" element={<Profile />} />
                 </Route>
             </Routes>
         </>

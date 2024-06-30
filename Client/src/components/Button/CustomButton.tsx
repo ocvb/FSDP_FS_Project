@@ -30,7 +30,7 @@ const CustomButton = forwardRef(
             startIcon,
             endIcon,
         }: CustomButtonProps,
-        ref
+        ref,
     ) => {
         return (
             <Button
@@ -67,7 +67,7 @@ const CustomButton = forwardRef(
                 {text}
             </Button>
         );
-    }
+    },
 );
 
 export default CustomButton;

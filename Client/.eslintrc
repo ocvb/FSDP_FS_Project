@@ -13,6 +13,9 @@
     "parserOptions": {
         "ecmaVersion": 2020, // Allows for the parsing of modern ECMAScript features
         "sourceType": "module", // Allows for the use of imports
+        "ecmaFeatures": {
+            "jsx": true,
+        },
     },
     "root": true,
     "env": { "browser": true, "es2020": true },
@@ -21,7 +24,6 @@
     "plugins": ["react-refresh", "@typescript-eslint", "prettier", "react"],
     "rules": {
         "react/react-in-jsx-scope": "off",
-        "@typescript-eslint/explicit-function-return-type": "off",
         "react-refresh/only-export-components": [
             "warn",
             { "allowConstantExport": true },
@@ -30,15 +32,6 @@
             "error",
             "single",
             { "avoidEscape": true, "allowTemplateLiterals": true },
-        ],
-        "prettier/prettier": [
-            "error",
-            {
-                "singleQuote": true,
-                "jsxSingleQuote": true,
-                "trailingComma": "es5",
-                "endOfLine": "auto",
-            },
         ],
     },
 }

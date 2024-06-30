@@ -11,8 +11,8 @@
         "build": "vite build",
         "preview": "vite preview",
         "lint": "eslint .",
-        "lint:fix": "eslint --fix .",
-        "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,md}' --config ./.prettierrc"
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write ."
     },
     "dependencies": {
         "@emotion/react": "^11.11.4",

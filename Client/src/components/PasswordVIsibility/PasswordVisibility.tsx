@@ -4,11 +4,11 @@ import { InputAdornment, TextField, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 type PasswordVisibilityProps = {
-    password: string;
-    handlePassword: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    password?: string;
+    handlePassword?: any;
     sx?: object;
     variant?: 'standard' | 'outlined' | 'filled';
-    label: string;
+    label?: string;
 };
 
 export default function PasswordVisibility({

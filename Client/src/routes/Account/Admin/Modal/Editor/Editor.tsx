@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Select, MenuItem, MenuList } from '@mui/material';
-import PropTypes from 'prop-types';
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';

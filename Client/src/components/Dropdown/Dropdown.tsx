@@ -27,7 +27,7 @@ const Dropdown = memo(
                 style,
                 allowHover,
             }: DropdownProps,
-            ref
+            ref,
         ) => {
             const anchorStyle = {
                 display: 'flex',
@@ -83,8 +83,8 @@ const Dropdown = memo(
                     </div>
                 </>
             );
-        }
-    )
+        },
+    ),
 );
 
 export default Dropdown;

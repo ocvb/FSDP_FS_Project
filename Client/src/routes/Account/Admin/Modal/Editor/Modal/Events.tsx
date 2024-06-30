@@ -40,7 +40,7 @@ export default function Users({ postSnackbar }) {
             day: 'numeric',
             month: 'long',
             year: 'numeric',
-        })
+        }),
     );
     const [userId, setUserId] = useState(null);
 
@@ -68,7 +68,7 @@ export default function Users({ postSnackbar }) {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
-                }
+                },
             );
 
             if (response.status === 200) {
@@ -92,7 +92,7 @@ export default function Users({ postSnackbar }) {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
-                }
+                },
             );
             if (response.status === 200) {
                 postSnackbar({
@@ -142,7 +142,7 @@ export default function Users({ postSnackbar }) {
                     <RefreshIcon sx={{ fontSize: 25, color: 'black' }} />
                 </IconButton>
                 <Button
-                    text='Add record'
+                    text="Add record"
                     startIcon={<AddIcon sx={{ fontSize: '25px !important' }} />}
                     onClick={handleClick}
                     sx={{
@@ -162,11 +162,12 @@ export default function Users({ postSnackbar }) {
         const length = 300;
         return (
             <div>
-                {expanded ? param.value : param.value.slice(0, length)}&nbsp;
+                {expanded ? param.value : param.value.slice(0, length)}
+                &nbsp;
                 {param.value.length > length && (
                     <Link
-                        type='button'
-                        component='button'
+                        type="button"
+                        component="button"
                         sx={{ fontSize: 'inherit' }}
                         onClick={() => setExpanded(!expanded)}
                     >
@@ -227,7 +228,7 @@ export default function Users({ postSnackbar }) {
                     <Tooltip title={params.formattedValue}>
                         <span>
                             {new Date(
-                                params.formattedValue as string
+                                params.formattedValue as string,
                             ).toLocaleDateString('en-GB', {
                                 day: 'numeric',
                                 month: 'long',
@@ -322,7 +323,7 @@ export default function Users({ postSnackbar }) {
         setSelectedRow(eventsData?.data.find((row) => row.id === id));
         setTitle(eventsData?.data.find((row) => row.id === id).title);
         setDescription(
-            eventsData?.data.find((row) => row.id === id).description
+            eventsData?.data.find((row) => row.id === id).description,
         );
         setDate(eventsData?.data.find((row) => row.id === id).date);
         setPrice(eventsData?.data.find((row) => row.id === id).price);
@@ -382,7 +383,7 @@ export default function Users({ postSnackbar }) {
     return (
         <>
             {isError ? (
-                <Alert severity='error'>Error fetching data</Alert>
+                <Alert severity="error">Error fetching data</Alert>
             ) : (
                 <DataGrid
                     rows={eventsData?.data || []}
@@ -428,29 +429,34 @@ export default function Users({ postSnackbar }) {
             <PopupModal
                 open={openEditModal || openAddModal}
                 handleClose={handleCloseModal}
-                title='Edit User'
+                title="Edit User"
                 sxBox={{
                     backgroundColor: 'background.paper',
                 }}
             >
-                <p style={{ fontSize: '1.4rem', textTransform: 'capitalize' }}>
+                <p
+                    style={{
+                        fontSize: '1.4rem',
+                        textTransform: 'capitalize',
+                    }}
+                >
                     {openEditModal ? `Update "${title}"` : 'Add Event'}
                 </p>
 
                 <form onSubmit={handleSubmitUpdate}>
                     <Stack spacing={2} sx={{ width: '100%' }}>
                         <TextField
-                            label='Title'
-                            variant='outlined'
+                            label="Title"
+                            variant="outlined"
                             fullWidth
-                            size='small'
+                            size="small"
                             value={title}
                             onChange={handleTitleChange}
                             autoFocus
                         />
                         <TextField
-                            label='Description'
-                            variant='outlined'
+                            label="Description"
+                            variant="outlined"
                             fullWidth
                             multiline
                             maxRows={10}
@@ -458,43 +464,43 @@ export default function Users({ postSnackbar }) {
                             onChange={handleDescriptionChange}
                         />
                         <TextField
-                            label='Price'
-                            variant='outlined'
+                            label="Price"
+                            variant="outlined"
                             fullWidth
-                            size='small'
+                            size="small"
                             value={price}
                             onChange={handlePriceChange}
                         />
                         <TextField
-                            variant='outlined'
-                            label='Location'
+                            variant="outlined"
+                            label="Location"
                             fullWidth
                             select
                             SelectProps={{
                                 native: true,
                             }}
-                            size='small'
+                            size="small"
                             value={location}
                             onChange={handleLocationChange}
-                            defaultChecked='yishun'
+                            defaultChecked="yishun"
                         >
-                            <option value='Ang Mo Kio'>Ang Mo Kio</option>
-                            <option value='Yishun'>Yishun</option>
+                            <option value="Ang Mo Kio">Ang Mo Kio</option>
+                            <option value="Yishun">Yishun</option>
                         </TextField>
                         <TextField
-                            label='Date'
-                            type='date'
-                            variant='outlined'
+                            label="Date"
+                            type="date"
+                            variant="outlined"
                             fullWidth
-                            size='small'
+                            size="small"
                             value={date}
                             onChange={handleDateChange}
                         />
                         <TextField
-                            label='User Id'
-                            variant='outlined'
+                            label="User Id"
+                            variant="outlined"
                             fullWidth
-                            size='small'
+                            size="small"
                             value={userId}
                             defaultValue={null}
                             onChange={handleUserIdChange}
@@ -502,8 +508,8 @@ export default function Users({ postSnackbar }) {
 
                         {(openEditModal && (
                             <Button
-                                text='Update'
-                                type='submit'
+                                text="Update"
+                                type="submit"
                                 fullWidth
                                 onClick={handleSubmitUpdate}
                                 sx={{
@@ -516,8 +522,8 @@ export default function Users({ postSnackbar }) {
                             />
                         )) || (
                             <Button
-                                text='Add'
-                                type='submit'
+                                text="Add"
+                                type="submit"
                                 fullWidth
                                 onClick={handleSubmitUpdate}
                                 sx={{

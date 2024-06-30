@@ -47,7 +47,9 @@ export default function Login({ passToChangeModal }: LoginProps) {
                     setloginStatus(true);
                     setMessage('Logging in...');
                     setTimeout(() => {
-                        return navigate(value.path, { replace: true });
+                        return navigate(value.path, {
+                            replace: true,
+                        });
                     }, 1000);
                 } else {
                     setloginStatus(false);
