@@ -104,7 +104,6 @@ export default function Login({ passToChangeModal }: LoginProps) {
                 onChange={handleUsernameChange}
                 autoFocus={true}
             />
-            {/* <InputModel2 sx={InputStyle} type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}></InputModel2> */}
             <PasswordVisibility
                 sx={InputStyle}
                 label='Password'
