@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react';
-// import { Container, Row, Col, Button } from "react-bootstrap";
 import { Box, Container, colors } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -37,14 +35,16 @@ export default function Events() {
             await axios.get('http://localhost:3001/api/events'),
     });
 
-    
-
     if (eventData?.data.length < 0) {
         refetch();
     } else {
         return (
             <>
-                <div styles='position: relative;'>
+                <div
+                    style={{
+                        position: 'relative',
+                    }}
+                >
                     <div className={styles.header}>
                         <img src={images} className={styles.img}></img>
                         <Stack
