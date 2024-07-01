@@ -25,7 +25,6 @@ const Users = db.define("users", {
     defaultValue: "member",
     allowNull: false,
   },
-
 });
 
 const Events = db.define("events", {
@@ -51,13 +50,29 @@ const Events = db.define("events", {
   },
 });
 
-Users.hasMany(Events), {
-  foreignKey: 'userId',
-};
+const Facilities = db.define("facilities", {
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  price: {
+    type: DataTypes.DOUBLE,
+    allowNull: false,
+  },
+});
+
+Users.hasMany(Events),
+  {
+    foreignKey: "userId",
+  };
 Events.belongsTo(Users, {
-  foreignKey: 'userId',
+  foreignKey: "userId",
   constraints: false,
   allowNull: true,
 });
 
-module.exports = { db, Users, Events };
+module.exports = { db, Users, Events, Facilities };
