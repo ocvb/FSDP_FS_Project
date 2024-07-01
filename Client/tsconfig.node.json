@@ -8,32 +8,19 @@
         "allowSyntheticDefaultImports": true,
         "strict": true,
         "jsx": "react-jsx",
-        "baseUrl": ".",
         "allowJs": true, // Allows JavaScript files to be compiled.
         "checkJs": true, // Set to true if you want TypeScript to type-check your JS files.
         "esModuleInterop": true,
         "target": "es5", // Set according to your target environment
-        "typeRoots": [
-            "./node_modules/@types",
-            "./types"
-        ],
+        "typeRoots": ["./node_modules/@types", "./types"],
+        "baseUrl": ".",
         "paths": {
-            "@/*": [
-                "./src/*"
-            ],
-            "@assets/*": [
-                "./src/assets/*"
-            ],
-            "@components/*": [
-                "./src/components/*"
-            ],
-            "@api/*": [
-                "./src/api/*"
-            ],
-            "@routes/*": [
-                "./src/routes/*"
-            ]
-        },
+            "@/*": ["./src/*"],
+            "@assets/*": ["./src/assets/*"],
+            "@components/*": ["./src/components/*"],
+            "@api/*": ["./src/api/*"],
+            "@routes/*": ["./src/routes/*"]
+        }
     },
     "include": [
         "vite.config.ts",

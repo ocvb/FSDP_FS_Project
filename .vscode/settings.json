@@ -4,5 +4,6 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "always"
     },
-    "editor.formatOnType": false
+    "editor.formatOnType": false,
+    "editor.tabSize": 4
 }
