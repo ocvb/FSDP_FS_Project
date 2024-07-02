@@ -10,13 +10,12 @@ export const navigation = [
         name: 'Courses',
         href: '/courses',
         submenu: [
-            { name: 'Web Development', href: '/web-dev' }, // menu items test
-            { name: 'Data Science', href: '/data-science' },
-            { name: 'Machine Learning', href: '/machine-learning' },
-            {
-                name: 'Artificial Intelligence',
-                href: '/artificial-intelligence',
-            },
+            { name: 'Health & Wellness', href: '/health-&-wellness' },
+            { name: 'Lifestyle & Leisure', href: '/lifestyle-&-leisure' },
+            { name: 'Sports & Fitness', href: '/sports-&-fitness' },
+            { name: 'Education & Enrichment', href: '/education-&-enrichment' },
+            { name: 'Lifelong Learning', href: '/lifelong-learning' },
+            { name: 'Interest Groups', href: '/interest-groups' },
         ],
     },
     { name: 'Rewards', href: '/rewards' },
