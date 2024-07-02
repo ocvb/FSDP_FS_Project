@@ -5,12 +5,14 @@
 /.pnp
 .pnp.js
 
+.vscode
+
 
 # testing
 /coverage
 
 # Database
-/model/database.db
+/src/Models/Database.db
 
 # misc
 .DS_Store

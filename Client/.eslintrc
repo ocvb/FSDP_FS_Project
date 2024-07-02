@@ -1,0 +1,35 @@
+{
+    "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react/recommended",
+    ],
+    "settings": {
+        "react": {
+            "version": "detect", // Tells eslint-plugin-react to automatically detect the version of React to use
+        },
+    },
+    "parserOptions": {
+        "ecmaVersion": 2020, // Allows for the parsing of modern ECMAScript features
+        "sourceType": "module", // Allows for the use of imports
+        "ecmaFeatures": {
+            "jsx": true,
+        },
+    },
+    "root": true,
+    "env": { "browser": true, "es2020": true },
+    "ignorePatterns": ["dist", ".eslintrc.cjs"],
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["react-refresh", "@typescript-eslint", "react"],
+    "rules": {
+        "react/react-in-jsx-scope": "off",
+        "react-refresh/only-export-components": [
+            "warn",
+            { "allowConstantExport": true },
+        ],
+        "quotes": [
+            "error",
+            "single",
+            { "avoidEscape": true, "allowTemplateLiterals": true },
+        ],
+    },
+}

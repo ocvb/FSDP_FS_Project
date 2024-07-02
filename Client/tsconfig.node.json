@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "composite": true,
+        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+        "skipLibCheck": true,
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "jsx": "react-jsx",
+        "allowJs": true, // Allows JavaScript files to be compiled.
+        "checkJs": true, // Set to true if you want TypeScript to type-check your JS files.
+        "esModuleInterop": true,
+        "target": "es5", // Set according to your target environment
+        "typeRoots": ["./node_modules/@types", "./types"],
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*"],
+            "@assets/*": ["./src/assets/*"],
+            "@components/*": ["./src/components/*"],
+            "@api/*": ["./src/api/*"],
+            "@routes/*": ["./src/routes/*"]
+        }
+    },
+    "include": [
+        "vite.config.ts",
+        "src/**/*",
+        "types/image.types.ts",
+        "types/typing.types.ts"
+    ]
+}
