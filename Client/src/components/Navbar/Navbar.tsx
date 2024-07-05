@@ -72,16 +72,33 @@ export default function navbar(props) {
                         padding: '0 2rem',
                     }}
                 >
-                    <div style={{ flexGrow: 1 }}>
+                    <div
+                        style={{
+                            flexGrow: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}
+                    >
                         <a
                             href={navigation[0].href}
                             style={{
                                 display: 'flex',
-                                alignItems: 'center',
+                                flexDirection: 'row',
                             }}
                         >
                             <img src={props.imgUrl} width={'45px'} />
                         </a>
+                        <p
+                            style={{
+                                fontSize: '1rem',
+                                fontWeight: '400',
+                                fontStyle: 'italic',
+                                marginLeft: '1rem',
+                            }}
+                        >
+                            People&apos;s <br />
+                            Person
+                        </p>
                     </div>
                     {navigation.map((item, index) => (
                         <div className={styles.buttonWrapper} key={index}>
