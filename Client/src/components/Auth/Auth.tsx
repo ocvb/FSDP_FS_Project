@@ -3,7 +3,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-const AuthContext = createContext();
+const AuthContext = createContext({});
 
 type AuthContextType = {
     children: any;
@@ -50,7 +50,7 @@ export default function AuthProvider({ children }: AuthContextType) {
         return data;
     };
 
-    const checkTokenIsValid = async (token) => {
+    const checkTokenIsValid = async (token: string) => {
         return await axios
             .get('http://localhost:3001/api/user/auth', {
                 headers: {
@@ -75,7 +75,7 @@ export default function AuthProvider({ children }: AuthContextType) {
             });
     };
 
-    const login = async (data) => {
+    const login = async (data: object) => {
         return await axios
             .post('http://localhost:3001/api/user/login', data)
             .then((response) => {

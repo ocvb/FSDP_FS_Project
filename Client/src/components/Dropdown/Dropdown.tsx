@@ -4,10 +4,10 @@ import styles from './css/Dropdown.module.css';
 
 type DropdownProps = {
     subitems?: Array<{
-        href: string;
-        name: string;
-        icon: any;
-        action: any;
+        href?: string;
+        name?: string;
+        icon?: any;
+        action?: any;
     }>;
     dropdown?: boolean;
     onMouseLeave?: any;
