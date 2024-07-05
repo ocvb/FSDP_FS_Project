@@ -8,18 +8,20 @@ import eslintPlugin from 'vite-plugin-eslint';
 export default defineConfig({
     plugins: [
         react(),
-        eslintPlugin({
-            cache: true,
-            fix: true,
-            failOnError: false,
-            failOnWarning: false,
-            emitWarning: true,
-            emitError: false,
-        }),
+        // eslintPlugin({
+        //     cache: true,
+        //     fix: true,
+        // }),
         // obfuscator({
         //   global: true,
         // }),
     ],
+    parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        project: ['./tsconfig.json', './tsconfig.node.json'],
+        tsconfigRootDir: __dirname,
+    },
     server: {
         hmr: {
             protocol: 'ws',
