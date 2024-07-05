@@ -5,7 +5,7 @@
     "type": "module",
     "proxy": "http://localhost:3000",
     "scripts": {
-        "prestart": "npm install && npm run build",
+        "prestart": "npm i",
         "start": "vite",
         "dev": "vite",
         "build": "vite build",
@@ -32,7 +32,7 @@
         "react-cookie": "^7.1.4",
         "react-dom": "^18.2.0",
         "react-material-ui-carousel": "^3.4.2",
-    "react-router-dom": "^6.23.0"
+        "react-router-dom": "^6.23.0"
     },
     "devDependencies": {
         "@types/react": "^18.3.3",
