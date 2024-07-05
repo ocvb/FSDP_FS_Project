@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { To, useNavigate } from 'react-router-dom';
 
 import { UseAuth } from '@components/Auth/Auth';
 import Button from '@components/Button/CustomButton';
@@ -13,6 +13,7 @@ import styles from './css/Modals.module.css';
 type LoginProps = {
     passToChangeModal: any;
 };
+
 
 export default function Login({ passToChangeModal }: LoginProps) {
     const pressedRegister = () => {
@@ -32,17 +33,17 @@ export default function Login({ passToChangeModal }: LoginProps) {
     const [message, setMessage] = useState('');
     const [loginStatus, setloginStatus] = useState(false);
     const navigate = useNavigate();
-    const { login } = UseAuth();
+    const { login }: any = UseAuth();
 
-    const checkLogin = () => {
+    const checkLogin = async () => {
         if (username == '' || password == '') {
             setMessage('Please fill in all fields');
             setloginStatus(false);
             return;
         }
 
-        login({ username, password })
-            .then((value) => {
+        await login({ username, password })
+            .then((value: { result: boolean; path: To }) => {
                 if (value.result == true) {
                     setloginStatus(true);
                     setMessage('Logging in...');
@@ -56,24 +57,28 @@ export default function Login({ passToChangeModal }: LoginProps) {
                     setMessage('Invalid username or password');
                 }
             })
-            .catch((error) => {
+            .catch((error: any) => {
                 console.log(error);
                 setloginStatus(false);
                 setMessage('Invalid username or password');
             });
     };
 
-    const onSubmit = (event) => {
+    const onSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
 
         checkLogin();
     };
 
-    const handleUsernameChange = (event) => {
+    const handleUsernameChange = (event: {
+        target: { value: React.SetStateAction<string> };
+    }) => {
         setUsername(event.target.value);
     };
 
-    const handlePasswordChange = (event) => {
+    const handlePasswordChange = (event: {
+        target: { value: React.SetStateAction<string> };
+    }) => {
         setPassword(event.target.value);
     };
 

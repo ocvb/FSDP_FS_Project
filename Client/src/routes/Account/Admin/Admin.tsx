@@ -8,8 +8,8 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 
 import styles from './Admin.module.css';
 
-import Editor from './Modal/Editor/Editor';
-import Analytics from './Modal/Analytics/Analytics';
+import Editor from './Pages/Editor/Editor';
+import Analytics from './Pages/Analytics/Analytics';
 
 export default function Admin() {
     const [activeTab, setActiveTab] = useState(0);
