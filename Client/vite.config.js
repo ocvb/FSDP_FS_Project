@@ -16,12 +16,6 @@ export default defineConfig({
         //   global: true,
         // }),
     ],
-    parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        project: ['./tsconfig.json', './tsconfig.node.json'],
-        tsconfigRootDir: __dirname,
-    },
     server: {
         hmr: {
             protocol: 'ws',
