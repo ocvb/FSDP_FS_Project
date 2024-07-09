@@ -7,7 +7,15 @@ interface AuthContextType {
 }
 
 interface fetchAuthType {
-    User: { username: string; id: string } | null;
+    User: {
+        createdAt?: string;
+        id?: number;
+        password?: string;
+        role?: string;
+        updatedAt?: string;
+        username?: string;
+        uuid?: string;
+    } | null;
     isAuthenticated: boolean;
     userRole: string | null;
 }
