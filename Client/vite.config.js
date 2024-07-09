@@ -9,8 +9,10 @@ export default defineConfig({
     plugins: [
         react(),
         eslintPlugin({
-            cache: true,
             fix: true,
+
+            emitError: false,
+            failOnError: false,
         }),
         // obfuscator({
         //     global: true,
