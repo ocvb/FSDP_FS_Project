@@ -10,10 +10,9 @@ import { CircularProgress } from '@mui/material';
 
 import styles from './css/Modals.module.css';
 
-type LoginProps = {
+interface LoginProps {
     passToChangeModal: any;
-};
-
+}
 
 export default function Login({ passToChangeModal }: LoginProps) {
     const pressedRegister = () => {
@@ -33,7 +32,7 @@ export default function Login({ passToChangeModal }: LoginProps) {
     const [message, setMessage] = useState('');
     const [loginStatus, setloginStatus] = useState(false);
     const navigate = useNavigate();
-    const { login }: any = UseAuth();
+    const { login } = UseAuth();
 
     const checkLogin = async () => {
         if (username == '' || password == '') {
@@ -43,7 +42,7 @@ export default function Login({ passToChangeModal }: LoginProps) {
         }
 
         await login({ username, password })
-            .then((value: { result: boolean; path: To }) => {
+            .then((value) => {
                 if (value.result == true) {
                     setloginStatus(true);
                     setMessage('Logging in...');

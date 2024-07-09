@@ -24,7 +24,7 @@ import './index.css';
 export default function App() {
     const { fetchAuth } = UseAuth();
     const location = useLocation();
-    const checkIfAdmin = fetchAuth().userRole === 'admin';
+    const checkIfAdmin = fetchAuth.userRole === 'admin';
     const isAdminRoute = location.pathname.includes('admin');
     return (
         <>
