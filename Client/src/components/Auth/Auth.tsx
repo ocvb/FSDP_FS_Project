@@ -1,18 +1,30 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 
-const AuthContext = createContext({});
-
-type AuthContextType = {
+interface AuthContextType {
     children: any;
-};
+}
+
+interface fetchAuthType {
+    User: { username: string; id: string } | null;
+    isAuthenticated: boolean;
+    userRole: string | null;
+}
+
+export interface AuthType {
+    fetchAuth: fetchAuthType;
+    login: (data: object) => Promise<{ result: boolean; path: string }>;
+    logout: () => void;
+    checkTokenIsValid: (token: string) => Promise<boolean>;
+}
+
+const AuthContext = createContext({} as AuthType);
 
 export default function AuthProvider({ children }: AuthContextType) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState(null);
-    const [userRole, setUserRole] = useState(null);
+    const [user, setUser] = useState([]);
+    const [userRole, setUserRole] = useState('');
     const [loginInEffect, setLoginInEffect] = useState(false);
 
     const location = useLocation();
@@ -41,14 +53,11 @@ export default function AuthProvider({ children }: AuthContextType) {
         }
     }, [isAuthenticated, userRole, location, loginInEffect, navigate]);
 
-    const fetchAuth = () => {
-        const data = {
-            User: user,
-            isAuthenticated: isAuthenticated,
-            userRole: userRole,
-        };
-        return data;
-    };
+    const fetchAuth = {
+        User: user,
+        isAuthenticated: isAuthenticated,
+        userRole: userRole,
+    } as fetchAuthType;
 
     const checkTokenIsValid = async (token: string) => {
         return await axios
@@ -63,6 +72,7 @@ export default function AuthProvider({ children }: AuthContextType) {
                     setUser(response.data.data);
                     setUserRole(response.data.data.role);
                     localStorage.setItem('token', response.data.token);
+                    console.log('tes?');
                     return true;
                 } else {
                     setIsAuthenticated(false);
@@ -86,7 +96,7 @@ export default function AuthProvider({ children }: AuthContextType) {
                     setLoginInEffect(true);
                     localStorage.setItem('token', response.data.token);
                     const path =
-                        response.data.data.role === 'admin'
+                        response.data?.data.role === 'admin'
                             ? '/account/admin'
                             : '/account/profile';
 
@@ -125,10 +135,6 @@ export default function AuthProvider({ children }: AuthContextType) {
         </AuthContext.Provider>
     );
 }
-
-AuthProvider.propTypes = {
-    children: PropTypes.any,
-};
 
 export function UseAuth() {
     return useContext(AuthContext);
