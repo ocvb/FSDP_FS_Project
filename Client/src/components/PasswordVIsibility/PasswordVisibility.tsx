@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import { InputAdornment, TextField, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-type PasswordVisibilityProps = {
+interface PasswordVisibilityProps {
     password?: string;
     handlePassword?: any;
     sx?: object;
     variant?: 'standard' | 'outlined' | 'filled';
     label?: string;
-};
+}
 
 export default function PasswordVisibility({
     password,

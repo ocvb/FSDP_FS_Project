@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 
 import { Button } from '@mui/material';
 
-type CustomButtonProps = {
+interface CustomButtonProps {
     fullWidth?: boolean | true;
     className?: string;
     onClick?: any;
@@ -15,7 +15,7 @@ type CustomButtonProps = {
     onMouseEnter?: any;
     startIcon?: any;
     endIcon?: any;
-};
+}
 
 const CustomButton = forwardRef(
     (

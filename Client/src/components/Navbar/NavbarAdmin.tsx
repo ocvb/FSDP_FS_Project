@@ -9,9 +9,9 @@ import Dropdown from '../Dropdown/Dropdown';
 import Button from '../Button/CustomButton';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-type NavbarAdminProps = {
+interface NavbarAdminProps {
     logo: string;
-};
+}
 
 export default function NavbarAdmin({ logo }: NavbarAdminProps) {
     const [dropdown, setDropdown] = useState(false);

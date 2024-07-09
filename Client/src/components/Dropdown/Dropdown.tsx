@@ -2,19 +2,19 @@ import { forwardRef, memo } from 'react';
 
 import styles from './css/Dropdown.module.css';
 
-type DropdownProps = {
-    subitems?: Array<{
+interface DropdownProps {
+    subitems?: {
         href?: string;
         name?: string;
         icon?: any;
         action?: any;
-    }>;
+    }[];
     dropdown?: boolean;
     onMouseLeave?: any;
     onMouseDown?: any;
     style?: object;
     allowHover?: boolean;
-};
+}
 
 const Dropdown = memo(
     forwardRef(
