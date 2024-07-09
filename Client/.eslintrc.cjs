@@ -4,6 +4,7 @@ module.exports = {
         'plugin:@typescript-eslint/stylistic-type-checked',
         'plugin:react-hooks/recommended',
         'plugin:react/recommended',
+        'plugin:react/jsx-runtime',
     ],
     settings: {
         react: {
@@ -16,7 +17,7 @@ module.exports = {
         ecmaFeatures: {
             jsx: true,
         },
-        project: ['tsconfig.node.json', 'tsconfig.json'],
+        project: ['./tsconfig.node.json', '../Client/tsconfig.json'],
     },
     root: true,
     env: { browser: true, es2020: true },
@@ -36,4 +37,12 @@ module.exports = {
         ],
         semi: ['error', 'always'],
     },
+    overrides: [
+        {
+            files: ['Client/**', '*.tsx', '*.ts'],
+            rules: {
+                'react/prop-types': 'off',
+            },
+        },
+    ],
 };
