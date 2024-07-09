@@ -8,12 +8,12 @@ import eslintPlugin from 'vite-plugin-eslint';
 export default defineConfig({
     plugins: [
         react(),
-        // eslintPlugin({
-        //     cache: true,
-        //     fix: true,
-        // }),
+        eslintPlugin({
+            cache: true,
+            fix: true,
+        }),
         // obfuscator({
-        //   global: true,
+        //     global: true,
         // }),
     ],
     server: {

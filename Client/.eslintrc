@@ -16,7 +16,7 @@
         "ecmaFeatures": {
             "jsx": true,
         },
-        "project": ["./tsconfig.json", "./tsconfig.node.json"],
+        "project": ["../Client/tsconfig.node.json", "../Client/tsconfig.json"],
     },
     "root": true,
     "env": { "browser": true, "es2020": true },
@@ -24,6 +24,7 @@
     "parser": "@typescript-eslint/parser",
     "plugins": ["react-refresh", "@typescript-eslint", "react"],
     "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": "off",
         "react/react-in-jsx-scope": "off",
         "react-refresh/only-export-components": [
             "warn",
@@ -34,5 +35,7 @@
             "single",
             { "avoidEscape": true, "allowTemplateLiterals": true },
         ],
+        "semi": ["error", "always"],
+        "no-unused-vars": "off",
     },
 }
