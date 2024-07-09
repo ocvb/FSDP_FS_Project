@@ -48,7 +48,7 @@ export default function AuthProvider({ children }: AuthContextType) {
     useEffect(() => {
         if (loginInEffect == false) {
             if (isAuthenticated && location.pathname === '/account') {
-                if (userRole === 'admin') {
+                if (userRole === 'Admin') {
                     return navigate('/account/admin', {
                         replace: true,
                     });
@@ -104,7 +104,7 @@ export default function AuthProvider({ children }: AuthContextType) {
                     setLoginInEffect(true);
                     localStorage.setItem('token', response.data.token);
                     const path =
-                        response.data?.data.role === 'admin'
+                        response.data?.data.role === 'Admin'
                             ? '/account/admin'
                             : '/account/profile';
 
