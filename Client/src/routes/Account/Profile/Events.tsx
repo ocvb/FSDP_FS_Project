@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { UseAuth } from '@components/Auth/Auth';
 import mainStyles from './css/Profile.module.css';
 import styles from './css/Events.module.css';
 import {
@@ -13,35 +11,25 @@ import {
     TableCell,
     Paper,
 } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { UseAuth } from '@components/Auth/Auth';
 
 export default function Events() {
-    const [data, setData] = useState([]);
-    const { fetchAuth, checkTokenIsValid } = UseAuth();
+    const { fetchAuth } = UseAuth();
     const retrieveToken = localStorage.getItem('token');
 
-    const getEventData = async () => {
-        checkTokenIsValid(retrieveToken).then(async (response) => {
-            if (response) {
-                await axios
-                    .get('http://localhost:3001/api/events/user', {
-                        params: {
-                            userId: fetchAuth().User.id,
-                        },
-                        headers: {
-                            Authorization: `Bearer ${retrieveToken}`,
-                        },
-                    })
-                    .then((response) => {
-                        setData(response.data);
-                    });
-                return;
-            }
-        });
-    };
+    console.log(fetchAuth.User?.id);
 
-    useEffect(() => {
-        getEventData();
-    }, []);
+    const { data: eventData } = useQuery({
+        queryKey: ['events'],
+        queryFn: async () =>
+            await axios.get('http://localhost:3001/api/events/user', {
+                params: {
+                    userId: fetchAuth.User?.id,
+                },
+                headers: { Authorization: `Bearer ${retrieveToken}` },
+            }),
+    });
 
     const head = [
         { name: 'ID' },
@@ -100,7 +88,7 @@ export default function Events() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.map((row) => (
+                            {eventData?.data.map((row) => (
                                 <TableRow
                                     key={row.id}
                                     sx={{
