@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // Components
 import { Box, Container } from '@mui/material';
@@ -51,8 +51,7 @@ export default function Admin() {
     };
 
     return (
-        <Container
-            maxWidth='true'
+        <Box
             sx={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -124,6 +123,6 @@ export default function Admin() {
             >
                 {activeTab == 0 ? <Editor /> : <Analytics />}
             </Box>
-        </Container>
+        </Box>
     );
 }

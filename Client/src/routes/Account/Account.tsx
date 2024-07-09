@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
 // Components
-import { UseAuth } from '@/components/Auth/Auth';
 import { Container } from '@mui/material';
 import styles from './css/Account.module.css';
 import bgImage from '@/assets/Account/login-bg.jpg';
