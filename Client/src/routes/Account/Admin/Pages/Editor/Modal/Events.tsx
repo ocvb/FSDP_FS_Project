@@ -218,7 +218,7 @@ export default function Users({ postSnackbar }) {
                     <Tooltip title={params.formattedValue}>
                         <span>
                             {new Date(
-                                params.formattedValue as string
+                                params.formattedValue
                             ).toLocaleDateString('en-GB', {
                                 day: 'numeric',
                                 month: 'long',
