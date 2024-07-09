@@ -24,12 +24,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 1rem;
 }
 
-.header_details p {
-    text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8);
-    text-align: center;
-}
 
 .tile {
     display: flex !important;
@@ -124,12 +121,12 @@ h3,
 h4,
 h5,
 h6 {
-    font-weight: 700;
+    font-weight: 600;
     text-align: center;
 }
 
-p {
-    font-size: 2rem;
+.home p {
+    font-size: 1rem;
     font-weight: 400;
     margin-block-end: 0;
 }

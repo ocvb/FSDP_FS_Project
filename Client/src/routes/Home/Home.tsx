@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Container, colors } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Container, colors } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import axios from 'axios';
@@ -12,31 +12,24 @@ import styles from './css/Home.module.css';
 // component
 import CustomButton from '@components/Button/CustomButton';
 import Footer from '@components/Footer/Footer';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Home() {
     const navigate = useNavigate();
-    const [events, setEvents] = useState(0);
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down('md'));
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (!events) {
-                    const response = await axios.get(
-                        'http://localhost:3001/api/events',
-                    );
-                    console.log('Data fetched successfully');
-                    setEvents(response.data);
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        fetchData();
-    }, [events]);
+    const {
+        data: eventData,
+        isFetched,
+        isFetching,
+        isError,
+    } = useQuery({
+        queryKey: ['events'],
+        queryFn: async () =>
+            await axios.get('http://localhost:3001/api/events'),
+    });
 
     const navigateToEvents = () => {
         navigate('/events');
@@ -44,19 +37,21 @@ export default function Home() {
 
     return (
         <>
-            <div styles='position: relative;'>
+            <div style={{ position: 'relative' }} className={styles.home}>
                 <div className={styles.header}>
                     <img src={images} className={styles.img}></img>
                     <div className={styles.header_details}>
                         {/* <h1 className={styles.h1}>W</h1> */}
-                        <p className={styles.p}>
-                            Welcome,
-                            <br />
-                            We are People's project community!
-                        </p>
-                        <p className={styles.p}>
-                            Where you can join events & meet new faces!
-                        </p>
+                        <Box>
+                            <h1>
+                                Welcome,
+                                <br />
+                                We are People's project community!
+                            </h1>
+                            <h2 style={{ fontWeight: 500 }}>
+                                Where you can join events & meet new faces!
+                            </h2>
+                        </Box>
                         <CustomButton
                             text='Join Us'
                             onClick={() => navigate('/account')}
@@ -68,6 +63,7 @@ export default function Home() {
                                     '0px 2px 6px 0px rgba(0, 0, 0, 0.15)',
                                 padding: '0.4rem 2rem',
                                 color: 'black',
+                                fontWeight: 500,
                                 backgroundColor: 'white',
                                 '&:hover': {
                                     backgroundColor: colors.grey[300],
@@ -92,25 +88,31 @@ export default function Home() {
                             Up-Coming Events & Facilities
                         </h2>
                         <div className={styles.row}>
-                            {events &&
-                                events.slice(0, 3).map((item, index) => (
-                                    <div className={styles.col} key={index}>
-                                        <div>
-                                            <h3 className={styles.h3}>
-                                                {item.title}
-                                            </h3>
-                                            <p className={styles.p}>
-                                                {item.description}
+                            {isError && <p>Currently theres no events</p>}
+                            {isFetching && (
+                                <p style={{ fontSize: '1rem' }}>Loading...</p>
+                            )}
+                            {!isError &&
+                                eventData?.data
+                                    .slice(0, 3)
+                                    .map((item, index) => (
+                                        <div className={styles.col} key={index}>
+                                            <div>
+                                                <h3 className={styles.h3}>
+                                                    {item.title}
+                                                </h3>
+                                                <p className={styles.p}>
+                                                    {item.description}
+                                                </p>
+                                            </div>
+                                            <p className={styles.dateText}>
+                                                {item.date}
                                             </p>
                                         </div>
-                                        <p className={styles.dateText}>
-                                            {item.date}
-                                        </p>
-                                    </div>
-                                ))}
+                                    ))}
                         </div>
                         <CustomButton
-                            text='more Events →'
+                            text='View Events →'
                             onClick={navigateToEvents}
                             sx={{
                                 display: 'inline-flex',
