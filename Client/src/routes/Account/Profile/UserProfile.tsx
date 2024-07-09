@@ -12,21 +12,25 @@ import './css/UserProfile.module.css';
 export default function UserProfile() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState(0);
     const [Message, setMessage] = useState('');
     const { fetchAuth, checkTokenIsValid } = UseAuth();
     const [success, setSuccess] = useState(false);
 
     useEffect(() => {
-        setUsername(fetchAuth().User.username);
-        setUserId(fetchAuth().User.id);
-    }, []);
+        setUsername(fetchAuth.User?.username ?? '');
+        setUserId(fetchAuth.User?.id ?? 0);
+    }, [fetchAuth.User]);
 
-    const handleUsernameChange = (event) => {
+    const handleUsernameChange = (event: {
+        target: { value: React.SetStateAction<string> };
+    }) => {
         setUsername(event.target.value);
     };
 
-    const handlePasswordChange = (event) => {
+    const handlePasswordChange = (event: {
+        target: { value: React.SetStateAction<string> };
+    }) => {
         setPassword(event.target.value);
     };
 
@@ -44,7 +48,7 @@ export default function UserProfile() {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
-                },
+                }
             )
             .then((response) => {
                 if (response.status === 200) {
@@ -68,7 +72,7 @@ export default function UserProfile() {
         return () => clearTimeout(timeoutId);
     };
 
-    const onSubmit = (event) => {
+    const onSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
         setSuccess(false);
 
