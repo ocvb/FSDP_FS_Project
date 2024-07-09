@@ -38,7 +38,7 @@ export default function Account() {
                     </div>
                     <div className={styles.login}>
                         <div className={styles.loginContainer}>
-                            <p>{modalChanged.login ? 'Login' : 'Register'}</p>
+                            <h2>{modalChanged.login ? 'Login' : 'Register'}</h2>
                             {modalChanged.login ? (
                                 <Login passToChangeModal={handleRecievedData} />
                             ) : (
