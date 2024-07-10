@@ -2,30 +2,37 @@ import { Container, Button } from '@mui/material';
 import images from '@/assets/Courses/Courses.jpg';
 import styles from './css/Courses.module.css';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Courses() {
     const [courses, setCourses] = useState([
         {
+            id: 1, // Assuming you have an ID field
             title: 'Health & Wellness',
             description:
                 'With our expert beauty tips, not only will you look good, you will feel good as well!',
         },
         {
+            id: 2,
             title: 'Lifestyle & Leisure',
             description:
                 'Embrace the Arts, craft your own leather cardholder, cook up a storm with our celebrity chefs and Trainers or unleash your creativity and find the star in you.',
         },
         {
+            id: 3,
             title: 'Sports & Fitness',
             description:
                 'Conquer air, water, and land while staying up to date with the latest in sports!',
         },
         {
+            id: 4,
             title: 'Education & Enrichment',
             description:
                 "Pique your child's interest with our range of hands-on science courses or improve pronunciation and reading with our phonics courses.",
         },
         {
+            id: 5,
             title: 'Lifelong Learning',
             description:
                 'In the age of evolving technology, you should evolve as well and learn skills that can keep you up with the times.',
@@ -33,7 +40,15 @@ export default function Courses() {
         // Add more courses as needed
     ]);
 
-    useEffect(() => {}, []);
+    useEffect(() => {
+        async function fetchCourses() {
+            const response = await axios.get(
+                'http://localhost:3001/api/courses'
+            );
+            setCourses(response.data);
+        }
+        fetchCourses();
+    }, []);
 
     return (
         <div style={{ position: 'relative' }}>
@@ -65,7 +80,7 @@ export default function Courses() {
                     <h2 className={styles.h2}>
                         These are the categories of courses we offer.
                     </h2>
-                    <br></br>
+                    <br />
                     <div className={styles.row}>
                         {courses.map((course, index) => (
                             <div className={styles.col} key={index}>
@@ -76,13 +91,15 @@ export default function Courses() {
                                     <p className={styles.p}>
                                         {course.description}
                                     </p>
-                                    <Button
-                                        variant='contained'
-                                        color='primary'
-                                        className={styles.Button}
-                                    >
-                                        Learn More
-                                    </Button>
+                                    <Link to={`/courses/${course.id}`}>
+                                        <Button
+                                            variant='contained'
+                                            color='primary'
+                                            className={styles.Button}
+                                        >
+                                            Learn More
+                                        </Button>
+                                    </Link>
                                 </div>
                             </div>
                         ))}
