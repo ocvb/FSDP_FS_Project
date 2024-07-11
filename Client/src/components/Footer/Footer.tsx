@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Container } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -69,7 +67,7 @@ export default function Footer() {
                 </div>
 
                 <div className={styles.nagivator}>
-                    <p>People's Project</p>
+                    <p>People&apos;s Project</p>
                     <ul>
                         <li>Home</li>
                         <li>Events</li>
@@ -106,7 +104,7 @@ export default function Footer() {
                     justifyContent: 'center',
                 }}
             >
-                © 2024 People's Project. All rights reserved.
+                © 2024 People&apos;s Project. All rights reserved.
                 {/* // heartshape logo */}
                 <svg
                     xmlns='http://www.w3.org/2000/svg'
