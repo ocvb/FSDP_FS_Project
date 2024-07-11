@@ -15,7 +15,6 @@
         "typeRoots": ["./node_modules/@types", "./types"],
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./src/*"],
             "@assets/*": ["./src/assets/*"],
             "@components/*": ["./src/components/*"],
             "@api/*": ["./src/api/*"],
