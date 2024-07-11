@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { SetStateAction, useState } from 'react';
 
 // Components
 import { Container } from '@mui/material';
@@ -13,9 +12,9 @@ export default function Account() {
     const [modalChanged, setModalChanged] = useState({
         login: true,
         register: false,
-    });
+    } as { login: boolean; register: boolean });
 
-    const handleRecievedData = (data) => {
+    const handleRecievedData = (data: SetStateAction<{ login: boolean; register: boolean; }>) => {
         setModalChanged(data);
     };
 
