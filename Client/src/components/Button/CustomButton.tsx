@@ -1,20 +1,22 @@
 /* eslint-disable react/display-name */
-import { forwardRef } from 'react';
+import { ForwardedRef, forwardRef } from 'react';
 
 import { Button } from '@mui/material';
 
 interface CustomButtonProps {
-    fullWidth?: boolean | true;
+    fullWidth?: boolean;
     className?: string;
-    onClick?: any;
-    type?: 'button' | 'submit' | 'reset' | 'text' | 'password';
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    type: 'button' | 'submit' | 'reset';
     sx?: object;
-    text: string;
-    onMouseDown?: any;
-    onMouseLeave?: any;
-    onMouseEnter?: any;
-    startIcon?: any;
-    endIcon?: any;
+    text?: string;
+    onMouseDown?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    onMouseLeave?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    onMouseEnter?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    startIcon?: React.ReactNode;
+    endIcon?: React.ReactNode;
+    ref?: ForwardedRef<HTMLButtonElement>;
+    href?: string;
 }
 
 const CustomButton = forwardRef(
@@ -31,18 +33,15 @@ const CustomButton = forwardRef(
             onMouseEnter,
             startIcon,
             endIcon,
-        }: CustomButtonProps,
-        ref,
+            href,
+        },
+        ref
     ) => {
         return (
             <Button
                 ref={ref}
                 fullWidth={fullWidth}
                 sx={{
-                    // "&:hover": {
-                    //     backgroundColor: "black",
-                    //     color: "white",
-                    // },
                     fontSize: '1.1rem',
                     display: 'flex',
                     gap: '0.5rem',
@@ -66,11 +65,12 @@ const CustomButton = forwardRef(
                 startIcon={startIcon}
                 endIcon={endIcon}
                 onMouseLeave={onMouseLeave}
+                href={href}
             >
                 {text}
             </Button>
         );
-    },
-);
+    }
+) as React.FC<CustomButtonProps>;
 
 export default CustomButton;
