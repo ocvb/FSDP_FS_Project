@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 import { TextField, colors } from '@mui/material';
@@ -7,7 +7,13 @@ import PasswordVisibility from '@components/PasswordVIsibility/PasswordVisibilit
 
 import styles from './css/Modals.module.css';
 
-export default function Register({ passToChangeModal }) {
+interface RegisterProps {
+    passToChangeModal: (
+        data: React.SetStateAction<{ login?: boolean; register?: boolean }>
+    ) => void;
+}
+
+export default function Register({ passToChangeModal }: RegisterProps) {
     const pressedLogin = () => {
         // reset before changing
         setUsername('');
@@ -25,9 +31,7 @@ export default function Register({ passToChangeModal }) {
     const [Username, setUsername] = useState('');
     const [Password, setPassword] = useState('');
     const [ConfirmPassword, setConfirmPassword] = useState('');
-
     const [Message, setMessage] = useState('');
-
     const [StatusSuccess, setStatusSuccess] = useState(false);
 
     const registerUser = async () => {
@@ -41,18 +45,20 @@ export default function Register({ passToChangeModal }) {
                     setStatusSuccess(true);
                     setMessage('Registered successfully');
 
-                    new Promise((resolve) => setTimeout(resolve, 1000)).then(
-                        () => {
+                    new Promise((resolve) => setTimeout(resolve, 1000))
+                        .then(() => {
                             pressedLogin();
-                        },
-                    );
+                        })
+                        .catch(() => {
+                            setStatusSuccess(false);
+                            setMessage("Couldn't redirect to login page");
+                        });
                 }
             })
-            .catch((error) => {
+            .catch(() => {
                 setStatusSuccess(false);
-                if (error.response) {
-                    setMessage(error.response.data.message);
-                }
+                setMessage('Something went wrong');
+                return false;
             });
     };
 
@@ -72,25 +78,34 @@ export default function Register({ passToChangeModal }) {
             return false;
         }
 
-        registerUser();
+        registerUser().catch(() => {
+            setStatusSuccess(false);
+            setMessage('Something went wrong');
+        });
     };
 
-    const onSubmit = (event) => {
+    const onSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
 
         // Logic to check if username and password are empty
         checkValidationAndProceed();
     };
 
-    const handleUsernameChange = (event) => {
+    const handleUsernameChange = (event: {
+        target: { value: React.SetStateAction<string> };
+    }) => {
         setUsername(event.target.value);
     };
 
-    const handlePasswordChange = (event) => {
+    const handlePasswordChange = (event: {
+        target: { value: React.SetStateAction<string> };
+    }) => {
         setPassword(event.target.value);
     };
 
-    const handleConfirmPasswordChange = (event) => {
+    const handleConfirmPasswordChange = (event: {
+        target: { value: React.SetStateAction<string> };
+    }) => {
         setConfirmPassword(event.target.value);
     };
 
@@ -130,14 +145,12 @@ export default function Register({ passToChangeModal }) {
             >
                 <PasswordVisibility
                     sx={InputStyle}
-                    type='password'
                     label='Password'
                     password={Password}
                     handlePassword={handlePasswordChange}
                 />
                 <PasswordVisibility
                     sx={InputStyle}
-                    type='password'
                     label='Confirm Password'
                     password={ConfirmPassword}
                     handlePassword={handleConfirmPasswordChange}
@@ -175,7 +188,7 @@ export default function Register({ passToChangeModal }) {
                         textAlign: 'center',
                     }}
                 >
-                    You've an account?{' '}
+                    You&apos;ve an account?{' '}
                     <span className={styles.link} onClick={pressedLogin}>
                         Login
                     </span>
