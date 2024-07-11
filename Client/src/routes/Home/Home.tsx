@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
 import { Box, Container, colors } from '@mui/material';
+import { NavigateNext } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import images from '@/assets/Home/home-bg.jpeg';
+import bg2 from '@/assets/Home/home-bg2.png';
 
 import styles from './css/Home.module.css';
 
@@ -13,22 +14,37 @@ import styles from './css/Home.module.css';
 import CustomButton from '@components/Button/CustomButton';
 import Footer from '@components/Footer/Footer';
 import { useQuery } from '@tanstack/react-query';
+import Carousel from 'react-material-ui-carousel';
+
+interface EventDataResponse {
+    title: string;
+    description: string;
+    location: string;
+    date: string;
+    price: number;
+    createdAt: string;
+    updatedAt: string;
+}
 
 export default function Home() {
     const navigate = useNavigate();
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down('md'));
+    const limitDescriptionLength = 320;
 
     const {
         data: eventData,
-        isFetched,
         isFetching,
         isError,
     } = useQuery({
         queryKey: ['events'],
-        queryFn: async () =>
-            await axios.get('http://localhost:3001/api/events'),
+        queryFn: async () => {
+            const r = await axios.get<EventDataResponse[]>(
+                'http://localhost:3001/api/events'
+            );
+            return r.data;
+        },
     });
 
     const navigateToEvents = () => {
@@ -39,20 +55,40 @@ export default function Home() {
         <>
             <div style={{ position: 'relative' }} className={styles.home}>
                 <div className={styles.header}>
-                    <img src={images} className={styles.img}></img>
-                    <div className={styles.header_details}>
+                    <Carousel
+                        className={styles.carousel}
+                        sx={{
+                            position: 'absolute',
+                            width: '100%',
+                            top: 0,
+                        }}
+                        autoPlay={true}
+                        animation='slide'
+                        NextIcon={<NavigateNext />}
+                        PrevIcon={
+                            <NavigateNext sx={{ transform: 'scale(-1, -1)' }} />
+                        }
+                    >
+                        <img src={images} className={styles.img}></img>
+                        <img src={bg2} className={styles.img}></img>
+                    </Carousel>
+                    <div
+                        className={styles.header_details}
+                        style={{ zIndex: '2' }}
+                    >
                         {/* <h1 className={styles.h1}>W</h1> */}
                         <Box>
                             <h1>
                                 Welcome,
                                 <br />
-                                We are People's project community!
+                                We are People&apos;s project community!
                             </h1>
                             <h2 style={{ fontWeight: 500 }}>
                                 Where you can join events & meet new faces!
                             </h2>
                         </Box>
                         <CustomButton
+                            type='button'
                             text='Join Us'
                             onClick={() => navigate('/account')}
                             sx={{
@@ -93,25 +129,29 @@ export default function Home() {
                                 <p style={{ fontSize: '1rem' }}>Loading...</p>
                             )}
                             {!isError &&
-                                eventData?.data
-                                    .slice(0, 3)
-                                    .map((item, index) => (
-                                        <div className={styles.col} key={index}>
-                                            <div>
-                                                <h3 className={styles.h3}>
-                                                    {item.title}
-                                                </h3>
-                                                <p className={styles.p}>
-                                                    {item.description}
-                                                </p>
-                                            </div>
-                                            <p className={styles.dateText}>
-                                                {item.date}
+                                eventData?.slice(0, 3).map((item, index) => (
+                                    <div className={styles.col} key={index}>
+                                        <div>
+                                            <h3 className={styles.h3}>
+                                                {item.title}
+                                            </h3>
+                                            <p className={styles.p}>
+                                                {item.description
+                                                    .slice(
+                                                        0,
+                                                        limitDescriptionLength
+                                                    )
+                                                    .trim() + '...'}
                                             </p>
                                         </div>
-                                    ))}
+                                        <p className={styles.dateText}>
+                                            {item.date}
+                                        </p>
+                                    </div>
+                                ))}
                         </div>
                         <CustomButton
+                            type='button'
                             text='View Events →'
                             onClick={navigateToEvents}
                             sx={{
