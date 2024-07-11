@@ -1,6 +1,18 @@
 import { Modal, Box } from '@mui/material';
 
-export default function PopupModal({ open, handleClose, children, sxBox }) {
+interface PopupModalProps {
+    open: boolean;
+    handleClose: () => void;
+    children: React.ReactNode;
+    sxBox?: object;
+}
+
+export default function PopupModal({
+    open,
+    handleClose,
+    children,
+    sxBox,
+}: PopupModalProps) {
     return (
         <Modal
             open={open}
