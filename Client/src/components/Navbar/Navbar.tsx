@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useState, useRef } from 'react';
 import { AppBar, Toolbar, Button } from '@mui/material';
 import styles from './css/Navbar.module.css';
 import Dropdown from '@components/Dropdown/Dropdown';
@@ -24,30 +25,17 @@ export const navigation = [
     { name: 'Account', href: '/account' },
 ];
 
-export default function navbar(props) {
+interface NavbarProps {
+    imgUrl: string;
+}
+
+export default function navbar(props: NavbarProps) {
     const [dropdown, setDropdown] = useState(false);
     const [getIndex, setIndex] = useState(0);
     const hoveredRef = useRef(null);
     const hoverButton = useRef(null);
 
-    useEffect(() => {
-        const handler = (event) => {
-            if (
-                hoveredRef.current?.style.display == 'block' &&
-                !hoverButton.current?.contains(event.target) &&
-                !hoveredRef.current?.contains(event.target)
-            ) {
-                setDropdown(false);
-            }
-        };
-
-        document.addEventListener('mouseover', handler);
-        return () => {
-            document.removeEventListener('mouseover', handler);
-        };
-    }, []);
-
-    const onMouseEnter = (index) => {
+    const onMouseEnter = (index: number) => {
         setIndex(index);
         setDropdown(true);
     };
@@ -77,6 +65,7 @@ export default function navbar(props) {
                             flexGrow: 1,
                             display: 'flex',
                             alignItems: 'center',
+                            gap: '0.5rem',
                         }}
                     >
                         <a
@@ -93,11 +82,13 @@ export default function navbar(props) {
                                 fontSize: '1rem',
                                 fontWeight: '400',
                                 fontStyle: 'italic',
-                                marginLeft: '1rem',
+                                lineHeight: '1',
+                                position: 'absolute',
+                                left: '80px',
                             }}
                         >
                             People&apos;s <br />
-                            Person
+                            Project
                         </p>
                     </div>
                     {navigation.map((item, index) => (
