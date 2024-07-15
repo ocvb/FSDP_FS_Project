@@ -10,6 +10,7 @@ export default function Courses() {
         {
             id: 1, // Assuming you have an ID field
             title: 'Health & Wellness',
+            path: 'HealthWellness',
             description:
                 'With our expert beauty tips, not only will you look good, you will feel good as well!',
         },
@@ -91,7 +92,7 @@ export default function Courses() {
                                     <p className={styles.p}>
                                         {course.description}
                                     </p>
-                                    <Link to={`/courses/${course.id}`}>
+                                    <Link to={`/courses/${course.path}`}>
                                         <Button
                                             variant='contained'
                                             color='primary'
