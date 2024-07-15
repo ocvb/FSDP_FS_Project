@@ -4,12 +4,12 @@ import axios from 'axios';
 
 export default function CourseDetails() {
     const { id } = useParams();
-    const [course, setCourse] = useState(null);
+    const [course, setCourses] = useState(null);
 
     useEffect(() => {
         async function fetchCourse() {
             const response = await axios.get(`http://localhost:3001/api/courses/${id}`);
-            setCourse(response.data);
+            setCourses(response.data);
         }
         fetchCourse();
     }, [id]);
