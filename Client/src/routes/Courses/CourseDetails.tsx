@@ -18,8 +18,12 @@ export default function CourseDetails() {
 
     return (
         <div>
-            <h1>{course.title}</h1>
-            <p>{course.description}</p>
+            <h1>{course.
+// @ts-ignore
+            title}</h1>
+            <p>{course.
+// @ts-ignore
+            description}</p>
         </div>
     );
 }
