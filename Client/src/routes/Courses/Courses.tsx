@@ -44,7 +44,7 @@ export default function Courses() {
     useEffect(() => {
         async function fetchCourses() {
             const response = await axios.get(
-                'http://localhost:3001/api/courses'
+                'http://localhost:3001/api/admin/courses'
             );
             setCourses(response.data);
         }
