@@ -13,7 +13,7 @@ router.get('/user', TokenAuthentication, async (req, res) => {
         if (userId) {
             const coursesByUserId = await Courses.findAll({
                 where: { userId: userId },
-                attributes: ['id', 'title', 'description'],
+                attributes: ['id', 'title', 'category', 'description'],
             });
 
             console.log(coursesByUserId);
@@ -38,7 +38,7 @@ router.get('/user', TokenAuthentication, async (req, res) => {
 });
 
 // Get all courses
-router.get('/api/courses', async (req, res) => {
+router.get('/api/admin/courses', async (req, res) => {
     try {
         const courses = await Courses.findAll();
         res.status(200).json(courses);
@@ -52,7 +52,7 @@ router.get('/api/courses', async (req, res) => {
 });
 
 // Add a new course
-router.post('/api/courses', TokenAuthentication, async (req, res) => {
+router.post('/api/admin/courses', TokenAuthentication, async (req, res) => {
     const { title, description } = req.body;
 
     if (!title || !description) {
@@ -83,7 +83,7 @@ router.post('/api/courses', TokenAuthentication, async (req, res) => {
 });
 
 // Update an existing course
-router.put('/api/courses/:id', TokenAuthentication, async (req, res) => {
+router.put('/api/admin/courses/:id', TokenAuthentication, async (req, res) => {
     const { id } = req.params;
     const { title, category, description } = req.body;
 
@@ -115,7 +115,7 @@ router.put('/api/courses/:id', TokenAuthentication, async (req, res) => {
 });
 
 // Delete a course
-router.delete('/api/courses/:id', TokenAuthentication, async (req, res) => {
+router.delete('/api/admin/courses/:id', TokenAuthentication, async (req, res) => {
     const { id } = req.params;
 
     try {

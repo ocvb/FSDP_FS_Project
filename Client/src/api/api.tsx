@@ -15,3 +15,11 @@ export const fetchEvents = async () => {
         },
     });
 };
+
+export const fetchCourses = async() => {
+    return await axios.get('http://localhost:3001/api/admin/courses/', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+};
