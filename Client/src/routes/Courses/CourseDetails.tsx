@@ -8,7 +8,7 @@ export default function CourseDetails() {
 
     useEffect(() => {
         async function fetchCourse() {
-            const response = await axios.get(`http://localhost:3001/api/courses/${id}`);
+            const response = await axios.get(`http://localhost:3001/api/admin/courses/${id}`);
             setCourses(response.data);
         }
         fetchCourse();
