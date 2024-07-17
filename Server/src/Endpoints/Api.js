@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Users, Events } = require('@models');
+const { Users, Events, Courses } = require('@models');
 const bcrypt = require('bcrypt');
 const process = require('process');
 
@@ -55,10 +55,21 @@ router.get('/', async (req, res) => {
             userId: 2,
         },
     ]);
+
+    const presetCourses = await Courses.bulkCreate([
+        {
+            title: 'Course 1',
+            category: 'Health & Wellness',
+            description: "lalala",
+            location: 'delulu'
+        }
+    ])
     presetUsers;
     presetEvents;
+    presetCourses;
 
     res.send('API is running, preset data have been loaded.');
 });
+
 
 module.exports = router;
