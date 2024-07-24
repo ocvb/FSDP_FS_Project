@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Select, MenuItem, MenuList } from '@mui/material';
+import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -7,25 +7,30 @@ import Alert from '@mui/material/Alert';
 import Events from './Modal/Events';
 import Users from './Modal/Users';
 import Courses from './Modal/Courses';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
-import { fetchUsers, fetchEvents } from '@api/api';
+import { fetchUsers, fetchEvents } from '@api/EndpointsQueries';
+
+interface snackBar {
+    message?: string;
+    severity?: 'success' | 'error' | 'info' | 'warning';
+}
 
 export default function Editor() {
-    const [snackbar, setSnackbar] = useState(null);
+    const [snackbar, setSnackbar] = useState(null as snackBar | null);
     const [selected, setSelected] = useState(0);
 
     const QueryClient = useQueryClient();
 
-    const handleOnChangeSelect = (event: any) => {
-        setSelected(event.target.value);
+    const handleOnChangeSelect = (event: SelectChangeEvent<number>) => {
+        setSelected(Number(event.target.value));
     };
 
-    const handleSnackbarFromModal = (data: object) => {
-        setSnackbar(data as any);
+    const handleSnackbarFromModal = (data: snackBar) => {
+        setSnackbar(data);
     };
 
-    const handleCloseSnackbar = (event: any, reason: string) => {
+    const handleCloseSnackbar = (reason: string) => {
         if (reason === 'clickaway') {
             return;
         }
@@ -36,6 +41,8 @@ export default function Editor() {
         QueryClient.prefetchQuery({
             queryKey: ['users'],
             queryFn: fetchUsers,
+        }).catch((error) => {
+            console.error('Error fetching users:', error);
         });
     };
 
@@ -43,6 +50,8 @@ export default function Editor() {
         QueryClient.prefetchQuery({
             queryKey: ['events'],
             queryFn: fetchEvents,
+        }).catch((error) => {
+            console.error('Error fetching events:', error);
         });
     };
 
@@ -68,7 +77,6 @@ export default function Editor() {
                     variant='outlined'
                     defaultValue={0}
                     onChange={handleOnChangeSelect}
-                    // onMouseEnter={(event) => console.log(event)}
                     sx={{
                         width: '200px',
                         color: 'black',
@@ -111,7 +119,7 @@ export default function Editor() {
                             horizontal: 'center',
                         }}
                         autoHideDuration={3000}
-                        onClose={handleCloseSnackbar}
+                        onClose={() => handleCloseSnackbar}
                     >
                         <Alert
                             onClose={() => setSnackbar(null)}
