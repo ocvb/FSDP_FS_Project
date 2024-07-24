@@ -9,6 +9,7 @@ import Button from '@components/Button/CustomButton';
 import mainStyles from './css/Profile.module.css';
 import './css/UserProfile.module.css';
 import { useMutation } from '@tanstack/react-query';
+import { UsersDataResponse } from '@api/ApiType';
 
 export default function UserProfile() {
     const [username, setUsername] = useState('');
@@ -36,17 +37,7 @@ export default function UserProfile() {
     };
 
     // Update user information
-    interface UsersDataResponse {
-        status?: string;
-        data?: {
-            id?: number;
-            username?: string;
-            password?: string;
-            uuid?: string;
-            role?: string;
-        };
-        token?: string;
-
+    interface DataResponses extends UsersDataResponse {
         modifiedData?: {
             username: string;
             password: string;
@@ -54,8 +45,8 @@ export default function UserProfile() {
     }
 
     const userMutation = useMutation({
-        mutationFn: async (data: UsersDataResponse['data']) => {
-            const r = await axios.put<UsersDataResponse>(
+        mutationFn: async (data: DataResponses['data']) => {
+            const r = await axios.put<DataResponses>(
                 `http://localhost:3001/api/user/update/${userId}`,
                 data,
                 {
@@ -77,14 +68,10 @@ export default function UserProfile() {
             return;
         }
 
-        interface UserData {
-            username: string;
-            password: string;
-        }
         const userData = {
             username: username,
             password: password,
-        } as UserData;
+        } as DataResponses['modifiedData'];
 
         // Trigger the mutation
         userMutation.mutate(userData, {
