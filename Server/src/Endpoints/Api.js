@@ -4,10 +4,9 @@ const { Users, Events, SkillShares } = require('@models/index');
 const bcrypt = require('bcrypt');
 const process = require('process');
 
-const saltRounds = process.env.SALT_ROUNDS || 10;
-
 function genHash(password) {
-    return bcrypt.hashSync(password, saltRounds);
+    const salt = bcrypt.genSaltSync(process.env.SALT_ROUNDS);
+    return bcrypt.hashSync(password, salt);
 }
 
 let userType = {
