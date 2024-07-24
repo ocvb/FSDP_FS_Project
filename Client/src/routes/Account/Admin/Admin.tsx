@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // Components
-import { Box, Container } from '@mui/material';
+import { Box } from '@mui/material';
 import Button from '@components/Button/CustomButton';
 import EditIcon from '@mui/icons-material/Edit';
 import BarChartIcon from '@mui/icons-material/BarChart';
@@ -12,8 +12,10 @@ import Editor from './Pages/Editor/Editor';
 import Analytics from './Pages/Analytics/Analytics';
 
 export default function Admin() {
-    const [activeTab, setActiveTab] = useState(0);
-
+    const [activeTab, setActiveTab] = useState(
+        sessionStorage.getItem('activeTab') ?? 0
+    );
+    sessionStorage.setItem('activeTab', activeTab.toString());
     const tabs = [
         {
             name: 'Editor',
@@ -83,37 +85,36 @@ export default function Admin() {
                         gap: '5px',
                     }}
                 >
-                    {tabs &&
-                        tabs.map((tab, index) => {
-                            return (
-                                <div key={index} className={styles.tab}>
-                                    <Button
-                                        startIcon={tab.icon}
-                                        sx={{
-                                            ...InputStyle,
-                                            backgroundColor:
-                                                activeTab == index
-                                                    ? 'black'
-                                                    : 'white',
-                                            color:
-                                                activeTab == index
-                                                    ? 'white'
-                                                    : '#212121',
-                                            '&:hover': {
-                                                backgroundColor: 'black',
-                                                color: 'white',
-                                            },
-                                        }}
-                                        text={tab.name}
-                                        onClick={tab.action}
-                                    ></Button>
-                                </div>
-                            );
-                        })}
+                    {tabs.map((tab, index) => {
+                        return (
+                            <div key={index} className={styles.tab}>
+                                <Button
+                                    type='button'
+                                    startIcon={tab.icon}
+                                    sx={{
+                                        ...InputStyle,
+                                        backgroundColor:
+                                            activeTab == index
+                                                ? 'black'
+                                                : 'white',
+                                        color:
+                                            activeTab == index
+                                                ? 'white'
+                                                : '#212121',
+                                        '&:hover': {
+                                            backgroundColor: 'black',
+                                            color: 'white',
+                                        },
+                                    }}
+                                    text={tab.name}
+                                    onClick={tab.action}
+                                ></Button>
+                            </div>
+                        );
+                    })}
                 </div>
             </Box>
             <Box
-                maxWidth={true}
                 sx={{
                     position: 'relative',
                     padding: '1rem',
