@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 interface CustomButtonProps {
     fullWidth?: boolean;
     className?: string;
-    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    onClick?: (event:React.ChangeEvent | React.MouseEvent) => void;
     type: 'button' | 'submit' | 'reset';
     sx?: object;
     text?: string;
