@@ -6,6 +6,10 @@ import {
     IconButton,
     Alert,
     FormControl,
+    Box,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
 } from '@mui/material';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import AddIcon from '@mui/icons-material/Add';
@@ -20,13 +24,14 @@ import Dropdown from '@components/Dropdown/Dropdown';
 import PopupModal from '@components/PopupModal/PopupModal';
 import { fetchUsers } from '@api/EndpointsQueries';
 import { UsersDataResponse } from '@api/ApiType';
-import zIndex from '@mui/material/styles/zIndex';
 
 interface UsersProps {
     postSnackbar: (data: {
         children?: string;
         severity?: 'success' | 'error' | 'info' | 'warning' | undefined;
     }) => void;
+    handleOnChangeSelect: (event: SelectChangeEvent<number>) => void;
+    selectedCategory?: number;
 }
 
 interface SelectedRow {
@@ -38,7 +43,11 @@ interface SelectedRow {
     updatedAt?: string;
 }
 
-export default function Users({ postSnackbar }: UsersProps) {
+export default function Users({
+    postSnackbar,
+    handleOnChangeSelect,
+    selectedCategory,
+}: UsersProps) {
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState({
@@ -115,36 +124,76 @@ export default function Users({ postSnackbar }: UsersProps) {
             <GridToolbarContainer
                 sx={{
                     display: 'flex',
-                    justifyContent: 'end',
+                    justifyContent: 'space-between',
                     gap: '1rem',
                     alignItems: 'center',
                     padding: '1rem',
                 }}
             >
-                <IconButton
-                    onClick={() => {
-                        refetchUsers().catch(console.error),
-                            postSnackbar({
-                                children: 'Users refreshed',
-                                severity: 'success',
-                            });
+                <Box
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        gap: '1rem',
                     }}
                 >
-                    <RefreshIcon sx={{ fontSize: 25, color: 'black' }} />
-                </IconButton>
-                <Button
-                    type='button'
-                    text='Add record'
-                    startIcon={<AddIcon sx={{ fontSize: '25px !important' }} />}
-                    onClick={handleClick}
-                    sx={{
-                        backgroundColor: 'black',
-                        color: 'white',
-                        '&:hover': {
-                            backgroundColor: '#2a2a2a',
-                        },
-                    }}
-                />
+                    <Select
+                        variant='outlined'
+                        defaultValue={selectedCategory}
+                        onChange={handleOnChangeSelect}
+                        sx={{
+                            width: '200px',
+                            color: 'black',
+                            backgroundColor: 'white',
+                            '& .MuiMenu-list': {
+                                p: '5px',
+                            },
+                        }}
+                    >
+                        <MenuItem value={0}>Users</MenuItem>
+                        <MenuItem value={1}>Events</MenuItem>
+                        <MenuItem value={2}>Courses</MenuItem>
+                    </Select>
+                </Box>
+                <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
+                    <Button
+                        type='button'
+                        text='Refresh'
+                        startIcon={<RefreshIcon sx={{ fontSize: '25px' }} />}
+                        onClick={() => {
+                            refetchUsers().catch(() =>
+                                console.log('Error refreshing')
+                            ),
+                                postSnackbar({
+                                    children: 'Events refreshed',
+                                    severity: 'success',
+                                });
+                        }}
+                        sx={{
+                            backgroundColor: 'black',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#2a2a2a',
+                            },
+                        }}
+                    />
+                    <Button
+                        type='button'
+                        text='Add record'
+                        startIcon={
+                            <AddIcon sx={{ fontSize: '25px !important' }} />
+                        }
+                        onClick={handleClick}
+                        sx={{
+                            backgroundColor: 'black',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#2a2a2a',
+                            },
+                        }}
+                    />
+                </Box>
             </GridToolbarContainer>
         );
     }
@@ -322,7 +371,6 @@ export default function Users({ postSnackbar }: UsersProps) {
     };
 
     const handleDeleteClick = (id: number) => () => {
-        
         userDeleteMutation.mutate(
             { id },
             {
@@ -348,7 +396,7 @@ export default function Users({ postSnackbar }: UsersProps) {
         );
     };
 
-    const handleSubmitUpdate = (event) => {
+    const handleSubmitUpdate = (event: React.FormEvent) => {
         event.preventDefault();
 
         interface UserData {
