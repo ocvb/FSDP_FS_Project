@@ -90,12 +90,10 @@ export default function AuthProvider({ children }: AuthContextType) {
             .then((response) => {
                 if (response.status === 200) {
                     const responseData = response?.data;
-                    console.log(responseData);
                     setIsAuthenticated(true);
                     setUser(responseData.data ?? {});
                     setUserRole(responseData?.data?.role ?? '');
                     localStorage.setItem('token', responseData?.token ?? '');
-                    console.log('tes?');
                     return true;
                 } else {
                     setIsAuthenticated(false);
@@ -114,7 +112,6 @@ export default function AuthProvider({ children }: AuthContextType) {
         return await callAPI
             .post<UsersDataResponse>('/api/user/login', data)
             .then((response) => {
-                console.log(response.data);
                 if (response.status === 200) {
                     const responseData = response?.data;
                     setIsAuthenticated(true);
