@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+
 export default function Courses() {
     const [courses, setCourses] = useState([
         {
@@ -17,24 +18,28 @@ export default function Courses() {
         {
             id: 2,
             title: 'Lifestyle & Leisure',
+            path: 'LifeLongLeisure',
             description:
                 'Embrace the Arts, craft your own leather cardholder, cook up a storm with our celebrity chefs and Trainers or unleash your creativity and find the star in you.',
         },
         {
             id: 3,
             title: 'Sports & Fitness',
+            path: 'SportsFitness',
             description:
                 'Conquer air, water, and land while staying up to date with the latest in sports!',
         },
         {
             id: 4,
             title: 'Education & Enrichment',
+            path: 'EducationEnrichment',
             description:
                 "Pique your child's interest with our range of hands-on science courses or improve pronunciation and reading with our phonics courses.",
         },
         {
             id: 5,
             title: 'Lifelong Learning',
+            path: 'LifelongLearning',
             description:
                 'In the age of evolving technology, you should evolve as well and learn skills that can keep you up with the times.',
         },
