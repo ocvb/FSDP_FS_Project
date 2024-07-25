@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { SelectChangeEvent } from '@mui/material';
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -7,9 +7,6 @@ import Alert from '@mui/material/Alert';
 import Events from './Modal/Events';
 import Users from './Modal/Users';
 import Courses from './Modal/Courses';
-import { useQueryClient } from '@tanstack/react-query';
-
-import { fetchUsers, fetchEvents } from '@api/EndpointsQueries';
 
 interface snackBar {
     message?: string;
@@ -19,8 +16,6 @@ interface snackBar {
 export default function Editor() {
     const [snackbar, setSnackbar] = useState(null as snackBar | null);
     const [selected, setSelected] = useState(0);
-
-    const QueryClient = useQueryClient();
 
     const handleOnChangeSelect = (event: SelectChangeEvent<number>) => {
         setSelected(Number(event.target.value));
@@ -37,24 +32,6 @@ export default function Editor() {
         setSnackbar(null);
     };
 
-    const handlePrefetchUsers = () => {
-        QueryClient.prefetchQuery({
-            queryKey: ['users'],
-            queryFn: fetchUsers,
-        }).catch((error) => {
-            console.error('Error fetching users:', error);
-        });
-    };
-
-    const handlePrefetchEvents = () => {
-        QueryClient.prefetchQuery({
-            queryKey: ['events'],
-            queryFn: fetchEvents,
-        }).catch((error) => {
-            console.error('Error fetching events:', error);
-        });
-    };
-
     return (
         <div
             style={{
@@ -67,46 +44,24 @@ export default function Editor() {
         >
             <div
                 style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    gap: '1rem',
-                }}
-            >
-                <Select
-                    variant='outlined'
-                    defaultValue={0}
-                    onChange={handleOnChangeSelect}
-                    sx={{
-                        width: '200px',
-                        color: 'black',
-                        backgroundColor: 'white',
-                        '& .MuiMenu-list': {
-                            p: '5px',
-                        },
-                    }}
-                >
-                    <MenuItem onMouseOver={handlePrefetchUsers} value={0}>
-                        Users
-                    </MenuItem>
-                    <MenuItem onMouseOver={handlePrefetchEvents} value={1}>
-                        Events
-                    </MenuItem>
-                    <MenuItem value={2}>Courses</MenuItem>
-                </Select>
-            </div>
-            <div
-                style={{
                     position: 'relative',
-                    height: 'calc(100vh - 135px - 2rem)',
+                    height: 'calc(100vh - 90px)',
                     width: '100%',
                     backgroundColor: 'white',
                 }}
             >
                 {selected == 0 ? (
-                    <Users postSnackbar={handleSnackbarFromModal} />
+                    <Users
+                        postSnackbar={handleSnackbarFromModal}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                        selectedCategory={selected}
+                    />
                 ) : selected == 1 ? (
-                    <Events postSnackbar={handleSnackbarFromModal} />
+                    <Events
+                        postSnackbar={handleSnackbarFromModal}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                        selectedCategory={selected}
+                    />
                 ) : (
                     <Courses />
                 )}
