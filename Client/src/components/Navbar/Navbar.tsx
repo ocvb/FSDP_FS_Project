@@ -104,6 +104,10 @@ export default function navbar(props: NavbarProps) {
                                 ref={hoverButton}
                                 sx={{
                                     minWidth: 'fit-content',
+                                    borderRadius: '10%',
+                                    '&:hover': {
+                                        backgroundColor: 'transparent',
+                                    },
                                 }}
                             >
                                 {item.name}
