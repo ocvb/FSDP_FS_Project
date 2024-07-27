@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { Courses } = require('../model');
-const { TokenAuthentication } = require('./Middlewares/TokenAuthentication');
+const { Courses } = require('@models/index');
+const { TokenAuthentication } = require('@middleware/TokenAuthentication');
 
 // Courses APIs
 
@@ -115,24 +115,30 @@ router.put('/api/admin/courses/:id', TokenAuthentication, async (req, res) => {
 });
 
 // Delete a course
-router.delete('/api/admin/courses/:id', TokenAuthentication, async (req, res) => {
-    const { id } = req.params;
+router.delete(
+    '/api/admin/courses/:id',
+    TokenAuthentication,
+    async (req, res) => {
+        const { id } = req.params;
 
-    try {
-        const deleted = await Courses.destroy({ where: { id: id } });
+        try {
+            const deleted = await Courses.destroy({ where: { id: id } });
 
-        if (deleted) {
-            res.status(200).json({ message: 'Course deleted successfully' });
-        } else {
-            res.status(404).json({ message: 'Course not found' });
+            if (deleted) {
+                res.status(200).json({
+                    message: 'Course deleted successfully',
+                });
+            } else {
+                res.status(404).json({ message: 'Course not found' });
+            }
+        } catch (error) {
+            console.error('Error deleting course', error.message);
+            res.status(500).json({
+                message: 'Course deletion failed',
+                error: error.message,
+            });
         }
-    } catch (error) {
-        console.error('Error deleting course', error.message);
-        res.status(500).json({
-            message: 'Course deletion failed',
-            error: error.message,
-        });
     }
-});
+);
 
 module.exports = router;
