@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Courses() {
-    const [Courses, setCourses] = useState([
+    const [courses, setCourses] = useState([
         {
             id: 1, // Assuming you have an ID field
             title: 'Health & Wellness',
@@ -87,16 +87,16 @@ export default function Courses() {
                     </h2>
                     <br />
                     <div className={styles.row}>
-                        {Courses.map((Course, index) => (
+                        {courses.map((course, index) => (
                             <div className={styles.col} key={index}>
                                 <div className={styles.courseTile}>
                                     <h3 className={styles.h3}>
-                                        {Course.title}
+                                        {course.title}
                                     </h3>
                                     <p className={styles.p}>
-                                        {Course.description}
+                                        {course.description}
                                     </p>
-                                    <Link to={`/courses/${Course.path}`}>
+                                    <Link to={`/courses/${course.path}`}>
                                         <Button
                                             variant='contained'
                                             color='primary'

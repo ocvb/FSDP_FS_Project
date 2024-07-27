@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Courses } = require('@models');
-const { TokenAuthentication } = require('./Middlewares/TokenAuthentication');
+const { TokenAuthentication } = require('@Middlewares/TokenAuthentication');
 const { CourseValidation } = require('@validations/CourseValidation');
 
 // Courses APIs
