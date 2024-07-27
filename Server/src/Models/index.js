@@ -65,6 +65,17 @@ const Facilities = db.define("facilities", {
   },
 });
 
+const Courses = db.define("courses", {
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  }
+})
+
 Users.hasMany(Events),
   {
     foreignKey: "userId",
