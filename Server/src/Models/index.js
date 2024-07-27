@@ -86,4 +86,4 @@ Events.belongsTo(Users, {
   allowNull: true,
 });
 
-module.exports = { db, Users, Events, Facilities };
+module.exports = { db, Users, Events, Facilities, Courses };
