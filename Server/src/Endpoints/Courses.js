@@ -53,11 +53,11 @@ router.get('/api/admin/courses', async (req, res) => {
 
 // Add a new course
 router.post('/api/admin/courses', TokenAuthentication, async (req, res) => {
-    const { title, description } = req.body;
+    const { title, category, description } = req.body;
 
-    if (!title || !description) {
+    if (!title || !category || !description) {
         res.status(400).json({
-            message: 'Please enter the title and description.',
+            message: 'Please enter the title, category and description',
         });
         return;
     }
