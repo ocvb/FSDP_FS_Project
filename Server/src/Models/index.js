@@ -73,6 +73,10 @@ const Courses = db.define("courses", {
   description: {
     type: DataTypes.TEXT,
     allowNull: false,
+  },
+  category: {
+    type: DataTypes.TEXT,
+    allowNull: false,
   }
 })
 
