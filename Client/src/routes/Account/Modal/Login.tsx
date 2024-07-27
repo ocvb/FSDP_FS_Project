@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { To, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { UseAuth } from '@components/Auth/Auth';
 import Button from '@components/Button/CustomButton';
@@ -11,7 +11,9 @@ import { CircularProgress } from '@mui/material';
 import styles from './css/Modals.module.css';
 
 interface LoginProps {
-    passToChangeModal: any;
+    passToChangeModal: (
+        data: React.SetStateAction<{ login?: boolean; register?: boolean }>
+    ) => void;
 }
 
 export default function Login({ passToChangeModal }: LoginProps) {
@@ -34,14 +36,14 @@ export default function Login({ passToChangeModal }: LoginProps) {
     const navigate = useNavigate();
     const { login } = UseAuth();
 
-    const checkLogin = async () => {
+    const checkLogin = () => {
         if (username == '' || password == '') {
             setMessage('Please fill in all fields');
             setloginStatus(false);
             return;
         }
 
-        await login({ username, password })
+        login({ username, password })
             .then((value) => {
                 if (value.result == true) {
                     setloginStatus(true);
@@ -56,8 +58,7 @@ export default function Login({ passToChangeModal }: LoginProps) {
                     setMessage('Invalid username or password');
                 }
             })
-            .catch((error: any) => {
-                console.log(error);
+            .catch(() => {
                 setloginStatus(false);
                 setMessage('Invalid username or password');
             });
@@ -107,6 +108,7 @@ export default function Login({ passToChangeModal }: LoginProps) {
                 value={username}
                 onChange={handleUsernameChange}
                 autoFocus={true}
+                autoComplete='on'
             />
             <PasswordVisibility
                 sx={InputStyle}
@@ -129,7 +131,10 @@ export default function Login({ passToChangeModal }: LoginProps) {
                     type='submit'
                     startIcon={
                         loginStatus ? (
-                            <CircularProgress size={20} />
+                            <CircularProgress
+                                size={20}
+                                sx={{ color: 'white' }}
+                            />
                         ) : (
                             <LoginIcon />
                         )
@@ -152,7 +157,7 @@ export default function Login({ passToChangeModal }: LoginProps) {
                         textAlign: 'center',
                     }}
                 >
-                    Don't have an account?{' '}
+                    Don&apos;t have an account?{' '}
                     <span className={styles.link} onMouseDown={pressedRegister}>
                         Register
                     </span>

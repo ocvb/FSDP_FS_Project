@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Select, MenuItem, MenuList } from '@mui/material';
+import { SelectChangeEvent } from '@mui/material';
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -7,43 +7,29 @@ import Alert from '@mui/material/Alert';
 import Events from './Modal/Events';
 import Users from './Modal/Users';
 import Courses from './Modal/Courses';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { fetchUsers, fetchEvents } from '@api/api';
+interface snackBar {
+    message?: string;
+    severity?: 'success' | 'error' | 'info' | 'warning';
+}
 
 export default function Editor() {
-    const [snackbar, setSnackbar] = useState(null);
+    const [snackbar, setSnackbar] = useState(null as snackBar | null);
     const [selected, setSelected] = useState(0);
 
-    const QueryClient = useQueryClient();
-
-    const handleOnChangeSelect = (event: any) => {
-        setSelected(event.target.value);
+    const handleOnChangeSelect = (event: SelectChangeEvent<number>) => {
+        setSelected(Number(event.target.value));
     };
 
-    const handleSnackbarFromModal = (data: object) => {
-        setSnackbar(data as any);
+    const handleSnackbarFromModal = (data: snackBar) => {
+        setSnackbar(data);
     };
 
-    const handleCloseSnackbar = (event: any, reason: string) => {
+    const handleCloseSnackbar = (reason: string) => {
         if (reason === 'clickaway') {
             return;
         }
         setSnackbar(null);
-    };
-
-    const handlePrefetchUsers = () => {
-        QueryClient.prefetchQuery({
-            queryKey: ['users'],
-            queryFn: fetchUsers,
-        });
-    };
-
-    const handlePrefetchEvents = () => {
-        QueryClient.prefetchQuery({
-            queryKey: ['events'],
-            queryFn: fetchEvents,
-        });
     };
 
     return (
@@ -58,47 +44,24 @@ export default function Editor() {
         >
             <div
                 style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    gap: '1rem',
-                }}
-            >
-                <Select
-                    variant='outlined'
-                    defaultValue={0}
-                    onChange={handleOnChangeSelect}
-                    // onMouseEnter={(event) => console.log(event)}
-                    sx={{
-                        width: '200px',
-                        color: 'black',
-                        backgroundColor: 'white',
-                        '& .MuiMenu-list': {
-                            p: '5px',
-                        },
-                    }}
-                >
-                    <MenuItem onMouseOver={handlePrefetchUsers} value={0}>
-                        Users
-                    </MenuItem>
-                    <MenuItem onMouseOver={handlePrefetchEvents} value={1}>
-                        Events
-                    </MenuItem>
-                    <MenuItem value={2}>Courses</MenuItem>
-                </Select>
-            </div>
-            <div
-                style={{
                     position: 'relative',
-                    height: 'calc(100vh - 135px - 2rem)',
+                    height: 'calc(100vh - 90px)',
                     width: '100%',
                     backgroundColor: 'white',
                 }}
             >
                 {selected == 0 ? (
-                    <Users postSnackbar={handleSnackbarFromModal} />
+                    <Users
+                        postSnackbar={handleSnackbarFromModal}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                        selectedCategory={selected}
+                    />
                 ) : selected == 1 ? (
-                    <Events postSnackbar={handleSnackbarFromModal} />
+                    <Events
+                        postSnackbar={handleSnackbarFromModal}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                        selectedCategory={selected}
+                    />
                 ) : (
                     <Courses />
                 )}
@@ -111,7 +74,7 @@ export default function Editor() {
                             horizontal: 'center',
                         }}
                         autoHideDuration={3000}
-                        onClose={handleCloseSnackbar}
+                        onClose={() => handleCloseSnackbar}
                     >
                         <Alert
                             onClose={() => setSnackbar(null)}

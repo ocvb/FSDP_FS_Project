@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Stack, TextField, IconButton, Alert } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+import {
+    Stack,
+    TextField,
+    IconButton,
+    Alert,
+    FormControl,
+    Box,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+} from '@mui/material';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,8 +22,32 @@ import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
 import { MoreHoriz } from '@mui/icons-material';
 import Dropdown from '@components/Dropdown/Dropdown';
 import PopupModal from '@components/PopupModal/PopupModal';
+import { fetchUsers } from '@api/EndpointsQueries';
+import { UsersDataResponse } from '@api/ApiType';
 
-export default function Users({ postSnackbar }) {
+interface UsersProps {
+    postSnackbar: (data: {
+        children?: string;
+        severity?: 'success' | 'error' | 'info' | 'warning' | undefined;
+    }) => void;
+    handleOnChangeSelect: (event: SelectChangeEvent<number>) => void;
+    selectedCategory?: number;
+}
+
+interface SelectedRow {
+    id?: number;
+    username?: string;
+    password?: string;
+    role?: string;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+export default function Users({
+    postSnackbar,
+    handleOnChangeSelect,
+    selectedCategory,
+}: UsersProps) {
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState({
@@ -23,7 +57,7 @@ export default function Users({ postSnackbar }) {
         role: 'Member',
         createdAt: '',
         updatedAt: '',
-    });
+    } as SelectedRow);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('Member');
@@ -31,83 +65,43 @@ export default function Users({ postSnackbar }) {
     const {
         data: usersData,
         isFetching,
-        isFetched,
         isError,
         refetch: refetchUsers,
     } = useQuery({
         queryKey: ['users'],
-        queryFn: async () =>
-            await axios.get('http://localhost:3001/api/admin/users/', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            }),
+        queryFn: fetchUsers,
     });
 
-    const handleUpdateToDatabase = async (
-        id: number,
-        updatedRow: {
-            username: string;
-            password?: string;
-            role?: string;
-            newRow: boolean;
-        }
-    ) => {
-        try {
-            const response = await axios.put(
-                `http://localhost:3001/api/admin/user/${id}`,
-                updatedRow,
+    const usersMutation = useMutation({
+        mutationKey: ['users'],
+        mutationFn: async (data: UsersDataResponse['data']) => {
+            const r = await axios.put<UsersDataResponse>(
+                `http://localhost:3001/api/admin/user/${data?.id}`,
+                data,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 }
             );
+            return r.data;
+        },
+    });
 
-            if (response.status === 200) {
-                if (updatedRow.newRow) {
-                    postSnackbar({
-                        children: `${updatedRow.username} added successfully.`,
-                        severity: 'success',
-                    });
-                } else {
-                    postSnackbar({
-                        children: `${updatedRow.username} updated successfully.`,
-                        severity: 'success',
-                    });
-                }
-                refetchUsers();
-            } else {
-                return new Error(`Failed to update ${updatedRow.username}.`);
-            }
-        } catch (error: any) {
-            postSnackbar({ children: error.message, severity: 'error' });
-        }
-    };
-
-    const handleDeleteFromDatabase = async (id: number) => {
-        try {
-            const response = await axios.delete(
-                `http://localhost:3001/api/admin/user/${id}`,
+    const userDeleteMutation = useMutation({
+        mutationKey: ['users'],
+        mutationFn: async (data: UsersDataResponse['data']) => {
+            const r = await axios.delete<UsersDataResponse>(
+                `http://localhost:3001/api/admin/user/${data?.id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 }
             );
-            if (response.status === 200) {
-                postSnackbar({
-                    children: `UserID (${id}) has deleted successfully`,
-                    severity: 'success',
-                });
-                refetchUsers();
-            } else {
-                return new Error(`Failed to delete UserID: ${id}.`);
-            }
-        } catch (error: any) {
-            postSnackbar({ children: error.message, severity: 'error' });
-        }
-    };
+            return r.data;
+        },
+    });
 
     function EditToolbar() {
         const handleClick = () => {
@@ -116,52 +110,93 @@ export default function Users({ postSnackbar }) {
                     children: 'Please wait for the data to load',
                     severity: 'info',
                 });
-            const id =
-                Math.max(0, ...usersData?.data.map((row: any) => row.id)) + 1;
+            const rowsIds = usersData?.map((value) => value?.id);
+            const id = Math.max(0, ...rowsIds) + 1;
             setOpenAddModal(true);
-            setSelectedRow({ id });
+
+            interface UserData {
+                id?: number;
+            }
+            setSelectedRow({ id } as UserData);
         };
 
         return (
             <GridToolbarContainer
                 sx={{
                     display: 'flex',
-                    justifyContent: 'end',
+                    justifyContent: 'space-between',
                     gap: '1rem',
                     alignItems: 'center',
                     padding: '1rem',
                 }}
             >
-                <IconButton
-                    onClick={() => {
-                        refetchUsers(),
-                            postSnackbar({
-                                children: 'Users refreshed',
-                                severity: 'success',
-                            });
+                <Box
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        gap: '1rem',
                     }}
                 >
-                    <RefreshIcon sx={{ fontSize: 25, color: 'black' }} />
-                </IconButton>
-                <Button
-                    text='Add record'
-                    startIcon={<AddIcon sx={{ fontSize: '25px !important' }} />}
-                    onClick={handleClick}
-                    sx={{
-                        backgroundColor: 'black',
-                        color: 'white',
-                        '&:hover': {
-                            backgroundColor: '#2a2a2a',
-                        },
-                    }}
-                />
+                    <Select
+                        variant='outlined'
+                        defaultValue={selectedCategory}
+                        onChange={handleOnChangeSelect}
+                        sx={{
+                            width: '200px',
+                            color: 'black',
+                            backgroundColor: 'white',
+                            '& .MuiMenu-list': {
+                                p: '5px',
+                            },
+                        }}
+                    >
+                        <MenuItem value={0}>Users</MenuItem>
+                        <MenuItem value={1}>Events</MenuItem>
+                        <MenuItem value={2}>Courses</MenuItem>
+                    </Select>
+                </Box>
+                <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
+                    <Button
+                        type='button'
+                        text='Refresh'
+                        startIcon={<RefreshIcon sx={{ fontSize: '25px' }} />}
+                        onClick={() => {
+                            refetchUsers().catch(() =>
+                                console.log('Error refreshing')
+                            ),
+                                postSnackbar({
+                                    children: 'Events refreshed',
+                                    severity: 'success',
+                                });
+                        }}
+                        sx={{
+                            backgroundColor: 'black',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#2a2a2a',
+                            },
+                        }}
+                    />
+                    <Button
+                        type='button'
+                        text='Add record'
+                        startIcon={
+                            <AddIcon sx={{ fontSize: '25px !important' }} />
+                        }
+                        onClick={handleClick}
+                        sx={{
+                            backgroundColor: 'black',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#2a2a2a',
+                            },
+                        }}
+                    />
+                </Box>
             </GridToolbarContainer>
         );
     }
-
-    const handleDeleteClick = (id: number) => () => {
-        handleDeleteFromDatabase(id);
-    };
 
     const columns = [
         {
@@ -177,6 +212,7 @@ export default function Users({ postSnackbar }) {
             type: 'string',
             editable: false,
             flex: 1,
+            width: 0,
         },
         {
             field: 'password',
@@ -184,6 +220,7 @@ export default function Users({ postSnackbar }) {
             type: 'string',
             editable: false,
             flex: 1,
+            width: 0,
         },
         {
             field: 'role',
@@ -191,15 +228,12 @@ export default function Users({ postSnackbar }) {
             type: 'singleSelect',
             editable: false,
             flex: 1,
+            width: 0,
             renderCell: (params: {
                 value:
                     | string
                     | number
                     | boolean
-                    | React.ReactElement<
-                          any,
-                          string | React.JSXElementConstructor<any>
-                      >
                     | Iterable<React.ReactNode>
                     | React.ReactPortal
                     | null
@@ -212,15 +246,27 @@ export default function Users({ postSnackbar }) {
                 );
             },
         },
-        { field: 'createdAt', headerName: 'Created At', editable: false },
-        { field: 'updatedAt', headerName: 'Updated At', editable: false },
+        {
+            field: 'createdAt',
+            headerName: 'Created At',
+            editable: false,
+            width: 0,
+        },
+        {
+            field: 'updatedAt',
+            headerName: 'Updated At',
+            editable: false,
+            width: 0,
+        },
         {
             field: 'action',
             type: 'actions',
             headerName: 'Action',
+            width: 0,
             cellClassName: 'actions',
             getActions: ({ id }: { id: number }) => {
-                const [dropdown, setDropdown] = useState(false);
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                const [dropdown, setDropdown] = React.useState(false);
                 const buttons = [
                     {
                         name: 'Edit',
@@ -275,21 +321,20 @@ export default function Users({ postSnackbar }) {
     ];
 
     const handleOpenEditModal = (id: number) => {
-        setOpenEditModal(true);
-        setSelectedRow(
-            usersData?.data.find((row: { id: number }) => row.id === id)
-        );
-        setUsername(
-            usersData?.data.find((row: { id: number }) => row.id === id)
-                .username
-        );
-        setPassword(
-            usersData?.data.find((row: { id: number }) => row.id === id)
-                .password
-        );
-        setRole(
-            usersData?.data.find((row: { id: number }) => row.id === id).role
-        );
+        const data = usersData?.find((row) => row?.id === id) as SelectedRow;
+
+        if (data) {
+            setOpenEditModal(true);
+            setSelectedRow(data);
+            setUsername(data.username ?? '');
+            setPassword(data.password ?? '');
+            setRole(data.role ?? 'Member');
+        } else {
+            postSnackbar({
+                children: `User with ID ${id} not found.`,
+                severity: 'error',
+            });
+        }
     };
     const handleCloseModal = () => {
         setOpenEditModal(false);
@@ -307,26 +352,90 @@ export default function Users({ postSnackbar }) {
         setRole('member');
     };
 
-    const handleUsernameChange = (event: any) => {
+    const handleUsernameChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         setUsername(event.target.value);
     };
 
-    const handlePasswordChange = (event: any) => {
+    const handlePasswordChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         setPassword(event.target.value);
     };
 
-    const handleSelectOptionChange = (event: any) => {
+    const handleSelectOptionChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         setRole(event.target.value);
     };
 
-    const handleSubmitUpdate = (event: any) => {
+    const handleDeleteClick = (id: number) => () => {
+        userDeleteMutation.mutate(
+            { id },
+            {
+                onSuccess: () => {
+                    postSnackbar({
+                        children: `UserID (${id}) has deleted successfully`,
+                        severity: 'success',
+                    });
+                    refetchUsers().catch(() =>
+                        postSnackbar({
+                            children: 'Error refreshing',
+                            severity: 'error',
+                        })
+                    );
+                },
+                onError: (error) => {
+                    postSnackbar({
+                        children: error.message,
+                        severity: 'error',
+                    });
+                },
+            }
+        );
+    };
+
+    const handleSubmitUpdate = (event: React.FormEvent) => {
         event.preventDefault();
-        handleUpdateToDatabase(selectedRow.id, {
+
+        interface UserData {
+            id?: number;
+            username?: string;
+            password?: string;
+            role?: string;
+        }
+
+        console.log(selectedRow.id);
+
+        const data = {
+            id: selectedRow.id,
             username,
             password,
             role,
-            newRow: openAddModal,
+        } as UserData;
+
+        usersMutation.mutate(data, {
+            onSuccess: () => {
+                postSnackbar({
+                    children: 'User updated successfully',
+                    severity: 'success',
+                });
+                refetchUsers().catch(() =>
+                    postSnackbar({
+                        children: 'Error refreshing',
+                        severity: 'error',
+                    })
+                );
+            },
+            onError: (error) => {
+                postSnackbar({
+                    children: error.message,
+                    severity: 'error',
+                });
+            },
         });
+
         setOpenEditModal(false);
         setOpenAddModal(false);
         handleCloseModal();
@@ -338,7 +447,7 @@ export default function Users({ postSnackbar }) {
                 <Alert severity='error'>Error fetching data</Alert>
             ) : (
                 <DataGrid
-                    rows={usersData?.data || []}
+                    rows={usersData ?? []}
                     columns={columns}
                     disableSelectionOnClick
                     disableColumnResize
@@ -353,6 +462,7 @@ export default function Users({ postSnackbar }) {
                     }}
                     slots={{
                         toolbar: EditToolbar,
+                        pagination: () => null,
                     }}
                     sx={{
                         '& .MuiDataGrid-main': {
@@ -394,7 +504,7 @@ export default function Users({ postSnackbar }) {
                     {openEditModal ? `Update "${username}"` : 'Add User'}
                 </p>
 
-                <form onSubmit={handleSubmitUpdate}>
+                <FormControl onSubmit={handleSubmitUpdate}>
                     <Stack spacing={2} sx={{ width: '100%' }}>
                         <TextField
                             label='Username'
@@ -410,7 +520,6 @@ export default function Users({ postSnackbar }) {
                             variant='outlined'
                             fullWidth
                             size='small'
-                            value={password}
                             onChange={handlePasswordChange}
                         />
                         <TextField
@@ -459,7 +568,7 @@ export default function Users({ postSnackbar }) {
                             />
                         )}
                     </Stack>
-                </form>
+                </FormControl>
             </PopupModal>
         </>
     );

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Users, Events, Courses } = require('@models');
+const { Users, Events, Courses, SkillShares } = require('@models/index');
 const bcrypt = require('bcrypt');
 const process = require('process');
 
@@ -56,20 +56,47 @@ router.get('/', async (req, res) => {
         },
     ]);
 
+    const presetSkillshare = await SkillShares.bulkCreate([
+        {
+            title: 'How do i start coding',
+            description:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Est lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque. Purus faucibus ornare suspendisse sed nisi lacus. Pulvinar pellentesque habitant morbi tristique. Congue eu consequat ac felis donec et odio pellentesque. Vitae et leo duis ut diam quam nulla porttitor. Est ullamcorper eget nulla facilisi etiam dignissim. Viverra nam libero justo laoreet sit amet cursus sit. Ullamcorper a lacus vestibulum sed arcu non odio. Odio euismod lacinia at quis risus sed vulputate.',
+            postedBy: 'admin',
+            category: 'IT',
+            numberOfResponded: 5,
+        },
+        {
+            title: 'How to make a cake',
+            description:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Est lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque. Purus faucibus ornare suspendisse sed nisi lacus. Pulvinar pellentesque habitant morbi tristique. Congue eu consequat ac felis donec et odio pellentesque. Vitae et leo duis ut diam quam nulla porttitor. Est ullamcorper eget nulla facilisi etiam dignissim. Viverra nam libero justo laoreet sit amet cursus sit. Ullamcorper a lacus vestibulum sed arcu non odio. Odio euismod lacinia at quis risus sed vulputate.',
+            postedBy: 'admin',
+            category: 'Cooking',
+            numberOfResponded: 2,
+        },
+        {
+            title: 'How to make a website',
+            description:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Est lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque. Purus faucibus ornare suspendisse sed nisi lacus. Pulvinar pellentesque habitant morbi tristique. Congue eu consequat ac felis donec et odio pellentesque. Vitae et leo duis ut diam quam nulla porttitor. Est ullamcorper eget nulla facilisi etiam dignissim. Viverra nam libero justo laoreet sit amet cursus sit. Ullamcorper a lacus vestibulum sed arcu non odio. Odio euismod lacinia at quis risus sed vulputate.',
+            postedBy: 'admin',
+            category: 'IT',
+            numberOfResponded: 3,
+        },
+    ]);
+
     const presetCourses = await Courses.bulkCreate([
         {
             title: 'Course 1',
             category: 'Health & Wellness',
-            description: "lalala",
-        }
+            description: 'lalala',
+        },
     ]);
 
     presetUsers;
     presetEvents;
+    presetSkillshare;
     presetCourses;
 
     res.send('API is running, preset data have been loaded.');
 });
-
 
 module.exports = router;

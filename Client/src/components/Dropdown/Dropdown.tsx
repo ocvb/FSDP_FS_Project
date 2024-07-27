@@ -6,12 +6,12 @@ interface DropdownProps {
     subitems?: {
         href?: string;
         name?: string;
-        icon?: any;
-        action?: any;
+        icon?: React.ReactNode;
+        action?: () => void;
     }[];
     dropdown?: boolean;
-    onMouseLeave?: any;
-    onMouseDown?: any;
+    onMouseLeave?: React.MouseEventHandler;
+    onMouseDown?: React.MouseEventHandler;
     style?: object;
     allowHover?: boolean;
 }
@@ -27,7 +27,7 @@ const Dropdown = memo(
                 style,
                 allowHover,
             }: DropdownProps,
-            ref,
+            ref: React.Ref<HTMLDivElement>
         ) => {
             const anchorStyle = {
                 display: 'flex',
@@ -83,8 +83,8 @@ const Dropdown = memo(
                     </div>
                 </>
             );
-        },
-    ),
+        }
+    )
 );
 
 export default Dropdown;

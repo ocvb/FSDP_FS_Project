@@ -5,7 +5,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 interface PasswordVisibilityProps {
     password?: string;
-    handlePassword?: any;
+    handlePassword?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     sx?: object;
     variant?: 'standard' | 'outlined' | 'filled';
     label?: string;
@@ -31,6 +31,7 @@ export default function PasswordVisibility({
             onChange={handlePassword}
             label={label}
             variant={variant ? variant : 'standard'}
+            autoComplete='on'
             InputProps={{
                 endAdornment: (
                     <InputAdornment position='end'>

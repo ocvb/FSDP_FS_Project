@@ -16,6 +16,16 @@ import styles from './css/Events.module.css';
 import CustomButton from '@components/Button/CustomButton';
 import Footer from '@components/Footer/Footer';
 
+interface EventDataResponse {
+    title?: string;
+    description?: string;
+    location?: string;
+    date?: string;
+    price?: number;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
 export default function Events() {
     const navigate = useNavigate();
 
@@ -31,12 +41,22 @@ export default function Events() {
         refetch,
     } = useQuery({
         queryKey: ['events'],
-        queryFn: async () =>
-            await axios.get('http://localhost:3001/api/events'),
+        queryFn: async () => {
+            const r = await axios.get<EventDataResponse[]>(
+                'http://localhost:3001/api/events'
+            );
+            return r.data;
+        },
     });
 
-    if (eventData?.data.length < 0) {
-        refetch();
+    if ((eventData?.length ?? 0) < 0) {
+        refetch()
+            .then(() => {
+                return;
+            })
+            .catch(() => {
+                return "Couldn't fetch data";
+            });
     } else {
         return (
             <>
@@ -110,7 +130,7 @@ export default function Events() {
                             Up-Coming Events & Facilities
                         </div>
                         <p className={styles.p}>
-                            {isError == undefined || eventData?.data.length < 0
+                            {isError || eventData?.length === 0
                                 ? 'There are currently no up-coming events.'
                                 : null}
                         </p>
@@ -136,8 +156,39 @@ export default function Events() {
                                 }}
                             >
                                 <div className={styles.carouselItems}>
-                                    {eventData?.data
-                                        .slice(0, 3)
+                                    {!isError &&
+                                        eventData
+                                            ?.slice(0, 3)
+                                            .map((item, index) => (
+                                                <div
+                                                    className={styles.carcol}
+                                                    key={index}
+                                                >
+                                                    <div>
+                                                        <h3
+                                                            className={
+                                                                styles.h3
+                                                            }
+                                                        >
+                                                            {item.title}
+                                                        </h3>
+                                                        <p className={styles.p}>
+                                                            {item.description}
+                                                        </p>
+                                                    </div>
+                                                    <p
+                                                        className={
+                                                            styles.dateText
+                                                        }
+                                                    >
+                                                        {item.date}
+                                                    </p>
+                                                </div>
+                                            ))}
+                                </div>
+                                <div className={styles.carouselItems}>
+                                    {eventData
+                                        ?.slice(3, 6)
                                         .map((item, index) => (
                                             <div
                                                 className={styles.carcol}
@@ -158,30 +209,8 @@ export default function Events() {
                                         ))}
                                 </div>
                                 <div className={styles.carouselItems}>
-                                    {eventData?.data
-                                        .slice(3, 6)
-                                        .map((item, index) => (
-                                            <div
-                                                className={styles.carcol}
-                                                key={index}
-                                            >
-                                                <div>
-                                                    <h3 className={styles.h3}>
-                                                        {item.title}
-                                                    </h3>
-                                                    <p className={styles.p}>
-                                                        {item.description}
-                                                    </p>
-                                                </div>
-                                                <p className={styles.dateText}>
-                                                    {item.date}
-                                                </p>
-                                            </div>
-                                        ))}
-                                </div>
-                                <div className={styles.carouselItems}>
-                                    {eventData?.data
-                                        .slice(6, 9)
+                                    {eventData
+                                        ?.slice(6, 9)
                                         .map((item, index) => (
                                             <div
                                                 className={styles.carcol}
@@ -205,6 +234,7 @@ export default function Events() {
                         </div>
                         <a href='#target-element'>
                             <CustomButton
+                                type='button'
                                 text='more Events →'
                                 href='#events'
                                 sx={{
@@ -245,23 +275,21 @@ export default function Events() {
                             }}
                         >
                             <div className={styles.row}>
-                                {eventData?.data
-                                    .slice(0, 3)
-                                    .map((item, index) => (
-                                        <div className={styles.col} key={index}>
-                                            <div>
-                                                <h3 className={styles.h3}>
-                                                    {item.title}
-                                                </h3>
-                                                <p className={styles.p}>
-                                                    {item.description}
-                                                </p>
-                                            </div>
-                                            <p className={styles.dateText}>
-                                                {item.date}
+                                {eventData?.slice(0, 3).map((item, index) => (
+                                    <div className={styles.col} key={index}>
+                                        <div>
+                                            <h3 className={styles.h3}>
+                                                {item.title}
+                                            </h3>
+                                            <p className={styles.p}>
+                                                {item.description}
                                             </p>
                                         </div>
-                                    ))}
+                                        <p className={styles.dateText}>
+                                            {item.date}
+                                        </p>
+                                    </div>
+                                ))}
                             </div>
                         </Container>
                     </Container>
@@ -288,23 +316,21 @@ export default function Events() {
                             }}
                         >
                             <div className={styles.row}>
-                                {eventData?.data
-                                    .slice(0, 3)
-                                    .map((item, index) => (
-                                        <div className={styles.col} key={index}>
-                                            <div>
-                                                <h3 className={styles.h3}>
-                                                    {item.title}
-                                                </h3>
-                                                <p className={styles.p}>
-                                                    {item.description}
-                                                </p>
-                                            </div>
-                                            <p className={styles.dateText}>
-                                                {item.date}
+                                {eventData?.slice(0, 3).map((item, index) => (
+                                    <div className={styles.col} key={index}>
+                                        <div>
+                                            <h3 className={styles.h3}>
+                                                {item.title}
+                                            </h3>
+                                            <p className={styles.p}>
+                                                {item.description}
                                             </p>
                                         </div>
-                                    ))}
+                                        <p className={styles.dateText}>
+                                            {item.date}
+                                        </p>
+                                    </div>
+                                ))}
                             </div>
                         </Container>
                     </Container>

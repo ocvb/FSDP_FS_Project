@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { AppBar, Toolbar } from '@mui/material';
 import { navigation } from './Navbar';
 
@@ -31,6 +31,7 @@ export default function NavbarAdmin({ logo }: NavbarAdminProps) {
 
     const onMouseEnter = () => {
         setDropdown(!dropdown);
+        return;
     };
 
     return (
@@ -53,6 +54,7 @@ export default function NavbarAdmin({ logo }: NavbarAdminProps) {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        gap: '0.5rem',
                     }}
                 >
                     <a
@@ -70,16 +72,19 @@ export default function NavbarAdmin({ logo }: NavbarAdminProps) {
                             fontSize: '1rem',
                             fontWeight: '400',
                             fontStyle: 'italic',
-                            marginLeft: '1rem',
+                            lineHeight: '1',
+                            position: 'absolute',
+                            left: '80px',
                         }}
                     >
                         People&apos;s <br />
-                        Person
+                        Project
                     </p>
                 </div>
 
                 <div>
                     <Button
+                        type='button'
                         text='Admin'
                         onClick={onMouseEnter}
                         ref={hoverButton}

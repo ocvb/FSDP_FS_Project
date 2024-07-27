@@ -1,12 +1,17 @@
-import {
-    JSXElementConstructor,
-    ReactElement,
-    ReactNode,
-    useState,
-} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { Stack, TextField, IconButton, Link, Alert } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+import {
+    Stack,
+    TextField,
+    IconButton,
+    Link,
+    Alert,
+    Box,
+    Select,
+    MenuItem,
+    SelectChangeEvent,
+} from '@mui/material';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -17,9 +22,35 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
 import { MoreHoriz } from '@mui/icons-material';
 import Dropdown from '@components/Dropdown/Dropdown';
-import PopupModal from '@/components/PopupModal/PopupModal';
+import PopupModal from '@components/PopupModal/PopupModal';
 
-export default function Users({ postSnackbar }) {
+import { fetchEvents } from '@api/EndpointsQueries';
+import { EventsDataResponse } from '@api/ApiType';
+
+interface EventsProps {
+    postSnackbar: (data: {
+        children?: string;
+        severity?: 'success' | 'error' | 'info' | 'warning' | undefined;
+    }) => void;
+    handleOnChangeSelect: (event: SelectChangeEvent<number>) => void;
+    selectedCategory?: number;
+}
+
+interface SelectedRow {
+    id?: number;
+    title?: string;
+    description?: string;
+    location?: string;
+    price?: number;
+    date?: string;
+    userId?: number | null;
+}
+
+export default function Events({
+    postSnackbar,
+    handleOnChangeSelect,
+    selectedCategory,
+}: EventsProps) {
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState({
@@ -27,14 +58,14 @@ export default function Users({ postSnackbar }) {
         title: '',
         description: '',
         location: '',
-        price: '',
+        price: 0,
         date: '',
         userId: null,
-    });
+    } as SelectedRow);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('Yishun');
-    const [price, setPrice] = useState('');
+    const [price, setPrice] = useState(0);
     const [date, setDate] = useState(
         new Date().toLocaleDateString('en-GB', {
             day: 'numeric',
@@ -42,7 +73,7 @@ export default function Users({ postSnackbar }) {
             year: 'numeric',
         })
     );
-    const [userId, setUserId] = useState(null);
+    const [userId, setUserId] = useState(0);
 
     const {
         data: eventsData,
@@ -51,61 +82,40 @@ export default function Users({ postSnackbar }) {
         refetch: refetchEvents,
     } = useQuery({
         queryKey: ['events'],
-        queryFn: async () =>
-            await axios.get('http://localhost:3001/api/admin/events/', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            }),
+        queryFn: fetchEvents,
     });
 
-    const handleUpdateToDatabase = async (id: number, updatedRow: object) => {
-        try {
-            const response = await axios.put(
-                `http://localhost:3001/api/admin/event/${id}`,
-                updatedRow,
+    const eventUpdateMutation = useMutation({
+        mutationKey: ['events'],
+        mutationFn: async (data: EventsDataResponse['data']) => {
+            console.log(data);
+            const response = await axios.put<EventsDataResponse>(
+                `http://localhost:3001/api/admin/event/${data?.id}`,
+                data,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 }
             );
+            return response.data;
+        },
+    });
 
-            if (response.status === 200) {
-                postSnackbar({
-                    children: 'Event updated successfully',
-                    severity: 'success',
-                });
-            } else {
-                return new Error('Error updating the event');
-            }
-        } catch (error: any) {
-            postSnackbar({ children: error.message, severity: 'error' });
-        }
-    };
-
-    const handleDeleteFromDatabase = async (id: number) => {
-        try {
-            const response = await axios.delete(
-                `http://localhost:3001/api/admin/event/${id}`,
+    const eventDeleteMutation = useMutation({
+        mutationKey: ['events'],
+        mutationFn: async (data: EventsDataResponse['data']) => {
+            const response = await axios.delete<EventsDataResponse>(
+                `http://localhost:3001/api/admin/event/${data?.id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 }
             );
-            if (response.status === 200) {
-                postSnackbar({
-                    children: 'Event deleted successfully',
-                    severity: 'success',
-                });
-            } else {
-                return new Error('Error deleting the event');
-            }
-        } catch (error: any) {
-            postSnackbar({ children: error.message, severity: 'error' });
-        }
-    };
+            return response.data;
+        },
+    });
 
     function EditToolbar() {
         const handleClick = () => {
@@ -114,50 +124,96 @@ export default function Users({ postSnackbar }) {
                     children: 'Please wait for the data to load',
                     severity: 'info',
                 });
-            const id =
-                Math.max(0, ...eventsData?.data.map((row: any) => row.id)) + 1;
+            const rowsIds = eventsData?.map((value) => value?.id);
+            const id = Math.max(0, ...rowsIds) + 1;
             setOpenAddModal(true);
-            setSelectedRow({ id });
+
+            interface EventData {
+                id?: number;
+            }
+
+            setSelectedRow({ id } as EventData);
         };
 
         return (
             <GridToolbarContainer
                 sx={{
                     display: 'flex',
-                    justifyContent: 'end',
+                    justifyContent: ' space-between',
                     gap: '1rem',
                     alignItems: 'center',
                     padding: '1rem',
                 }}
             >
-                <IconButton
-                    onClick={() => {
-                        refetchEvents(),
-                            postSnackbar({
-                                children: 'Events refreshed',
-                                severity: 'success',
-                            });
+                <Box
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        gap: '1rem',
                     }}
                 >
-                    <RefreshIcon sx={{ fontSize: 25, color: 'black' }} />
-                </IconButton>
-                <Button
-                    text='Add record'
-                    startIcon={<AddIcon sx={{ fontSize: '25px !important' }} />}
-                    onClick={handleClick}
-                    sx={{
-                        backgroundColor: 'black',
-                        color: 'white',
-                        '&:hover': {
-                            backgroundColor: '#2a2a2a',
-                        },
-                    }}
-                />
+                    <Select
+                        variant='outlined'
+                        defaultValue={selectedCategory}
+                        onChange={handleOnChangeSelect}
+                        sx={{
+                            width: '200px',
+                            color: 'black',
+                            backgroundColor: 'white',
+                            '& .MuiMenu-list': {
+                                p: '5px',
+                            },
+                        }}
+                    >
+                        <MenuItem value={0}>Users</MenuItem>
+                        <MenuItem value={1}>Events</MenuItem>
+                        <MenuItem value={2}>Courses</MenuItem>
+                    </Select>
+                </Box>
+                <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
+                    <Button
+                        type='button'
+                        text='Refresh'
+                        startIcon={<RefreshIcon sx={{ fontSize: '25px' }} />}
+                        onClick={() => {
+                            refetchEvents().catch(() =>
+                                console.log('Error refreshing')
+                            ),
+                                postSnackbar({
+                                    children: 'Events refreshed',
+                                    severity: 'success',
+                                });
+                        }}
+                        sx={{
+                            backgroundColor: 'black',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#2a2a2a',
+                            },
+                        }}
+                    />
+                    <Button
+                        type='button'
+                        text='Add record'
+                        startIcon={
+                            <AddIcon sx={{ fontSize: '25px !important' }} />
+                        }
+                        onClick={handleClick}
+                        sx={{
+                            backgroundColor: 'black',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#2a2a2a',
+                            },
+                        }}
+                    />
+                </Box>
             </GridToolbarContainer>
         );
     }
 
-    function ExpandableCell(param: any) {
+    function ExpandableCell(param: { value: string }) {
         const [expanded, setExpanded] = useState(false);
         const length = 300;
         return (
@@ -179,7 +235,26 @@ export default function Users({ postSnackbar }) {
     }
 
     const handleDeleteClick = (id: number) => () => {
-        handleDeleteFromDatabase(id);
+        eventDeleteMutation.mutate(
+            { id },
+            {
+                onSuccess: () => {
+                    postSnackbar({
+                        children: 'Event deleted successfully',
+                        severity: 'success',
+                    });
+                    refetchEvents().catch(() => {
+                        console.log('Error refreshing');
+                    });
+                },
+                onError: (error) => {
+                    postSnackbar({
+                        children: error.message,
+                        severity: 'error',
+                    });
+                },
+            }
+        );
     };
 
     const columns = [
@@ -200,7 +275,7 @@ export default function Users({ postSnackbar }) {
             headerName: 'Description',
             type: 'string',
             flex: 1,
-            renderCell: (params: any) => <ExpandableCell {...params} />,
+            renderCell: (params) => <ExpandableCell {...params} />,
         },
         {
             field: 'location',
@@ -217,13 +292,14 @@ export default function Users({ postSnackbar }) {
                 return (
                     <Tooltip title={params.formattedValue}>
                         <span>
-                            {new Date(
-                                params.formattedValue
-                            ).toLocaleDateString('en-GB', {
-                                day: 'numeric',
-                                month: 'long',
-                                year: 'numeric',
-                            })}
+                            {new Date(params.formattedValue).toLocaleDateString(
+                                'en-GB',
+                                {
+                                    day: 'numeric',
+                                    month: 'long',
+                                    year: 'numeric',
+                                }
+                            )}
                         </span>
                     </Tooltip>
                 );
@@ -237,11 +313,24 @@ export default function Users({ postSnackbar }) {
             field: 'price',
             headerName: 'Price',
             type: 'number',
-            renderCell: (params: any) => {
+            renderCell: (params: { value: number }) => {
                 if (params.value === 0) {
                     return 'Free';
                 } else if (params.value > 0) {
                     return `$${params.value.toFixed(2)}`;
+                }
+                return params.value;
+            },
+        },
+        {
+            field: 'userId',
+            headerName: 'Assigned ID(s)',
+            type: 'number',
+            editable: false,
+            width: 160,
+            renderCell: (params: { value: number }) => {
+                if (params.value === null) {
+                    return '-';
                 }
                 return params.value;
             },
@@ -253,7 +342,8 @@ export default function Users({ postSnackbar }) {
             type: 'actions',
             headerName: 'Action',
             cellClassName: 'actions',
-            getActions: ({ id }) => {
+            getActions: ({ id }: { id: number }) => {
+                // eslint-disable-next-line react-hooks/rules-of-hooks
                 const [dropdown, setDropdown] = useState(false);
                 const buttons = [
                     {
@@ -308,64 +398,113 @@ export default function Users({ postSnackbar }) {
         },
     ];
 
-    const handleOpenEditModal = (id) => {
-        setOpenEditModal(true);
-        setSelectedRow(eventsData?.data.find((row) => row.id === id));
-        setTitle(eventsData?.data.find((row) => row.id === id).title);
-        setDescription(
-            eventsData?.data.find((row) => row.id === id).description
-        );
-        setDate(eventsData?.data.find((row) => row.id === id).date);
-        setPrice(eventsData?.data.find((row) => row.id === id).price);
-        setUserId(eventsData?.data.find((row) => row.id === id).userId);
+    const handleOpenEditModal = (id: number) => {
+        const row = eventsData?.find(
+            (value) => value?.id === id
+        ) as SelectedRow;
+        if (row === undefined || row === null) {
+            return postSnackbar({
+                children: 'Error fetching data',
+                severity: 'error',
+            });
+        }
+        if (row) {
+            setOpenEditModal(true);
+            setSelectedRow(row);
+            setTitle(row?.title ?? '');
+            setDescription(
+                row?.description ?? 'No description available for this event'
+            );
+            setDate(row?.date ?? '');
+            setPrice(row?.price ?? 0);
+            setUserId(row?.userId ?? 0);
+        }
     };
 
     const handleCloseModal = () => {
         setOpenEditModal(false);
         setOpenAddModal(false);
-        setSelectedRow({});
+        setSelectedRow({
+            id: 0,
+            title: '',
+            description: '',
+            location: '',
+            price: 0,
+            date: '',
+            userId: null,
+        });
         setTitle('');
         setDescription('');
-        setPrice('');
+        setPrice(0);
         setDate('');
-        setUserId(null);
+        setUserId(0);
     };
 
-    const handleTitleChange = (event) => {
+    const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
     };
 
-    const handleDescriptionChange = (event) => {
+    const handleDescriptionChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         setDescription(event.target.value);
     };
 
-    const handlePriceChange = (event) => {
-        setPrice(event.target.value);
+    const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPrice(parseFloat(event.target.value));
     };
 
-    const handleLocationChange = (event) => {
+    const handleLocationChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         setLocation(event.target.value);
     };
 
-    const handleDateChange = (event) => {
+    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDate(event.target.value);
     };
 
-    const handleUserIdChange = (event) => {
-        setUserId(event.target.value);
+    const handleUserIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUserId(Number(event.target.value) ?? null);
     };
 
-    const handleSubmitUpdate = (event) => {
+    const handleSubmitUpdate = (event: React.FormEvent) => {
         event.preventDefault();
-        handleUpdateToDatabase(selectedRow.id, {
+
+        interface EventData {
+            id: number;
+            title: string;
+            description: string;
+            location: string;
+            price: number;
+            date: string;
+            userId: number | null;
+        }
+
+        const eventData = {
+            id: selectedRow.id,
             title,
             description,
             location,
             price,
             date,
-            userId,
+            userId: userId === null ? null : userId ?? 0,
+        } as EventData;
+
+        eventUpdateMutation.mutate(eventData, {
+            onSuccess: () => {
+                postSnackbar({
+                    children: 'Event updated successfully',
+                    severity: 'success',
+                });
+                refetchEvents().catch(() => {
+                    console.log('Error refreshing');
+                });
+            },
+            onError: (error) => {
+                postSnackbar({ children: error.message, severity: 'error' });
+            },
         });
-        refetchEvents();
         setOpenEditModal(false);
         setOpenAddModal(false);
     };
@@ -376,7 +515,7 @@ export default function Users({ postSnackbar }) {
                 <Alert severity='error'>Error fetching data</Alert>
             ) : (
                 <DataGrid
-                    rows={eventsData?.data || []}
+                    rows={eventsData ?? []}
                     columns={columns}
                     getEstimatedRowHeight={() => 100}
                     getRowHeight={() => 'auto'}
@@ -393,6 +532,7 @@ export default function Users({ postSnackbar }) {
                     }}
                     slots={{
                         toolbar: EditToolbar,
+                        pagination: () => null,
                     }}
                     sx={{
                         '& .MuiDataGrid-main': {
@@ -427,7 +567,6 @@ export default function Users({ postSnackbar }) {
             <PopupModal
                 open={openEditModal || openAddModal}
                 handleClose={handleCloseModal}
-                title='Edit User'
                 sxBox={{
                     backgroundColor: 'background.paper',
                 }}
@@ -480,7 +619,7 @@ export default function Users({ postSnackbar }) {
                             size='small'
                             value={location}
                             onChange={handleLocationChange}
-                            defaultChecked='yishun'
+                            defaultChecked={true}
                         >
                             <option value='Ang Mo Kio'>Ang Mo Kio</option>
                             <option value='Yishun'>Yishun</option>

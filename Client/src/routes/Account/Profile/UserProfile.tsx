@@ -8,6 +8,8 @@ import Button from '@components/Button/CustomButton';
 
 import mainStyles from './css/Profile.module.css';
 import './css/UserProfile.module.css';
+import { useMutation } from '@tanstack/react-query';
+import { UsersDataResponse } from '@api/ApiType';
 
 export default function UserProfile() {
     const [username, setUsername] = useState('');
@@ -35,42 +37,27 @@ export default function UserProfile() {
     };
 
     // Update user information
-    const updateUser = async () => {
-        let timeoutId = null;
-        await axios
-            .put(
+    interface DataResponses extends UsersDataResponse {
+        modifiedData?: {
+            username: string;
+            password: string;
+        };
+    }
+
+    const userMutation = useMutation({
+        mutationFn: async (data: DataResponses['data']) => {
+            const r = await axios.put<DataResponses>(
                 `http://localhost:3001/api/user/update/${userId}`,
-                {
-                    username: username,
-                    password: password,
-                },
+                data,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 }
-            )
-            .then((response) => {
-                if (response.status === 200) {
-                    setMessage('Updated');
-                    setPassword('');
-                    checkTokenIsValid(response.data.token);
-                    setSuccess(true);
-                } else {
-                    setMessage('Failed to update');
-                    setSuccess(false);
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-
-        // Visual feedback
-        timeoutId = setTimeout(() => {
-            setMessage('Save changes');
-        }, 2000);
-        return () => clearTimeout(timeoutId);
-    };
+            );
+            return r.data;
+        },
+    });
 
     const onSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
@@ -81,7 +68,40 @@ export default function UserProfile() {
             return;
         }
 
-        updateUser();
+        const userData = {
+            username: username,
+            password: password,
+        } as DataResponses['modifiedData'];
+
+        // Trigger the mutation
+        userMutation.mutate(userData, {
+            onSuccess: (data) => {
+                // Handle success response
+                console.log('Updated Data', data);
+                setMessage('Updated');
+                setPassword('');
+                setSuccess(true);
+                checkTokenIsValid(data?.token ?? '')
+                    .then(() => {
+                        return;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+
+                // Visual feedback
+                let timeoutId = null;
+                timeoutId = setTimeout(() => {
+                    setMessage('Save changes');
+                }, 2000);
+                return () => clearTimeout(timeoutId);
+            },
+            onError: () => {
+                // Handle error response
+                setMessage('Failed to update');
+                setSuccess(false);
+            },
+        });
     };
 
     return (

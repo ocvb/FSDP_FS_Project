@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { SetStateAction, useState } from 'react';
 
 // Components
 import { Container } from '@mui/material';
@@ -9,13 +8,18 @@ import bgImage from '@/assets/Account/login-bg.jpg';
 import Login from './Modal/Login';
 import Register from './Modal/Register';
 
+interface ModalChangedData {
+    login?: boolean;
+    register?: boolean;
+}
+
 export default function Account() {
     const [modalChanged, setModalChanged] = useState({
         login: true,
         register: false,
-    });
+    } as ModalChangedData);
 
-    const handleRecievedData = (data) => {
+    const handleRecievedData = (data: SetStateAction<ModalChangedData>) => {
         setModalChanged(data);
     };
 

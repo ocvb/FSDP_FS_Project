@@ -1,13 +1,14 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { callAPI } from '@api/EndpointsQueries';
+import { UsersDataResponse } from '@api/ApiType';
 
 interface AuthContextType {
-    children: any;
+    children: React.ReactNode;
 }
 
 interface fetchAuthType {
-    User: {
+    User?: {
         createdAt?: string;
         id?: number;
         password?: string;
@@ -15,12 +16,14 @@ interface fetchAuthType {
         updatedAt?: string;
         username?: string;
         uuid?: string;
-    } | null;
-    isAuthenticated: boolean;
-    userRole: string | null;
+    };
+    isAuthenticated?: boolean;
+    userRole?: string | null;
 }
 
 export interface AuthType {
+    user: UsersDataResponse['data'];
+    isAuthenticated: boolean;
     fetchAuth: fetchAuthType;
     login: (data: object) => Promise<{ result: boolean; path: string }>;
     logout: () => void;
@@ -31,7 +34,15 @@ const AuthContext = createContext({} as AuthType);
 
 export default function AuthProvider({ children }: AuthContextType) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState([]);
+    const [user, setUser] = useState({
+        createdAt: '',
+        id: 0,
+        password: '',
+        role: '',
+        updatedAt: '',
+        username: '',
+        uuid: '',
+    } as UsersDataResponse['data']);
     const [userRole, setUserRole] = useState('');
     const [loginInEffect, setLoginInEffect] = useState(false);
 
@@ -41,7 +52,9 @@ export default function AuthProvider({ children }: AuthContextType) {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            checkTokenIsValid(token);
+            checkTokenIsValid(token).catch(() => {
+                setIsAuthenticated(false);
+            });
         }
     }, []);
 
@@ -68,19 +81,19 @@ export default function AuthProvider({ children }: AuthContextType) {
     } as fetchAuthType;
 
     const checkTokenIsValid = async (token: string) => {
-        return await axios
-            .get('http://localhost:3001/api/user/auth', {
+        return await callAPI
+            .get<UsersDataResponse>('/api/user/auth', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
             .then((response) => {
                 if (response.status === 200) {
+                    const responseData = response?.data;
                     setIsAuthenticated(true);
-                    setUser(response.data.data);
-                    setUserRole(response.data.data.role);
-                    localStorage.setItem('token', response.data.token);
-                    console.log('tes?');
+                    setUser(responseData.data ?? {});
+                    setUserRole(responseData?.data?.role ?? '');
+                    localStorage.setItem('token', responseData?.token ?? '');
                     return true;
                 } else {
                     setIsAuthenticated(false);
@@ -93,18 +106,21 @@ export default function AuthProvider({ children }: AuthContextType) {
             });
     };
 
-    const login = async (data: object) => {
-        return await axios
-            .post('http://localhost:3001/api/user/login', data)
+    const login = async (
+        data: object
+    ): Promise<{ result: boolean; path: string }> => {
+        return await callAPI
+            .post<UsersDataResponse>('/api/user/login', data)
             .then((response) => {
                 if (response.status === 200) {
+                    const responseData = response?.data;
                     setIsAuthenticated(true);
-                    setUser(response.data.data);
-                    setUserRole(response.data.data.role);
+                    setUser(responseData?.data);
+                    setUserRole(responseData?.data?.role ?? '');
                     setLoginInEffect(true);
-                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('token', responseData?.token ?? '');
                     const path =
-                        response.data?.data.role === 'Admin'
+                        responseData?.data?.role === 'Admin'
                             ? '/account/admin'
                             : '/account/profile';
 
@@ -112,17 +128,17 @@ export default function AuthProvider({ children }: AuthContextType) {
                 } else {
                     setIsAuthenticated(false);
                     setLoginInEffect(false);
-                    return false;
+                    return { result: false, path: '' };
                 }
             })
-            .catch((error) => {
+            .catch(() => {
                 setIsAuthenticated(false);
-                return error;
+                return { result: false, path: '' };
             });
     };
 
     const logout = () => {
-        setUser(null);
+        setUser({});
         setIsAuthenticated(false);
         localStorage.removeItem('token');
         return <Navigate to={'/account'} replace />;
