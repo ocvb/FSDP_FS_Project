@@ -131,7 +131,10 @@ export default function Login({ passToChangeModal }: LoginProps) {
                     type='submit'
                     startIcon={
                         loginStatus ? (
-                            <CircularProgress size={20} />
+                            <CircularProgress
+                                size={20}
+                                sx={{ color: 'white' }}
+                            />
                         ) : (
                             <LoginIcon />
                         )
