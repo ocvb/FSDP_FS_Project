@@ -1,30 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { fetchCourses } from '@/api/api';
 
 export default function CourseDetails() {
     const { id } = useParams();
-    const [course, setCourses] = useState(null);
+    const [Course, setCourses] = useState(null);
 
     useEffect(() => {
-        async function fetchCourse() {
+        async function fetchCourses() {
             const response = await axios.get(`http://localhost:3001/api/admin/courses/${id}`);
             setCourses(response.data);
         }
-        fetchCourse();
+        fetchCourses();
     }, [id]);
 
-    if (!course) return <div>Loading...</div>;
+    if (!Course) return <div>Loading...</div>;
 
     return (
         <div>
-            <h1>{course.
+            <h1>{Course.
 // @ts-ignore
             title}</h1>
-            <p>{course.
+            <p>{Course.
 // @ts-ignore
             category}</p>
-            <p>{course.
+            <p>{Course.
 // @ts-ignore
             description}</p>
         </div>
