@@ -29,3 +29,12 @@ export const fetchEvents = async () => {
     );
     return response.data;
 };
+
+export const fetchCourses = async () => {
+    const response = await callAPI.get('/api/admin/courses/', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+};
