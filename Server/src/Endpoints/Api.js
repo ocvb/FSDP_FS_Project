@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { Users, Events, SkillShares } = require('@models/index');
+const { Users, Events, Courses, SkillShares } = require('@models/index');
 const bcrypt = require('bcrypt');
 const process = require('process');
 
+const saltRounds = process.env.SALT_ROUNDS || 10;
+
 function genHash(password) {
-    const salt = bcrypt.genSaltSync(process.env.SALT_ROUNDS);
-    return bcrypt.hashSync(password, salt);
+    return bcrypt.hashSync(password, saltRounds);
 }
 
 let userType = {
@@ -82,9 +83,18 @@ router.get('/', async (req, res) => {
         },
     ]);
 
+    const presetCourses = await Courses.bulkCreate([
+        {
+            title: 'Course 1',
+            category: 'Health & Wellness',
+            description: 'lalala',
+        },
+    ]);
+
     presetUsers;
     presetEvents;
     presetSkillshare;
+    presetCourses;
 
     res.send('API is running, preset data have been loaded.');
 });
