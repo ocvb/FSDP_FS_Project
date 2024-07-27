@@ -6,7 +6,6 @@ const { CourseValidation } = require('@validations/CourseValidation');
 
 // Courses APIs
 
-// Get courses by user ID
 router.get('/user', TokenAuthentication, async (req, res) => {
     const { userId } = req.query;
 
