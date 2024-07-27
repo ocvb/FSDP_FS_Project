@@ -96,7 +96,7 @@ router.put('/api/admin/courses/:id', TokenAuthentication, async (req, res) => {
 
     try {
         const [updated] = await Courses.update(
-            { title, description },
+            { title, category, description },
             { where: { id: id } }
         );
 

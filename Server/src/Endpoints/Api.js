@@ -61,9 +61,9 @@ router.get('/', async (req, res) => {
             title: 'Course 1',
             category: 'Health & Wellness',
             description: "lalala",
-            location: 'delulu'
         }
-    ])
+    ]);
+
     presetUsers;
     presetEvents;
     presetCourses;
