@@ -16,6 +16,10 @@ import Footer from '@components/Footer/Footer';
 import { useQuery } from '@tanstack/react-query';
 import Carousel from 'react-material-ui-carousel';
 
+// Images
+import BadmintonPlayers from '@assets/Home/Badminton-Players.jpg';
+import Championship from '@assets/Home/community_championship_thumbnail.png';
+
 interface EventDataResponse {
     title: string;
     description: string;
@@ -184,28 +188,42 @@ export default function Home() {
                             gap: '1rem',
                         }}
                     >
-                        <div className={styles.box}>
-                            <p className={styles.leadingTitle}>Leading Title</p>
-                            <h2 className={styles.h2}>title</h2>
+                        <div
+                            className={`${styles.box} ${styles.alternatingBox}`}
+                        >
+                            <p className={styles.leadingTitle}>FIND A COURSE</p>
+                            <h2
+                                className={styles.h2}
+                                style={{ fontSize: '1.8rem' }}
+                            >
+                                People&apos;s Courses
+                            </h2>
                             <p className={styles.p}>
-                                We are a community of people who love to meet
-                                new faces and share experiences. Our goal is to
-                                bring people together and create memories that
-                                will last a lifetime. Join us today and become a
-                                part of our community!
+                                People&apos;s Project offers you endless
+                                opportunities to pick up new skills, have fun,
+                                while making new friends in the process. Come
+                                join us today!
                             </p>
+                            <CustomButton
+                                text='Join a Course! →'
+                                type='button'
+                                onClick={() => navigate('/courses')}
+                                sx={{
+                                    textTransform: 'uppercase',
+                                }}
+                            />
                         </div>
                         <div className={styles.imageBox}>
                             {/* placeholder image */}
                             <img
-                                src='https://via.placeholder.com/500x500'
+                                src={BadmintonPlayers}
                                 className={styles.img}
                             ></img>
                         </div>
                     </Container>
                 </Container>
 
-                <Container maxWidth={false} sx={{}}>
+                <Container maxWidth={false}>
                     <Container
                         sx={{
                             position: 'relative',
@@ -219,21 +237,24 @@ export default function Home() {
                     >
                         <div className={styles.imageBox}>
                             {/* placeholder image */}
-                            <img
-                                src='https://via.placeholder.com/500x500'
-                                className={styles.img}
-                            ></img>
+                            <img src={Championship}></img>
                         </div>
 
                         <div className={styles.box}>
-                            <p className={styles.leadingTitle}>Leading Title</p>
-                            <h2 className={styles.h2}>title</h2>
+                            <p className={styles.leadingTitle}>
+                                BE YOUR NEIGHBOURHOOD CHAMPION
+                            </p>
+                            <h2
+                                className={styles.h2}
+                                style={{ fontSize: '1.8rem' }}
+                            >
+                                Community Championship
+                            </h2>
                             <p className={styles.p}>
-                                We are a community of people who love to meet
-                                new faces and share experiences. Our goal is to
-                                bring people together and create memories that
-                                will last a lifetime. Join us today and become a
-                                part of our community!
+                                Get your team ready for the nationwide community
+                                sports challenge from April to August 2026. Top
+                                teams will represent their Cluster at the Pesta
+                                Sukan!
                             </p>
                         </div>
                     </Container>
