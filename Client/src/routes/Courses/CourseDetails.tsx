@@ -23,6 +23,9 @@ export default function CourseDetails() {
             title}</h1>
             <p>{course.
 // @ts-ignore
+            category}</p>
+            <p>{course.
+// @ts-ignore
             description}</p>
         </div>
     );
