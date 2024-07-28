@@ -1,63 +1,62 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Components
 import { UseAuth } from '@components/Auth/Auth';
-import { Box, Skeleton } from '@mui/material';
-import Button from '@components/Button/CustomButton';
+import { Box, Stack } from '@mui/material';
+import MuiButton from '@mui/material/Button';
 import UserProfile from './UserProfile';
 import Notifications from './Notifications';
 import Events from './Events';
 
 import styles from './css/Profile.module.css';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { Award, Bell, Calendar, Ticket, User } from 'lucide-react';
 
 export default function Profile() {
-    const [tab, setTab] = useState(0);
-    const [notLoading, setNotloading] = useState(false);
+    const [navigationTab, setNavigationTab] = useState(-1);
+    const { logout, fetchAuth } = UseAuth();
 
-    const [getToken, setToken] = useState(localStorage.getItem('token'));
-    const { logout } = UseAuth();
-
-    const handleTabChange = async (event, index) => {
+    const handleTabChange = (
+        event: React.MouseEvent<HTMLButtonElement>,
+        index: number
+    ) => {
+        console.log(event);
         if (
-            event.target.textContent === tabs[index].name &&
+            (event.target as HTMLButtonElement).id === tabs[index].name &&
             tabs[index].name != 'Logout'
         ) {
-            setNotloading(false); // Set loading to true when a tab is clicked
-            setTab(index);
-
-            // Simulate a network request or some operation
-            // After the operation is complete, set loading to false
-            await new Promise((resolve) => setTimeout(resolve, 500));
-            setNotloading(true);
+            setNavigationTab(index);
+            console.log('Tab changed to:', tabs[index].name);
         }
-    };
-    useEffect(() => {
-        const loadingTimeout = setTimeout(() => {
-            setNotloading(true);
-        }, 1000);
-
-        // Clear the timeout when the component is unmounted or when stillLoading changes
-        return () => clearTimeout(loadingTimeout);
-    }, []);
-
-    const buttonStyle = {
-        justifyContent: 'start',
-        width: '100%',
-        color: 'black',
-        // "&:hover": {
-        //     backgroundColor: "black",
-        //     color: "white",
-        // },
     };
 
     const tabs = [
-        { name: 'Profile' },
-        { name: 'Notifications' },
-        { name: 'Events' },
-        { name: 'Bookings' },
-        { name: 'Rewards' },
         {
+            name: 'Profile',
+            icon: <User />,
+            desc: 'View and edit your profile',
+            render: <UserProfile />,
+        },
+        {
+            name: 'Notifications',
+            icon: <Bell />,
+            desc: 'View your notifications',
+            // render: <Notifications />,
+        },
+        {
+            name: 'Participated Events',
+            icon: <Calendar />,
+            desc: 'View your participated events',
+            render: <Events />,
+        },
+        { name: 'Bookings', icon: <Ticket />, desc: 'View your bookings' },
+        {
+            name: 'Rewards',
+            icon: <Award />,
+            desc: 'View and redeem your rewards points',
+        },
+        {
+            skip: true,
             name: 'Logout',
             action: () => {
                 logout();
@@ -71,72 +70,106 @@ export default function Profile() {
             className={styles.profile}
             sx={{
                 display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
+                flexDirection: 'column',
                 alignItems: 'start',
                 gap: '1rem',
                 fontSize: '1rem',
+                margin: '2rem auto 0',
+                width: 'auto',
+                maxWidth: '460px',
             }}
         >
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-around',
-                    alignItems: 'start',
-                    margin: '1rem 0',
-                    padding: '1rem',
-                    borderRadius: '10px',
-                    backgroundColor: 'white',
-                    width: 'fit-content',
-                    boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.25)',
-                }}
-            >
-                {tabs &&
-                    tabs.map((tab, index) => (
-                        <Button
-                            key={index}
-                            text={tab.name}
-                            sx={buttonStyle}
-                            onClick={tab.action}
-                            endIcon={tab.icon}
-                            onMouseDown={(event) =>
-                                handleTabChange(event, index)
-                            }
-                        />
-                    ))}
-            </div>
-
-            <div
-                className={styles.profileContainer}
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'start',
-                    margin: '1rem 0',
-                    backgroundColor: 'white',
-                    boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.25)',
-                    fontSize: '1rem',
-                    width: '100%',
-                    maxWidth: '460px',
-                    borderRadius: '10px',
-                }}
-            >
-                {tab == 0 && notLoading ? (
-                    <UserProfile geToken={getToken} />
-                ) : tab == 1 && notLoading ? (
-                    <Notifications />
-                ) : tab == 2 && notLoading ? (
-                    <Events />
-                ) : (
-                    <Skeleton
-                        variant='rectangular'
-                        width='100%'
-                        height='300px'
+            <Stack alignItems={'start'}>
+                <p>Dashboard</p>
+                <Stack
+                    flexDirection={'row'}
+                    gap={'1rem'}
+                    alignItems={'start'}
+                    sx={{
+                        fontSize: '1rem',
+                    }}
+                >
+                    <img
+                        src='https://via.placeholder.com/80'
+                        alt='profile'
+                        style={{
+                            borderRadius: '50%',
+                            width: '80px',
+                            height: '80px',
+                        }}
                     />
-                )}
-            </div>
+                    <Stack alignItems={'start'}>
+                        <p style={{ fontSize: '1.5rem', fontWeight: '500' }}>
+                            {fetchAuth.User?.username}
+                        </p>
+                        <p style={{ fontSize: '1.1rem' }}>email@email.com</p>
+                    </Stack>
+                </Stack>
+            </Stack>
+
+            <Stack
+                direction={'column'}
+                justifyContent={'space-between'}
+                gap={'1rem'}
+                sx={{
+                    width: '100%',
+                }}
+            >
+                {tabs.map((tab, index) => (
+                    <MuiButton
+                        key={index}
+                        id={`${tab.name}`}
+                        disableTouchRipple
+                        disableFocusRipple
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'start',
+                            alignItems: 'center',
+                            gap: '1rem',
+                            padding: '1rem',
+                            borderRadius: '10px',
+                            backgroundColor: (theme) =>
+                                theme.palette.background.paper,
+                            width: '100%',
+                            border: '1px solid #e0e0e0',
+                            textTransform: 'none',
+                            color: (theme) => theme.palette.text.primary,
+                            '&:hover': {
+                                backgroundColor: (theme) =>
+                                    theme.palette.background.default,
+                            },
+                            '&:focus': {
+                                outline: '#646cff',
+                                outlineStyle: 'solid',
+                                outlineWidth: '1px',
+                            },
+                        }}
+                        onClick={(event) => handleTabChange(event, index)}
+                        onMouseUp={tab.action}
+                    >
+                        <Stack flexDirection={'column'} gap={'1rem'}>
+                            <Stack
+                                flexDirection={'row'}
+                                alignItems={'center'}
+                                gap={'0.4rem'}
+                            >
+                                {tab.icon}
+                                <b>{tab.name}</b>
+                            </Stack>
+                            {navigationTab === index
+                                ? tab.render
+                                : tab.skip == false && (
+                                      <Stack>
+                                          <p style={{ fontSize: '1rem' }}>
+                                              {tab.desc}
+                                          </p>
+                                      </Stack>
+                                  )}
+                        </Stack>
+                    </MuiButton>
+                ))}
+            </Stack>
         </Box>
     );
 }
