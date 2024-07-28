@@ -109,15 +109,6 @@ export default function UserProfile() {
     return (
         <>
             <div
-                className={mainStyles.header}
-                style={{
-                    padding: '1rem',
-                    width: '100%',
-                }}
-            >
-                <p>Profile</p>
-            </div>
-            <div
                 style={{
                     display: 'flex',
                     flexDirection: 'column',
