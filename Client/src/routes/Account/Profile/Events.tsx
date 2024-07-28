@@ -13,22 +13,27 @@ import {
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { UseAuth } from '@components/Auth/Auth';
+import { EventsDataResponse } from '@api/ApiType';
 
 export default function Events() {
     const { fetchAuth } = UseAuth();
     const retrieveToken = localStorage.getItem('token');
 
-    console.log(fetchAuth.User?.id);
-
     const { data: eventData } = useQuery({
-        queryKey: ['events'],
-        queryFn: async () =>
-            await axios.get('http://localhost:3001/api/events/user', {
-                params: {
-                    userId: fetchAuth.User?.id,
-                },
-                headers: { Authorization: `Bearer ${retrieveToken}` },
-            }),
+        queryKey: ['userEvents'],
+        queryFn: async () => {
+            const response = await axios.get<EventsDataResponse['data'][]>(
+                'http://localhost:3001/api/events/user',
+                {
+                    params: {
+                        userId: fetchAuth.User?.id,
+                    },
+                    headers: { Authorization: `Bearer ${retrieveToken}` },
+                }
+            );
+
+            return response.data;
+        },
     });
 
     const head = [
@@ -40,17 +45,6 @@ export default function Events() {
     ];
     return (
         <>
-            <div
-                className={mainStyles.header}
-                style={{
-                    padding: '1rem',
-                    backgroundColor: '#F9F9F9',
-                    width: '100%',
-                }}
-            >
-                <p>Events</p>
-            </div>
-
             <div
                 className={styles.events}
                 style={{
@@ -88,9 +82,9 @@ export default function Events() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {eventData?.data.map((row) => (
+                            {eventData?.map((item, index) => (
                                 <TableRow
-                                    key={row.id}
+                                    key={index}
                                     sx={{
                                         '&:last-child td, &:last-child th': {
                                             border: 0,
@@ -98,12 +92,12 @@ export default function Events() {
                                     }}
                                 >
                                     <TableCell component='th' scope='row'>
-                                        {row.id}
+                                        {item?.id}
                                     </TableCell>
-                                    <TableCell>{row.title}</TableCell>
-                                    <TableCell>{row.location}</TableCell>
-                                    <TableCell>{row.date}</TableCell>
-                                    <TableCell>{row.price}</TableCell>
+                                    <TableCell>{item?.title}</TableCell>
+                                    <TableCell>{item?.location}</TableCell>
+                                    <TableCell>{item?.date}</TableCell>
+                                    <TableCell>{item?.price}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
