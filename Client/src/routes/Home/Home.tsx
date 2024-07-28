@@ -134,7 +134,14 @@ export default function Home() {
                             )}
                             {!isError &&
                                 eventData?.slice(0, 3).map((item, index) => (
-                                    <div className={styles.col} key={index}>
+                                    <div
+                                        className={styles.col}
+                                        key={index}
+                                        style={{
+                                            backgroundColor:
+                                                theme.palette.background.paper,
+                                        }}
+                                    >
                                         <div>
                                             <h3 className={styles.h3}>
                                                 {item.title}
@@ -165,7 +172,6 @@ export default function Home() {
                                 boxShadow:
                                     '0px 2px 6px 0px rgba(0, 0, 0, 0.15)',
                                 padding: '0.5rem 2rem',
-                                color: 'black',
                             }}
                         />
                     </div>
@@ -188,9 +194,7 @@ export default function Home() {
                             gap: '1rem',
                         }}
                     >
-                        <div
-                            className={`${styles.box} ${styles.alternatingBox}`}
-                        >
+                        <div className={`${styles.box}`}>
                             <p className={styles.leadingTitle}>FIND A COURSE</p>
                             <h2
                                 className={styles.h2}
@@ -240,7 +244,12 @@ export default function Home() {
                             <img src={Championship}></img>
                         </div>
 
-                        <div className={styles.box}>
+                        <div
+                            className={styles.box}
+                            style={{
+                                backgroundColor: theme.palette.background.paper,
+                            }}
+                        >
                             <p className={styles.leadingTitle}>
                                 BE YOUR NEIGHBOURHOOD CHAMPION
                             </p>
