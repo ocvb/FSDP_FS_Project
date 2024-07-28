@@ -3,6 +3,8 @@ import { useState, useRef } from 'react';
 import { AppBar, Toolbar, Button } from '@mui/material';
 import styles from './css/Navbar.module.css';
 import Dropdown from '@components/Dropdown/Dropdown';
+import { useTheme } from '@mui/material/styles';
+import ChangeThemeModeButton from '@components/ThemeMode/ChangeThemeModeButton';
 
 export const navigation = [
     { name: 'Home', href: '/' },
@@ -14,7 +16,10 @@ export const navigation = [
             { name: 'Health & Wellness', href: '/courses/HealthWellness' },
             { name: 'Lifestyle & Leisure', href: '/courses/LifestyleLeisure' },
             { name: 'Sports & Fitness', href: '/courses/SportsFitness' },
-            { name: 'Education & Enrichment', href: '/courses/EducationEnrichment' },
+            {
+                name: 'Education & Enrichment',
+                href: '/courses/EducationEnrichment',
+            },
             { name: 'Lifelong Learning', href: '/courses/LifelongLearning' },
             { name: 'Interest Groups', href: '/interest-groups' },
         ],
@@ -35,6 +40,8 @@ export default function navbar(props: NavbarProps) {
     const hoveredRef = useRef(null);
     const hoverButton = useRef(null);
 
+    const theme = useTheme();
+
     const onMouseEnter = (index: number) => {
         setIndex(index);
         setDropdown(true);
@@ -52,6 +59,7 @@ export default function navbar(props: NavbarProps) {
                 sx={{
                     boxShadow:
                         '0px 2px 3px -1px rgba(0,0,0,0.09), 0px 4px 3px 0px rgba(0,0,0,0.05)',
+                    backgroundColor: theme.palette.background.paper,
                 }}
             >
                 <Toolbar
@@ -124,6 +132,7 @@ export default function navbar(props: NavbarProps) {
                         </div>
                     ))}
                     <div style={{ flexGrow: 1 }}></div>
+                    {/* <ChangeThemeModeButton /> */}
                 </Toolbar>
             </AppBar>
         </>
