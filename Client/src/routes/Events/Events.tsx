@@ -15,6 +15,7 @@ import styles from './css/Events.module.css';
 // component
 import CustomButton from '@components/Button/CustomButton';
 import Footer from '@components/Footer/Footer';
+import { useEffect, useState } from 'react';
 
 interface EventDataResponse {
     title?: string;
@@ -25,13 +26,21 @@ interface EventDataResponse {
     createdAt?: string;
     updatedAt?: string;
 }
-
+interface SearchConditionType {
+    what?: string;
+    where?: string;
+    when?: string;
+}
 export default function Events() {
     const navigate = useNavigate();
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down('md'));
-    const itemsPerSlide = 3;
+    const [searchCondition, setSearchCondition] = useState({
+        what: '',
+        where: '',
+        when: '',
+    } as SearchConditionType);
 
     const {
         data: eventData,
@@ -48,6 +57,27 @@ export default function Events() {
             return r.data;
         },
     });
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchCondition({
+            what:
+                e.target.name == 'what' ? e.target.value : searchCondition.what,
+            when:
+                e.target.name == 'when' ? e.target.value : searchCondition.when,
+            where:
+                e.target.name == 'where'
+                    ? e.target.value
+                    : searchCondition.where,
+        });
+    };
+
+    const handleSearch = () => {
+        navigate('search', { state: searchCondition });
+    };
+
+    useEffect(() => {
+        console.log(searchCondition);
+    }, [searchCondition]);
 
     if ((eventData?.length ?? 0) < 0) {
         refetch()
@@ -82,9 +112,22 @@ export default function Events() {
                             }}
                         >
                             <p>Explore Events</p>
-                            <TextField label='What*'></TextField>
-                            <TextField label='Where'></TextField>
-                            <TextField label='When'></TextField>
+                            <TextField
+                                label='What'
+                                name='what'
+                                // value={searchCondition.what}
+                                onChange={handleSearchChange}
+                            ></TextField>
+                            <TextField
+                                label='Where'
+                                name='where'
+                                onChange={handleSearchChange}
+                            ></TextField>
+                            <TextField
+                                label='When'
+                                name='when'
+                                onChange={handleSearchChange}
+                            ></TextField>
                             <div
                                 style={{
                                     position: 'relative',
@@ -95,8 +138,9 @@ export default function Events() {
                                 }}
                             >
                                 <CustomButton
+                                    type='submit'
                                     text='Search'
-                                    onClick={() => navigate('/events-search')}
+                                    onClick={handleSearch}
                                     sx={{
                                         // marginLeft: "auto",
                                         display: 'inline-flex',
@@ -136,7 +180,6 @@ export default function Events() {
                         </p>
                         <div className={styles.row}>
                             <Carousel
-                                itemsPerSlide={itemsPerSlide}
                                 autoPlay={false}
                                 animation='slide'
                                 indicatorIconButtonProps={{
