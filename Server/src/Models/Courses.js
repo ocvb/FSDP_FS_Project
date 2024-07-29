@@ -6,11 +6,11 @@ const Courses = db.define('courses', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    category: {
+    description: {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    description: {
+    category: {
         type: DataTypes.TEXT,
         allowNull: false,
     },

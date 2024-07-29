@@ -73,7 +73,7 @@ export default function HealthWellness() {
                             ) : (
                                 <TableRow>
                                     <TableCell colSpan={4} align="center">
-                                        No courses available
+                                        
                                     </TableCell>
                                 </TableRow>
                             )}
