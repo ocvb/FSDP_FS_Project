@@ -1,44 +1,44 @@
 const express = require('express');
 const router = express.Router();
 const { Courses } = require('@models');
-const { TokenAuthentication } = require('@Middlewares/TokenAuthentication');
+const { TokenAuthentication } = require('@middleware/TokenAuthentication');
 const { CourseValidation } = require('@validations/CourseValidation');
 
 // Courses APIs
 
-router.get('/user', TokenAuthentication, async (req, res) => {
-    const { userId } = req.query;
+// router.get('/', TokenAuthentication, async (req, res) => {
+//     const { userId } = req.query;
 
-    try {
-        if (userId) {
-            const coursesByUserId = await Courses.findAll({
-                where: { userId: userId },
-                attributes: ['id', 'title', 'category', 'description'],
-            });
+//     try {
+//         if (userId) {
+//             const coursesByUserId = await Courses.findAll({
+//                 where: { userId: userId },
+//                 attributes: ['id', 'title', 'category', 'description'],
+//             });
 
-            console.log(coursesByUserId);
-            if (coursesByUserId.length > 0) {
-                res.status(200).json(coursesByUserId);
-            } else {
-                res.status(404).json({
-                    message: 'No courses found for this user',
-                });
-            }
-        } else {
-            const courses = await Courses.findAll();
-            res.status(200).json(courses);
-        }
-    } catch (error) {
-        console.error('Error fetching courses', error.message);
-        res.status(500).json({
-            message: 'Error fetching courses',
-            error: error.message,
-        });
-    }
-});
+//             console.log(coursesByUserId);
+//             if (coursesByUserId.length > 0) {
+//                 res.status(200).json(coursesByUserId);
+//             } else {
+//                 res.status(404).json({
+//                     message: 'No courses found for this user',
+//                 });
+//             }
+//         } else {
+//             const courses = await Courses.findAll();
+//             res.status(200).json(courses);
+//         }
+//     } catch (error) {
+//         console.error('Error fetching courses', error.message);
+//         res.status(500).json({
+//             message: 'Error fetching courses',
+//             error: error.message,
+//         });
+//     }
+// });
 
 // Get all courses
-router.get('/api/courses', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const courses = await Courses.findAll();
         res.status(200).json(courses);
@@ -52,7 +52,7 @@ router.get('/api/courses', async (req, res) => {
 });
 
 // Add a new course
-router.post('/api/courses', TokenAuthentication, CourseValidation, async (req, res) => {
+router.post('/', TokenAuthentication, CourseValidation, async (req, res) => {
     const { title, category, description } = req.body;
 
     if (!title || !category || !description) {
