@@ -75,20 +75,13 @@ export default function Profile() {
                 gap: '1rem',
                 fontSize: '1rem',
                 margin: '2rem auto 0',
-                width: 'auto',
+                width: '100%',
                 maxWidth: '460px',
             }}
         >
             <Stack alignItems={'start'}>
                 <p>Dashboard</p>
-                <Stack
-                    flexDirection={'row'}
-                    gap={'1rem'}
-                    alignItems={'start'}
-                    sx={{
-                        fontSize: '1rem',
-                    }}
-                >
+                <Stack flexDirection={'row'} gap={'1rem'} alignItems={'start'}>
                     <img
                         src='https://via.placeholder.com/80'
                         alt='profile'
@@ -111,9 +104,8 @@ export default function Profile() {
                 direction={'column'}
                 justifyContent={'space-between'}
                 gap={'1rem'}
-                sx={{
-                    width: '100%',
-                }}
+                className={styles.awdawdaw}
+                width={'100%'}
             >
                 {tabs.map((tab, index) => (
                     <MuiButton
@@ -148,7 +140,11 @@ export default function Profile() {
                         onClick={(event) => handleTabChange(event, index)}
                         onMouseUp={tab.action}
                     >
-                        <Stack flexDirection={'column'} gap={'1rem'}>
+                        <Stack
+                            flexDirection={'column'}
+                            gap={'1rem'}
+                            sx={{ width: '100%' }}
+                        >
                             <Stack
                                 flexDirection={'row'}
                                 alignItems={'center'}
