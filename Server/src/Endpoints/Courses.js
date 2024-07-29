@@ -38,7 +38,7 @@ router.get('/user', TokenAuthentication, async (req, res) => {
 });
 
 // Get all courses
-router.get('/courses', async (req, res) => {
+router.get('/api/courses', async (req, res) => {
     try {
         const courses = await Courses.findAll();
         res.status(200).json(courses);
@@ -52,7 +52,7 @@ router.get('/courses', async (req, res) => {
 });
 
 // Add a new course
-router.post('/courses', TokenAuthentication, CourseValidation, async (req, res) => {
+router.post('/api/courses', TokenAuthentication, CourseValidation, async (req, res) => {
     const { title, category, description } = req.body;
 
     if (!title || !category || !description) {
@@ -83,7 +83,7 @@ router.post('/courses', TokenAuthentication, CourseValidation, async (req, res) 
 });
 
 // Update an existing course
-router.put('/courses/:id', TokenAuthentication, async (req, res) => {
+router.put('/api/courses/:id', TokenAuthentication, async (req, res) => {
     const { id } = req.params;
     const { title, category, description } = req.body;
 
@@ -115,7 +115,7 @@ router.put('/courses/:id', TokenAuthentication, async (req, res) => {
 });
 
 // Delete a course
-router.delete('/courses/:id', TokenAuthentication, async (req, res) => {
+router.delete('/api/courses/:id', TokenAuthentication, async (req, res) => {
     const { id } = req.params;
 
     try {
