@@ -30,7 +30,7 @@ app.use('/api/user', userAPI);
 app.use('/api/events', eventAPI);
 app.use('/api/admin', adminAPI);
 app.use('/api/facilities', facilitiesAPI);
-app.use('/api/eventsSearch', eventsSearchAPI);
+app.use('/api/search', eventsSearchAPI);
 app.use('/api/skillshare', skillshareAPI);
 
 // Don't touch beyond this line

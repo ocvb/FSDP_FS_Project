@@ -1,29 +1,47 @@
 import React, { useState, useEffect } from 'react';
-
 import styles from './css/EventsSearch.module.css';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { Box } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 
 export default function EventsSearch() {
-    const [searchedEvents, setEvents] = useState([]);
+    const [searchedEvents, setSearchedEvents] = useState([]);
+
+    const getPrevious = useLocation();
+
+    const fetchEvents = useQuery({
+        queryKey: ['conditionedEvents'],
+        queryFn: async () => {
+            const response = await axios.post(
+                'http://localhost:3001/api/search/',
+                {
+                    title: getPrevious.state.what,
+                    location: getPrevious.state.where,
+                    date: getPrevious.state.when,
+                }
+            );
+            return response.data; // Assuming response.data is an array of events
+        },
+    });
 
     useEffect(() => {
-        fetch('/api/eventsSearch')
-            .then((response) => response.json())
-            .then((data) => setEvents(data))
-            .catch((error) => console.error(error));
-    }, []);
+        if (fetchEvents.data) {
+            setSearchedEvents(fetchEvents.data); // Update searchedEvents state with fetched data
+        }
+    }, [fetchEvents.data]);
+
+    // Count the number of events found
+    const numEventsFound = searchedEvents.length;
 
     return (
-        <div>
-            <p className={styles.header2}>3 Results Found</p>
-            <div className={styles.row}>
-                <p className={styles.p}>placeholder</p>
-            </div>
-            <div className={styles.row}>
-                <p className={styles.p}>placeholder</p>
-            </div>
-            <div className={styles.row}>
-                <p className={styles.p}>placeholder</p>
-            </div>
-        </div>
+        <Box>
+            <p className={styles.header2}>{numEventsFound} Results Found</p>
+            {searchedEvents.map((item, index) => (
+                <div key={index} className={styles.row}>
+                    <p className={styles.p}>{item.title}</p>
+                </div>
+            ))}
+        </Box>
     );
 }
