@@ -85,9 +85,9 @@ router.get('/', async (req, res) => {
 
     const presetCourses = await Courses.bulkCreate([
         {
-            title: 'Course 1',
+            title: 'Makeup and Skincare',
             category: 'Health & Wellness',
-            description: 'lalala',
+            description: 'Learn the different types of makeup and how to take care of your skin',
         },
     ]);
 
