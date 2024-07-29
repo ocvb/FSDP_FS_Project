@@ -25,3 +25,14 @@ export interface EventsDataResponse {
     };
     token?: string;
 }
+
+export interface CoursesDataResponse {
+    status?: string;
+    data?: {
+        id?: number;
+        title?: string;
+        category?: string;
+        description?: string;
+    };
+    token?: string;
+}
