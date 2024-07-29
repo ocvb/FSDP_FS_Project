@@ -14,7 +14,7 @@ export default function EventsSearch() {
         queryKey: ['conditionedEvents'],
         queryFn: async () => {
             const response = await axios.post(
-                'http://localhost:3001/api/search/',
+                'http://localhost:3001/api/events/search/',
                 {
                     title: getPrevious.state.what,
                     location: getPrevious.state.where,
