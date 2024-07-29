@@ -23,14 +23,12 @@ const userAPI = require('@endpoints/Account');
 const eventAPI = require('@endpoints/Events');
 const adminAPI = require('@endpoints/Admin');
 const facilitiesAPI = require('@endpoints/Facilities');
-const eventsSearchAPI = require('@endpoints/EventsSearch');
 const skillshareAPI = require('@endpoints/SkillShare');
 
 app.use('/api/user', userAPI);
 app.use('/api/events', eventAPI);
 app.use('/api/admin', adminAPI);
 app.use('/api/facilities', facilitiesAPI);
-app.use('/api/search', eventsSearchAPI);
 app.use('/api/skillshare', skillshareAPI);
 
 // Don't touch beyond this line
