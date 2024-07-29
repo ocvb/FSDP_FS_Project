@@ -45,15 +45,15 @@ export default function Courses() {
         // Add more courses as needed
     ]);
 
-    useEffect(() => {
-        async function fetchCourses() {
-            const response = await axios.get(
-                'http://localhost:3001/api/courses'
-            );
-            setCourses(response.data);
-        }
-        fetchCourses();
-    }, []);
+    // useEffect(() => {
+    //     async function fetchCourses() {
+    //         const response = await axios.get(
+    //             'http://localhost:3001/api/courses'
+    //         );
+    //         setCourses(response.data);
+    //     }
+    //     fetchCourses();
+    // }, []);
 
     return (
         <div style={{ position: 'relative' }}>
