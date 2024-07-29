@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
 
 // Components
 import NavigationBar from '@components/Navbar/Navbar';
@@ -20,6 +20,7 @@ import Admin from '@routes/Account/Admin/Admin';
 import logo from '@assets/Navbar/logo.png';
 
 import './index.css';
+import EventsSearch from '@routes/Events/EventsSearch/EventsSearch';
 
 export default function App() {
     const { fetchAuth } = UseAuth();
@@ -35,7 +36,10 @@ export default function App() {
             )}
             <Routes>
                 <Route path='/' element={<Home />} />
-                <Route path='/events' element={<Events />} />
+                <Route path='/events' element={<Events/>}/>
+                <Route path='/events/*' element={<Outlet/>}>
+                    <Route path='search' element={<EventsSearch/>}/>
+                </Route>
                 <Route path='/courses' element={<Courses />} />
                 <Route path='/skill-share' element={<SkillShare />} />
                 <Route path='/account' element={<Account />} />
