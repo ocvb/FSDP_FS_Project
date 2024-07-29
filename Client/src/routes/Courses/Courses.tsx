@@ -17,7 +17,7 @@ export default function Courses() {
         {
             id: 2,
             title: 'Lifestyle & Leisure',
-            path: 'LifeLongLeisure',
+            path: 'LifestyleLeisure',
             description:
                 'Embrace the Arts, craft your own leather cardholder, cook up a storm with our celebrity chefs and Trainers or unleash your creativity and find the star in you.',
         },
