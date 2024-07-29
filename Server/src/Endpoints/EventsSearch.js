@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Events } = require('@models');
+const { Op, where } = require('sequelize');
 const { TokenAuthentication } = require('@middleware/TokenAuthentication');
 const { EventValidation } = require('@validations/EventValidation');
 
@@ -25,30 +26,53 @@ router.get('/user', TokenAuthentication, async (req, res) => {
     }
 });
 
-router.get('/eventsSearch', async (req, res) => {
+router.get('/', async (req, res) => {
     const events = await Events.findAll();
     res.status(200).json(events);
 });
 
-router.post('/search', EventValidation, async (req, res) => {
-    try {
-        const { title, date, location } = req.body;
+router.post('/', async (req, res) => {
+    console.log('hello');
 
-        const whereConditions = {};
+    const { title, date, location } = req.body;
 
-        if (title) whereConditions.title = { [Op.like]: `%${title}%` };
-        if (location) whereConditions.location = { [Op.like]: `%${location}%` };
-        if (date) whereConditions.date = new Date(date);
+    const whereConditions = {};
 
-        const events = await Event.findAll({
-            where: whereConditions,
-            order: [['date', 'DESC']],
-        });
+    console.log(req.body);
 
-        res.json(events);
-    } catch (error) {
-        res.status(500).send(error.message);
+    console.log(whereConditions);
+
+    // TODO: FIx Date Later
+
+    // if (title) whereConditions.title = { [Op.like]: `%${title}%` };
+    // if (location) whereConditions.location = { [Op.like]: `%${location}%` };
+    // if (date) whereConditions.date = new Date(date);
+
+    let checkDate = '';
+
+    console.log(date);
+
+    if (date != '') {
+        checkDate = new Date(date).toLocaleDateString();
+    } else {
+        checkDate = '';
     }
+
+    if (date) whereConditions.date = { checkDate };
+    console.log(checkDate);
+
+    const events = await Events.findAll({
+        where: {
+            title: { [Op.like]: `%${title}%` },
+            location: { [Op.like]: `%${location}%` },
+            ...whereConditions,
+        },
+    });
+
+    // console.log(date);
+    // console.log(new Date(date).toLocaleDateString());
+
+    res.status(200).json(events);
 });
 
 module.exports = router;
