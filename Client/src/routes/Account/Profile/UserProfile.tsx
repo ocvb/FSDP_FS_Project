@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { UseAuth } from '@components/Auth/Auth';
-import { TextField } from '@mui/material';
+import { UseAuth } from '@contexts/Auth';
+import { TextField, useTheme } from '@mui/material';
 import PasswordVisibility from '@components/PasswordVIsibility/PasswordVisibility';
 import Button from '@components/Button/CustomButton';
 
-import mainStyles from './css/Profile.module.css';
+import './css/Profile.module.css';
 import './css/UserProfile.module.css';
 import { useMutation } from '@tanstack/react-query';
 import { UsersDataResponse } from '@api/ApiType';
 
 export default function UserProfile() {
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [userId, setUserId] = useState(0);
@@ -20,8 +21,8 @@ export default function UserProfile() {
     const [success, setSuccess] = useState(false);
 
     useEffect(() => {
-        setUsername(fetchAuth.User?.username ?? '');
-        setUserId(fetchAuth.User?.id ?? 0);
+        setUsername(fetchAuth.User.username ?? '');
+        setUserId(fetchAuth.User.id ?? 0);
     }, [fetchAuth.User]);
 
     const handleUsernameChange = (event: {
@@ -107,16 +108,6 @@ export default function UserProfile() {
     return (
         <>
             <div
-                className={mainStyles.header}
-                style={{
-                    padding: '1rem',
-                    backgroundColor: '#F9F9F9',
-                    width: '100%',
-                }}
-            >
-                <p>Profile</p>
-            </div>
-            <div
                 style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -134,11 +125,8 @@ export default function UserProfile() {
                         width: '100%',
                     }}
                 >
-                    {/* <div>
-                        <img src="https://via.placeholder.com/80" alt="profile" />
-                    </div> */}
                     <div>
-                        <p>User Name</p>
+                        <p>Username</p>
                         <TextField
                             value={username}
                             onChange={handleUsernameChange}

@@ -20,7 +20,7 @@ const SkillShares = db.define('skillshares', {
     },
     numberOfResponded: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
 });
 

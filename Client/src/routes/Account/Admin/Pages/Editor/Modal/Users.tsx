@@ -7,8 +7,6 @@ import {
     Alert,
     FormControl,
     Box,
-    MenuItem,
-    Select,
     SelectChangeEvent,
 } from '@mui/material';
 import { useQuery, useMutation } from '@tanstack/react-query';
@@ -24,6 +22,7 @@ import Dropdown from '@components/Dropdown/Dropdown';
 import PopupModal from '@components/PopupModal/PopupModal';
 import { fetchUsers } from '@api/EndpointsQueries';
 import { UsersDataResponse } from '@api/ApiType';
+import EditorSelector from '@components/Admin/EditorSelector';
 
 interface UsersProps {
     postSnackbar: (data: {
@@ -31,7 +30,7 @@ interface UsersProps {
         severity?: 'success' | 'error' | 'info' | 'warning' | undefined;
     }) => void;
     handleOnChangeSelect: (event: SelectChangeEvent<number>) => void;
-    selectedCategory?: number;
+    selectedCategory: number;
 }
 
 interface SelectedRow {
@@ -138,23 +137,10 @@ export default function Users({
                         gap: '1rem',
                     }}
                 >
-                    <Select
-                        variant='outlined'
-                        defaultValue={selectedCategory}
-                        onChange={handleOnChangeSelect}
-                        sx={{
-                            width: '200px',
-                            color: 'black',
-                            backgroundColor: 'white',
-                            '& .MuiMenu-list': {
-                                p: '5px',
-                            },
-                        }}
-                    >
-                        <MenuItem value={0}>Users</MenuItem>
-                        <MenuItem value={1}>Events</MenuItem>
-                        <MenuItem value={2}>Courses</MenuItem>
-                    </Select>
+                    <EditorSelector
+                        selectedCategory={selectedCategory}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                    />
                 </Box>
                 <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
                     <Button
@@ -213,6 +199,7 @@ export default function Users({
             editable: false,
             flex: 1,
             width: 0,
+            maxWidth: 200,
         },
         {
             field: 'password',
@@ -465,6 +452,8 @@ export default function Users({
                         pagination: () => null,
                     }}
                     sx={{
+                        width: '100%',
+
                         '& .MuiDataGrid-main': {
                             borderTop: '1px solid #e0e0e0',
                         },

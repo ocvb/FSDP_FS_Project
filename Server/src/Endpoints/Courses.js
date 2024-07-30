@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Courses } = require('@models');
+const { Courses } = require('@models/index');
 const { CourseValidation } = require('@validations/CourseValidation');
 
 // Courses APIs

@@ -14,28 +14,13 @@ app.use(
         methods: 'GET, POST, PUT, DELETE',
     })
 );
+// Don't touch Above this line
+// Don't touch Beyond this line
 
-const startAPI = require('@endpoints/Api');
-app.use('/api', startAPI);
+// Add endpoints in routing.js
+const routings = require('./routings');
+app.use(routings);
 
-// Add your API endpoints here
-const userAPI = require('@endpoints/Account');
-const eventAPI = require('@endpoints/Events');
-const adminAPI = require('@endpoints/Admin');
-const facilitiesAPI = require('@endpoints/Facilities');
-const eventsSearchAPI = require('@endpoints/EventsSearch');
-const skillshareAPI = require('@endpoints/SkillShare');
-const coursesAPI = require('@endpoints/Courses');
-
-app.use('/api/user', userAPI);
-app.use('/api/events', eventAPI);
-app.use('/api/admin', adminAPI);
-app.use('/api/facilities', facilitiesAPI);
-app.use('/api/eventsSearch', eventsSearchAPI);
-app.use('/api/skillshare', skillshareAPI);
-app.use('/api/courses', coursesAPI);
-
-// Don't touch beyond this line
 app.get('/', (req, res) => {
     res.send(
         'You have reached the server. Please use the client to view the website.'

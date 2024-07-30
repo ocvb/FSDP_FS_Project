@@ -1,12 +1,18 @@
-import {
-    JSXElementConstructor,
-    ReactElement,
-    ReactNode,
-    useState,
-} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { Stack, TextField, IconButton, Link, Alert } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+import {
+    Stack,
+    TextField,
+    IconButton,
+    Link,
+    Alert,
+    Box,
+    Select,
+    MenuItem,
+    SelectChangeEvent,
+    FormControl,
+} from '@mui/material';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -17,84 +23,87 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
 import { MoreHoriz } from '@mui/icons-material';
 import Dropdown from '@components/Dropdown/Dropdown';
-import PopupModal from '@/components/PopupModal/PopupModal';
+import PopupModal from '@components/PopupModal/PopupModal';
 
-export default function Users({ postSnackbar }) {
+import { fetchCourses } from '@api/EndpointsQueries';
+import { CoursesDataResponse } from '@api/ApiType';
+import EditorSelector from '@components/Admin/EditorSelector';
+
+interface CourseProps {
+    postSnackbar: (data: {
+        children?: string;
+        severity?: 'success' | 'error' | 'info' | 'warning' | undefined;
+    }) => void;
+    handleOnChangeSelect: (event: SelectChangeEvent<number>) => void;
+    selectedCategory: number;
+}
+
+interface SelectedRow {
+    id?: number;
+    title?: string;
+    description?: string;
+    category?: string;
+}
+
+export default function Course({
+    postSnackbar,
+    handleOnChangeSelect,
+    selectedCategory,
+}: CourseProps) {
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState({
         id: 0,
         title: '',
-        category: '',
         description: '',
-    });
+        category: '',
+    } as SelectedRow);
+
     const [title, setTitle] = useState('');
-    const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
-    const [userId, setUserId] = useState(null);
+    const [category, setCategory] = useState('');
 
     const {
-        data: coursesData,
+        data: eventsData,
         isFetching,
         isError,
-        refetch: refetchEvents,
+        refetch: refetchCourses,
     } = useQuery({
-        queryKey: ['events'],
-        queryFn: async () =>
-            await axios.get('http://localhost:3001/api/admin/courses/', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            }),
+        queryKey: ['courses'],
+        queryFn: fetchCourses,
     });
 
-    const handleUpdateToDatabase = async (id: number, updatedRow: object) => {
-        try {
-            const response = await axios.put(
-                `http://localhost:3001/api/admin/courses/${id}`,
-                updatedRow,
+    const courseUpdateMutation = useMutation({
+        mutationKey: ['courses'],
+        mutationFn: async (data: CoursesDataResponse['data']) => {
+            console.log(data);
+            const response = await axios.put<CoursesDataResponse>(
+                `http://localhost:3001/api/admin/course/${data?.id}`,
+                data,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 }
             );
+            return response.data;
+        },
+    });
 
-            if (response.status === 200) {
-                postSnackbar({
-                    children: 'Course updated successfully',
-                    severity: 'success',
-                });
-            } else {
-                return new Error('Error updating the course');
-            }
-        } catch (error: any) {
-            postSnackbar({ children: error.message, severity: 'error' });
-        }
-    };
-
-    const handleDeleteFromDatabase = async (id: number) => {
-        try {
-            const response = await axios.delete(
-                `http://localhost:3001/api/admin/courses/${id}`,
+    const courseDeleteMutation = useMutation({
+        mutationKey: ['courses'],
+        mutationFn: async (data: CoursesDataResponse['data']) => {
+            const response = await axios.delete<CoursesDataResponse>(
+                `http://localhost:3001/api/admin/course/${data?.id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 }
             );
-            if (response.status === 200) {
-                postSnackbar({
-                    children: 'Course deleted successfully',
-                    severity: 'success',
-                });
-            } else {
-                return new Error('Error deleting the course');
-            }
-        } catch (error: any) {
-            postSnackbar({ children: error.message, severity: 'error' });
-        }
-    };
+            return response.data;
+        },
+    });
 
     function EditToolbar() {
         const handleClick = () => {
@@ -103,50 +112,83 @@ export default function Users({ postSnackbar }) {
                     children: 'Please wait for the data to load',
                     severity: 'info',
                 });
-            const id =
-                Math.max(0, ...coursesData?.data.map((row: any) => row.id)) + 1;
+            const rowsIds = eventsData?.map((value) => value?.id);
+            const id = Math.max(0, ...rowsIds) + 1;
             setOpenAddModal(true);
-            setSelectedRow({ id });
+
+            interface data {
+                id?: number;
+            }
+
+            setSelectedRow({ id } as data);
         };
 
         return (
             <GridToolbarContainer
                 sx={{
                     display: 'flex',
-                    justifyContent: 'end',
+                    justifyContent: ' space-between',
                     gap: '1rem',
                     alignItems: 'center',
                     padding: '1rem',
                 }}
             >
-                <IconButton
-                    onClick={() => {
-                        refetchEvents(),
-                            postSnackbar({
-                                children: 'Courses refreshed',
-                                severity: 'success',
-                            });
+                <Box
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        gap: '1rem',
                     }}
                 >
-                    <RefreshIcon sx={{ fontSize: 25, color: 'black' }} />
-                </IconButton>
-                <Button
-                    text='Add record'
-                    startIcon={<AddIcon sx={{ fontSize: '25px !important' }} />}
-                    onClick={handleClick}
-                    sx={{
-                        backgroundColor: 'black',
-                        color: 'white',
-                        '&:hover': {
-                            backgroundColor: '#2a2a2a',
-                        },
-                    }}
-                />
+                    <EditorSelector
+                        selectedCategory={selectedCategory}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                    />
+                </Box>
+                <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
+                    <Button
+                        type='button'
+                        text='Refresh'
+                        startIcon={<RefreshIcon sx={{ fontSize: '25px' }} />}
+                        onClick={() => {
+                            refetchCourses().catch(() =>
+                                console.log('Error refreshing')
+                            ),
+                                postSnackbar({
+                                    children: 'Courses refreshed',
+                                    severity: 'success',
+                                });
+                        }}
+                        sx={{
+                            backgroundColor: 'black',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#2a2a2a',
+                            },
+                        }}
+                    />
+                    <Button
+                        type='button'
+                        text='Add record'
+                        startIcon={
+                            <AddIcon sx={{ fontSize: '25px !important' }} />
+                        }
+                        onClick={handleClick}
+                        sx={{
+                            backgroundColor: 'black',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#2a2a2a',
+                            },
+                        }}
+                    />
+                </Box>
             </GridToolbarContainer>
         );
     }
 
-    function ExpandableCell(param: any) {
+    function ExpandableCell(param: { value: string }) {
         const [expanded, setExpanded] = useState(false);
         const length = 300;
         return (
@@ -168,7 +210,26 @@ export default function Users({ postSnackbar }) {
     }
 
     const handleDeleteClick = (id: number) => () => {
-        handleDeleteFromDatabase(id);
+        courseDeleteMutation.mutate(
+            { id },
+            {
+                onSuccess: () => {
+                    postSnackbar({
+                        children: 'Course deleted successfully',
+                        severity: 'success',
+                    });
+                    refetchCourses().catch(() => {
+                        console.log('Error refreshing');
+                    });
+                },
+                onError: (error) => {
+                    postSnackbar({
+                        children: error.message,
+                        severity: 'error',
+                    });
+                },
+            }
+        );
     };
 
     const columns = [
@@ -185,20 +246,18 @@ export default function Users({ postSnackbar }) {
             width: 160,
         },
         {
-            field: 'category',
-            headerName: 'Category',
-            type: 'string',
-            maxWidth: 150,
-        },
-        {
             field: 'description',
             headerName: 'Description',
             type: 'string',
             flex: 1,
-            renderCell: (params: any) => <ExpandableCell {...params} />,
+            renderCell: (params) => <ExpandableCell {...params} />,
         },
-
-        
+        {
+            field: 'category',
+            headerName: 'Category',
+            type: 'string',
+            flex: 1,
+        },
         { field: 'createdAt', headerName: 'Created At', editable: false },
         { field: 'updatedAt', headerName: 'Updated At', editable: false },
         {
@@ -206,7 +265,8 @@ export default function Users({ postSnackbar }) {
             type: 'actions',
             headerName: 'Action',
             cellClassName: 'actions',
-            getActions: ({ id }) => {
+            getActions: ({ id }: { id: number }) => {
+                // eslint-disable-next-line react-hooks/rules-of-hooks
                 const [dropdown, setDropdown] = useState(false);
                 const buttons = [
                     {
@@ -261,52 +321,68 @@ export default function Users({ postSnackbar }) {
         },
     ];
 
-    const handleOpenEditModal = (id) => {
-        setOpenEditModal(true);
-        setSelectedRow(coursesData?.data.find((row) => row.id === id));
-        setTitle(coursesData?.data.find((row) => row.id === id).title);
-        setCategory(coursesData?.data.find((row) => row.id === id).category);
-        setDescription(
-            coursesData?.data.find((row) => row.id === id).description
-        );
-        setUserId(coursesData?.data.find((row) => row.id === id).userId);
+    const handleOpenEditModal = (id: number) => {
+        const row = eventsData?.find(
+            (value) => value?.id === id
+        ) as SelectedRow;
+        if (row === undefined || row === null) {
+            return postSnackbar({
+                children: 'Error fetching data',
+                severity: 'error',
+            });
+        }
+        if (row) {
+            setOpenEditModal(true);
+            setSelectedRow(row);
+            setTitle(row?.title ?? '');
+            setDescription(row?.description ?? '');
+            setCategory(row?.category ?? '');
+        }
     };
 
     const handleCloseModal = () => {
         setOpenEditModal(false);
         setOpenAddModal(false);
-        setSelectedRow({});
-        setTitle('');
-        setCategory('');
-        setDescription('');
-        setUserId(null);
-    };
-
-    const handleTitleChange = (courses) => {
-        setTitle(courses.target.value);
-    };
-
-    const handleCategoryChange = (courses) => {
-        setCategory(courses.target.value);
-    }
-
-    const handleDescriptionChange = (courses) => {
-        setDescription(courses.target.value);
-    };
-
-    const handleUserIdChange = (courses) => {
-        setUserId(courses.target.value);
-    };
-
-    const handleSubmitUpdate = (courses) => {
-        courses.preventDefault();
-        handleUpdateToDatabase(selectedRow.id, {
-            title,
-            category,
-            description,
-            userId,
+        setSelectedRow({
+            id: 0,
+            title: '',
+            description: '',
+            category: '',
         });
-        refetchCourses();
+    };
+
+    const handleSubmitUpdate = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+
+        interface data {
+            id: number;
+            title: string;
+            description: string;
+            category: string;
+        }
+
+        const data = {
+            id: selectedRow.id,
+            title: formData.get('title') as string,
+            description: formData.get('description') as string,
+            category: formData.get('category') as string,
+        } as data;
+
+        courseUpdateMutation.mutate(data, {
+            onSuccess: () => {
+                postSnackbar({
+                    children: `${title} updated successfully`,
+                    severity: 'success',
+                });
+                refetchCourses().catch(() => {
+                    console.log('Error refreshing');
+                });
+            },
+            onError: (error) => {
+                postSnackbar({ children: error.message, severity: 'error' });
+            },
+        });
         setOpenEditModal(false);
         setOpenAddModal(false);
     };
@@ -317,10 +393,8 @@ export default function Users({ postSnackbar }) {
                 <Alert severity='error'>Error fetching data</Alert>
             ) : (
                 <DataGrid
-                    rows={coursesData?.data || []}
+                    rows={eventsData ?? []}
                     columns={columns}
-                    getEstimatedRowHeight={() => 100}
-                    getRowHeight={() => 'auto'}
                     disableSelectionOnClick
                     disableColumnResize
                     loading={isFetching}
@@ -334,6 +408,7 @@ export default function Users({ postSnackbar }) {
                     }}
                     slots={{
                         toolbar: EditToolbar,
+                        pagination: () => null,
                     }}
                     sx={{
                         '& .MuiDataGrid-main': {
@@ -368,7 +443,6 @@ export default function Users({ postSnackbar }) {
             <PopupModal
                 open={openEditModal || openAddModal}
                 handleClose={handleCloseModal}
-                title='Edit User'
                 sxBox={{
                     backgroundColor: 'background.paper',
                 }}
@@ -382,25 +456,16 @@ export default function Users({ postSnackbar }) {
                     {openEditModal ? `Update "${title}"` : 'Add Event'}
                 </p>
 
-                <form onSubmit={handleSubmitUpdate}>
+                <FormControl onSubmit={handleSubmitUpdate}>
                     <Stack spacing={2} sx={{ width: '100%' }}>
                         <TextField
                             label='Title'
                             variant='outlined'
                             fullWidth
                             size='small'
+                            autoFocus
                             value={title}
-                            onChange={handleTitleChange}
-                            autoFocus
-                        />
-                        <TextField
-                            label='Category'
-                            variant='outlined'
-                            fullWidth
-                            size='small'
-                            value={category}
-                            onChange={handleCategoryChange}
-                            autoFocus
+                            onChange={(e) => setTitle(e.target.value)}
                         />
                         <TextField
                             label='Description'
@@ -409,18 +474,16 @@ export default function Users({ postSnackbar }) {
                             multiline
                             maxRows={10}
                             value={description}
-                            onChange={handleDescriptionChange}
+                            onChange={(e) => setDescription(e.target.value)}
                         />
                         <TextField
-                            label='User Id'
+                            label='Category'
                             variant='outlined'
                             fullWidth
                             size='small'
-                            value={userId}
-                            defaultValue={null}
-                            onChange={handleUserIdChange}
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
                         />
-
                         {(openEditModal && (
                             <Button
                                 text='Update'
@@ -451,7 +514,7 @@ export default function Users({ postSnackbar }) {
                             />
                         )}
                     </Stack>
-                </form>
+                </FormControl>
             </PopupModal>
         </>
     );

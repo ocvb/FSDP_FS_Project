@@ -2,27 +2,13 @@
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
-            "@src/*": [
-                "src/*"
-            ],
-            "@validations/*": [
-                "src/Middlewares/Validations/*"
-            ],
-            "@models/*": [
-                "src/Models/*"
-            ],
-            "@endpoints/*": [
-                "src/Endpoints/*"
-            ],
-            "@schema/*": [
-                "src/Schemas/*"
-            ],
-            "@middleware/*": [
-                "src/Middlewares/*"
-            ]
+            "@src/*": ["src/*"],
+            "@validations/*": ["src/Middlewares/Validations/*"],
+            "@models/*": ["src/Models/*"],
+            "@endpoints/*": ["src/Endpoints/*"],
+            "@schema/*": ["src/Schemas/*"],
+            "@middleware/*": ["src/Middlewares/*"]
         }
     },
-    "include": [
-        "src/**/*","*"
-    ]
+    "include": ["src/**/*", "*"]
 }

@@ -2,11 +2,12 @@
 import { ForwardedRef, forwardRef } from 'react';
 
 import { Button } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 interface CustomButtonProps {
     fullWidth?: boolean;
     className?: string;
-    onClick?: (event:React.ChangeEvent | React.MouseEvent) => void;
+    onClick?: (event: React.ChangeEvent | React.MouseEvent) => void;
     type: 'button' | 'submit' | 'reset';
     sx?: object;
     text?: string;
@@ -17,6 +18,7 @@ interface CustomButtonProps {
     endIcon?: React.ReactNode;
     ref?: ForwardedRef<HTMLButtonElement>;
     href?: string;
+    color?: 'primary' | 'secondary';
 }
 
 const CustomButton = forwardRef(
@@ -34,14 +36,17 @@ const CustomButton = forwardRef(
             startIcon,
             endIcon,
             href,
+            color,
         },
         ref
     ) => {
+        const theme = useTheme();
         return (
             <Button
                 ref={ref}
                 fullWidth={fullWidth}
                 sx={{
+                    color: theme.palette.text.primary,
                     fontSize: '1.1rem',
                     display: 'flex',
                     gap: '0.5rem',
@@ -66,6 +71,7 @@ const CustomButton = forwardRef(
                 endIcon={endIcon}
                 onMouseLeave={onMouseLeave}
                 href={href}
+                color={color}
             >
                 {text}
             </Button>

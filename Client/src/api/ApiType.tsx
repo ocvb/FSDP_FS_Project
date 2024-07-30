@@ -17,13 +17,24 @@ export interface EventsDataResponse {
         id?: number;
         title?: string;
         description?: string;
+        location?: string;
         date?: string;
         price?: number;
         createdAt?: string;
         updatedAt?: string;
         userId?: number | null;
     };
-    token?: string;
+    message?: string;
+}
+
+export interface CoursesDataResponse {
+    status?: string;
+    data?: {
+        id?: number;
+        title?: string;
+        description?: string;
+        category?: string;
+    };
 }
 
 export interface CoursesDataResponse {

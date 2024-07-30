@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Users, Events } = require('@models/index');
+const { Users, Events, Courses } = require('@models/index');
 const { TokenAuthentication } = require('@middleware/TokenAuthentication');
 const bcrypt = require('bcrypt');
 const process = require('process');
@@ -132,6 +132,43 @@ router.delete('/event/:id', TokenAuthentication, async (req, res) => {
         res.status(500).json({
             message: 'Event deletion failed',
             error: err.message,
+        });
+    }
+});
+
+// Course Endpoints
+router.get('/courses', TokenAuthentication, async (req, res) => {
+    const courses = await Courses.findAll();
+    res.status(200).json(courses);
+});
+
+router.put('/course/:id', TokenAuthentication, async (req, res) => {
+    const { id } = req.params;
+    const { title, category, description } = req.body;
+
+    if (!title || !category || !description) {
+        res.status(400).json({
+            message: 'Please provide all the required fields',
+        });
+        return;
+    }
+
+    try {
+        const [updated] = await Courses.upsert(
+            { id, title, category, description },
+            { where: { id: id } }
+        );
+
+        if (updated) {
+            res.status(200).json({ message: 'Course updated successfully' });
+        } else {
+            res.status(400).json({ message: 'Course update failed' });
+        }
+    } catch (error) {
+        console.error('Error updating course', error.message);
+        res.status(500).json({
+            message: 'Course update failed',
+            error: error.message,
         });
     }
 });

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { UseAuth } from '@components/Auth/Auth';
+import { UseAuth } from '@contexts/Auth';
 import Button from '@components/Button/CustomButton';
 import PasswordVisibility from '@components/PasswordVIsibility/PasswordVisibility';
 import { TextField, colors } from '@mui/material';
