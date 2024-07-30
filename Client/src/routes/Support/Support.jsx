@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
+import axios from "axios";
 
 // components
-import Navbar from '@/components/Navbar/Navbar.module'; // Importing the Navbar component
-import Footer from '@/components/Footer/Footer.module'; // Importing the Footer component
-import Button from '@/components/Button/CustomButton.module'; // Importing the existing Button component
-import Dropdown from '@/components/Dropdown/Dropdown.module'; // Importing the existing Dropdown component
+import Footer from '@/components/Footer/Footer.module';
+import CustomButton from '@/components/Button/CustomButton.module';
 
-import './css/Support.css';
+import enquiryIMG from '@/assets/Support/enquiries.png';
+import styles from './css/Support.module.css';
 
-const EnquiryForm = () => {
+const EnquiriesPage = () => {
   const [formData, setFormData] = useState({
     location: '',
     urgency: '',
@@ -20,67 +20,67 @@ const EnquiryForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission, e.g., send data to backend
-    console.log(formData);
+    console.log('Form Data:', formData);
+    try {
+      await axios.post('http://localhost:3001/api/enquiries', formData); 
+      setFormData({ location: '', urgency: '', description: '' });
+    } catch (error) {
+      console.error('There was an error submitting the form!', error);
+    }
   };
 
   return (
-    <div className="enquiry-form-container">
-      <div className="form-section">
-        <h2>Is there something you want to inform us about?</h2>
-        <p>(i.e. incidents, repairs, feedback etc.)</p>
-        <form onSubmit={handleSubmit} className="enquiry-form">
-          <label>
-            Location
-            <input
-              type="text"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              placeholder="Enter location..."
-            />
-          </label>
-          <label>
-            Urgency
-            <Dropdown
-              name="urgency"
-              value={formData.urgency}
-              onChange={handleChange}
-              options={[
-                { value: '', label: 'Select urgency level...' },
-                { value: 'None', label: 'None (message, feedback etc.)' },
-                { value: 'Low', label: 'Low (people are not too affected)' },
-                { value: 'Medium', label: 'Medium (people are moderately affected)' },
-                { value: 'High', label: 'High (people are severely affected)' },
-              ]}
-            />
-          </label>
-          <label>
-            Description
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Enter details..."
-            ></textarea>
-          </label>
-          <Button type="submit" text="Submit" />
-        </form>
-      </div>
-      <div className="image-container">
-        <img src="fsdp\Client\src\assets\Support\enquiries.png" alt="Community Image" />
-      </div>
-    </div>
-  );
-};
-
-const EnquiriesPage = () => {
-  return (
     <div>
-      <Navbar />
-      <EnquiryForm />
+      <div className={styles['enquiry-form-container']}>
+        <div className={styles['form-section']}>
+          <h2>Is there something you want to inform us about?</h2>
+          <p>(i.e. incidents, repairs, feedback etc.)</p>
+          <form onSubmit={handleSubmit} className={styles['enquiry-form']}>
+            <label>
+              Location
+              <input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                placeholder="Enter location..."
+                className={styles['input']}
+              />
+            </label>
+            <label>
+              Urgency
+              <select
+                name="urgency"
+                value={formData.urgency}
+                onChange={handleChange}
+                className={styles['dropdown']}
+              >
+                <option value="">Select urgency level...</option>
+                <option value="None">None (message, feedback etc.)</option>
+                <option value="Low">Low (people are not too affected)</option>
+                <option value="Medium">Medium (people are moderately affected)</option>
+                <option value="High">High (people are severely affected)</option>
+              </select>
+            </label>
+            <label>
+              Description
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Enter details..."
+                className={styles['textarea']}
+              ></textarea>
+            </label>
+            <CustomButton type="submit" text="Submit" className={styles['button']} />
+          </form>
+        </div>
+        <div className={styles['image-container']}>
+          <img src={enquiryIMG} alt="Community Image" />
+        </div>
+      </div>
       <Footer />
     </div>
   );
