@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-    Container,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-} from '@mui/material';
+import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import images from '@/assets/Courses/Courses.jpg';
 import styles from '@/routes/Courses/css/Courses.module.css';
 
@@ -21,7 +12,7 @@ interface Course {
 }
 
 // Function to fetch data from the API
-const fetchCourses = async (): Promise<Course[]> => {
+const fetchCoursesByCategory = async (category: string): Promise<Course[]> => {
     try {
         const response = await fetch('http://localhost:3001/api/courses'); // Ensure this endpoint is correct
         if (!response.ok) {
@@ -37,14 +28,15 @@ const fetchCourses = async (): Promise<Course[]> => {
 
 export default function HealthWellness() {
     const [courses, setCourses] = useState<Course[]>([]);
+    const category = "Health & Wellness"
 
     useEffect(() => {
         const getData = async () => {
-            const data = await fetchCourses();
+            const data = await fetchCoursesByCategory(category);
             setCourses(data); // Ensure the data structure matches your expectations
         };
         getData();
-    }, []);
+    }, [category]);
 
     return (
         <div style={{ position: 'relative' }}>

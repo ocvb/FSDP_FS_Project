@@ -6,41 +6,23 @@ const { CourseValidation } = require('@validations/CourseValidation');
 
 // Courses APIs
 
-// router.get('/', TokenAuthentication, async (req, res) => {
-//     const { userId } = req.query;
-
-//     try {
-//         if (userId) {
-//             const coursesByUserId = await Courses.findAll({
-//                 where: { userId: userId },
-//                 attributes: ['id', 'title', 'category', 'description'],
-//             });
-
-//             console.log(coursesByUserId);
-//             if (coursesByUserId.length > 0) {
-//                 res.status(200).json(coursesByUserId);
-//             } else {
-//                 res.status(404).json({
-//                     message: 'No courses found for this user',
-//                 });
-//             }
-//         } else {
-//             const courses = await Courses.findAll();
-//             res.status(200).json(courses);
-//         }
-//     } catch (error) {
-//         console.error('Error fetching courses', error.message);
-//         res.status(500).json({
-//             message: 'Error fetching courses',
-//             error: error.message,
-//         });
-//     }
-// });
 
 // Get all courses
 router.get('/', async (req, res) => {
+    const { category } = req.query;
+
     try {
-        const courses = await Courses.findAll();
+        let courses;
+        if (category) {
+            courses = await Courses.findAll({
+                where: { category: category },
+                attributes: ['id', 'title', 'category', 'description'],
+            });
+        } else {
+            courses = await Courses.findAll();
+        }
+
+
         res.status(200).json(courses);
     } catch (error) {
         console.error('Error fetching courses', error.message);
@@ -83,7 +65,7 @@ router.post('/', TokenAuthentication, CourseValidation, async (req, res) => {
 });
 
 // Update an existing course
-router.put('/api/courses/:id', TokenAuthentication, async (req, res) => {
+router.put('/:id', TokenAuthentication, async (req, res) => {
     const { id } = req.params;
     const { title, category, description } = req.body;
 
@@ -115,7 +97,7 @@ router.put('/api/courses/:id', TokenAuthentication, async (req, res) => {
 });
 
 // Delete a course
-router.delete('/api/courses/:id', TokenAuthentication, async (req, res) => {
+router.delete('/:id', TokenAuthentication, async (req, res) => {
     const { id } = req.params;
 
     try {
