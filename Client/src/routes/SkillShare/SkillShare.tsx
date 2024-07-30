@@ -7,6 +7,7 @@ import axios from 'axios';
 
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { UseAuth } from '@contexts/Auth';
 
 interface SkillShareDataResponse {
     title: string;
@@ -17,7 +18,7 @@ interface SkillShareDataResponse {
 }
 
 export default function SkillShare() {
-    const { data: SkillshareData } = useQuery({
+    const { data: SkillshareData, refetch: refetchSkillshare } = useQuery({
         queryKey: ['skillshare'],
         queryFn: async () => {
             const r = await axios.get<SkillShareDataResponse[]>(
@@ -26,6 +27,7 @@ export default function SkillShare() {
             return r.data;
         },
     });
+
     const maxDescriptionLength = 200;
     const navigate = useNavigate();
     const [displayForm, setDisplayForm] = useState(false);
@@ -100,7 +102,9 @@ export default function SkillShare() {
                         onClick={() => setDisplayForm(!displayForm)}
                     />
 
-                    {displayForm && <SkillshareForm />}
+                    {displayForm && (
+                        <SkillshareForm refetchSkillshare={refetchSkillshare} />
+                    )}
                 </div>
             </Box>
 
@@ -196,7 +200,22 @@ export default function SkillShare() {
     );
 }
 
-function SkillshareForm() {
+interface SkillshareFormProp {
+    refetchSkillshare: () => void;
+}
+
+function SkillshareForm(props: SkillshareFormProp) {
+    const { fetchAuth } = UseAuth();
+    const { refetchSkillshare } = props; // Assuming refetchSkillshare is passed as a prop
+
+    const postSkillshare = async (data) => {
+        const response = await axios.post(
+            'http://localhost:3001/api/skillshare',
+            data
+        );
+        return response;
+    };
+
     return (
         <FormControl
             component='form'
@@ -210,7 +229,22 @@ function SkillshareForm() {
             }}
             onSubmit={(e) => {
                 e.preventDefault();
-                alert('Form submitted!');
+                const formData = new FormData(e.target as HTMLFormElement);
+                const formSubmittedData = {
+                    title: formData.get('title'),
+                    postedBy: fetchAuth.User.username,
+                    description: formData.get('description'),
+                    category: formData.get('category'),
+                };
+
+                postSkillshare(formSubmittedData)
+                    .then((res) => {
+                        console.log(res);
+                        refetchSkillshare();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             }}
         >
             <FormGroup
@@ -227,6 +261,7 @@ function SkillshareForm() {
                     Hi! My name is{' '}
                     <TextField
                         type='text'
+                        name='postedBy'
                         placeholder='Name'
                         variant='standard'
                         size='small'
@@ -243,6 +278,7 @@ function SkillshareForm() {
                     request to help with{' '}
                     <TextField
                         type='text'
+                        name='title'
                         placeholder='How to make a cake?'
                         variant='standard'
                         size='small'
@@ -256,6 +292,7 @@ function SkillshareForm() {
                     and give a brief description{' '}
                     <TextField
                         type='text'
+                        name='description'
                         multiline
                         maxRows={2}
                         placeholder='How can we help?'
@@ -268,6 +305,7 @@ function SkillshareForm() {
                     in which category{' '}
                     <TextField
                         type='text'
+                        name='category'
                         placeholder='Category'
                         variant='standard'
                         size='small'
@@ -282,13 +320,13 @@ function SkillshareForm() {
                             },
                         }}
                     >
-                        <option value='cooking'>Cooking</option>
-                        <option value='baking'>Baking</option>
-                        <option value='gardening'>Gardening</option>
-                        <option value='coding'>Coding</option>
-                        <option value='it'>IT</option>
-                        <option value='art'>Art</option>
-                        <option value='music'>Music</option>
+                        <option value='Cooking'>Cooking</option>
+                        <option value='Baking'>Baking</option>
+                        <option value='Gardening'>Gardening</option>
+                        <option value='Coding'>Coding</option>
+                        <option value='IT'>IT</option>
+                        <option value='Art'>Art</option>
+                        <option value='Music'>Music</option>
                     </TextField>
                     {'.'}
                 </div>
