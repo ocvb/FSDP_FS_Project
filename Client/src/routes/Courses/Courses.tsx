@@ -10,35 +10,35 @@ export default function Courses() {
         {
             id: 1, // Assuming you have an ID field
             title: 'Health & Wellness',
-            path: 'HealthWellness',
+            path: 'health&wellness',
             description:
                 'With our expert beauty tips, not only will you look good, you will feel good as well!',
         },
         {
             id: 2,
             title: 'Lifestyle & Leisure',
-            path: 'LifestyleLeisure',
+            path: 'lifestyle&leisure',
             description:
                 'Embrace the Arts, craft your own leather cardholder, cook up a storm with our celebrity chefs and Trainers or unleash your creativity and find the star in you.',
         },
         {
             id: 3,
             title: 'Sports & Fitness',
-            path: 'SportsFitness',
+            path: 'sports&fitness',
             description:
                 'Conquer air, water, and land while staying up to date with the latest in sports!',
         },
         {
             id: 4,
             title: 'Education & Enrichment',
-            path: 'EducationEnrichment',
+            path: 'education&enrichment',
             description:
                 "Pique your child's interest with our range of hands-on science courses or improve pronunciation and reading with our phonics courses.",
         },
         {
             id: 5,
             title: 'Lifelong Learning',
-            path: 'LifelongLearning',
+            path: 'lifelonglearning',
             description:
                 'In the age of evolving technology, you should evolve as well and learn skills that can keep you up with the times.',
         },

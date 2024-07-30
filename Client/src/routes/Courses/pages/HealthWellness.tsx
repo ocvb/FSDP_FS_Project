@@ -31,8 +31,6 @@ const fetchCoursesByCategory = async (category: string): Promise<Course[]> => {
     }
 };
 
-
-
 export default function HealthWellness() {
     const [courses, setCourses] = useState<Course[]>([]);
 
@@ -76,7 +74,7 @@ export default function HealthWellness() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.length > 0 ?(
+                            {data != undefined ? (
                                 data.map((course) => (
                                     <TableRow key={course.id}>
                                         <TableCell>{course.id}</TableCell>

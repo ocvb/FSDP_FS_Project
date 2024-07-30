@@ -76,7 +76,7 @@ export default function EducationEnrichment() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.length > 0 ?(
+                        {data != undefined ? (
                                 data.map((course) => (
                                     <TableRow key={course.id}>
                                         <TableCell>{course.id}</TableCell>

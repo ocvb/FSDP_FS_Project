@@ -8,6 +8,7 @@ const { CourseValidation } = require('@validations/CourseValidation');
 // Get all courses
 router.post('/category', async (req, res) => {
     const { category } = req.body;
+    console.log('awdawd');
 
     try {
         let courses;
@@ -20,7 +21,7 @@ router.post('/category', async (req, res) => {
             courses = await Courses.findAll();
         }
 
-        console.log(courses)
+        console.log(courses);
         res.status(200).json(courses);
     } catch (error) {
         console.error('Error fetching courses', error.message);
