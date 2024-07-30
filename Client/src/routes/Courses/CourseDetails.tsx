@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { fetchCourses } from '@/api/api';
+
+interface courses {
+    title: string
+    category: string
+    description: string
+}
 
 export default function CourseDetails() {
     const { id } = useParams();
-    const [Course, setCourses] = useState(null);
+    const [course, setCourses] = useState<courses | null>(null);
 
     useEffect(() => {
         async function fetchCourses() {
@@ -15,19 +20,13 @@ export default function CourseDetails() {
         fetchCourses();
     }, [id]);
 
-    if (!Course) return <div>Loading...</div>;
+    if (!course) return <div>Loading...</div>;
 
     return (
         <div>
-            <h1>{Course.
-// @ts-ignore
-            title}</h1>
-            <p>{Course.
-// @ts-ignore
-            category}</p>
-            <p>{Course.
-// @ts-ignore
-            description}</p>
+            <h1>{course.title}</h1>
+            <p>{course.category}</p>
+            <p>{course.description}</p>
         </div>
     );
 }

@@ -23,4 +23,7 @@ router.use('/api/eventsSearch', eventsSearchAPI);
 const skillshareAPI = require('@endpoints/SkillShare');
 router.use('/api/skillshare', skillshareAPI);
 
+const coursesAPI = require('@endpoints/Courses');
+router.use('/api/courses', coursesAPI);
+
 module.exports = router;

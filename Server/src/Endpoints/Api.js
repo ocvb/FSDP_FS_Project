@@ -85,10 +85,20 @@ router.get('/', async (req, res) => {
 
     const presetCourses = await Courses.bulkCreate([
         {
-            title: 'Course 1',
+            title: 'Makeup and Skincare',
             category: 'Health & Wellness',
-            description: 'lalala',
+            description: 'Learn the different types of makeup and how to take care of your skin',
         },
+        {
+            title: 'Healthy Cooking',
+            category: 'Health & Wellness',
+            description: 'Learn how to cook healthy, delicious meals that can contribute to overall wellness and a balanced diet.'
+        },
+        {
+            title: 'Cardio Workout',
+            category: 'Sports & Fitness',
+            description: 'This course offers a variety of cardio exercises to help you improve your cardiovascular health and fitness.'
+        }
     ]);
 
     presetUsers;

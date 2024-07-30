@@ -58,47 +58,29 @@ export default function App() {
 
     return (
         <>
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                {checkIfAdmin && isAdminRoute ? (
-                    <NavbarAdmin logo={logo} />
-                ) : (
-                    <NavigationBar imgUrl={logo} />
-                )}
-                <Routes>
-                    <Route path='/' element={<Home />} />
-                    <Route path='/events' element={<Events />} />
-                    <Route path='/courses/*' element={<Courses />} />
-                    <Route path='/courses/*' element={<Outlet />}>
-                        <Route
-                            path='HealthWellness'
-                            element={<HealthWellness />}
-                        />
-                        <Route
-                            path='LifestyleLeisure'
-                            element={<LifestyleLeisure />}
-                        />
-                        <Route
-                            path='SportsFitness'
-                            element={<SportsFitness />}
-                        />
-                        <Route
-                            path='EducationEnrichment'
-                            element={<EducationEnrichment />}
-                        />
-                        <Route
-                            path='LifelongLearning'
-                            element={<LifeLongLearning />}
-                        />
-                    </Route>
-                    <Route path='/skill-share' element={<SkillShare />} />
-                    <Route path='/account' element={<Account />} />
-                    <Route path='/account/*' element={<ProtectedRoute />}>
-                        <Route path='admin' element={<Admin />} />
-                        <Route path='profile' element={<Profile />} />
-                    </Route>
-                </Routes>
-            </ThemeProvider>
+            {checkIfAdmin && isAdminRoute ? (
+                <NavbarAdmin logo={logo} />
+            ) : (
+                <NavigationBar imgUrl={logo} />
+            )}
+            <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/events' element={<Events />} />
+                <Route path='/courses/*' element={<Courses />} />
+                <Route path='/courses/*' element={<Outlet />}>
+                    <Route path='health&wellness' element={<HealthWellness />} />
+                    <Route path='lifestyle&leisure' element={<LifestyleLeisure />} />
+                    <Route path='sports&fitness' element={<SportsFitness />} />
+                    <Route path='education&enrichment' element={<EducationEnrichment />} />
+                    <Route path='lifelonglearning' element={<LifeLongLearning />} />
+                </Route>
+                <Route path='/skill-share' element={<SkillShare />} />
+                <Route path='/account' element={<Account />} />
+                <Route path='/account/*' element={<ProtectedRoute />}>
+                    <Route path='admin' element={<Admin />} />
+                    <Route path='profile' element={<Profile />} />
+                </Route>
+            </Routes>
         </>
     );
 }

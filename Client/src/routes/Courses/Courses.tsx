@@ -6,54 +6,54 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Courses() {
-    const [Courses, setCourses] = useState([
+    const [courses, setCourses] = useState([
         {
             id: 1, // Assuming you have an ID field
             title: 'Health & Wellness',
-            path: 'HealthWellness',
+            path: 'health&wellness',
             description:
                 'With our expert beauty tips, not only will you look good, you will feel good as well!',
         },
         {
             id: 2,
             title: 'Lifestyle & Leisure',
-            path: 'LifeLongLeisure',
+            path: 'lifestyle&leisure',
             description:
                 'Embrace the Arts, craft your own leather cardholder, cook up a storm with our celebrity chefs and Trainers or unleash your creativity and find the star in you.',
         },
         {
             id: 3,
             title: 'Sports & Fitness',
-            path: 'SportsFitness',
+            path: 'sports&fitness',
             description:
                 'Conquer air, water, and land while staying up to date with the latest in sports!',
         },
         {
             id: 4,
             title: 'Education & Enrichment',
-            path: 'EducationEnrichment',
+            path: 'education&enrichment',
             description:
                 "Pique your child's interest with our range of hands-on science courses or improve pronunciation and reading with our phonics courses.",
         },
         {
             id: 5,
             title: 'Lifelong Learning',
-            path: 'LifelongLearning',
+            path: 'lifelonglearning',
             description:
                 'In the age of evolving technology, you should evolve as well and learn skills that can keep you up with the times.',
         },
         // Add more courses as needed
     ]);
 
-    useEffect(() => {
-        async function fetchCourses() {
-            const response = await axios.get(
-                'http://localhost:3001/api/admin/courses'
-            );
-            setCourses(response.data);
-        }
-        fetchCourses();
-    }, []);
+    // useEffect(() => {
+    //     async function fetchCourses() {
+    //         const response = await axios.get(
+    //             'http://localhost:3001/api/courses'
+    //         );
+    //         setCourses(response.data);
+    //     }
+    //     fetchCourses();
+    // }, []);
 
     return (
         <div style={{ position: 'relative' }}>
@@ -87,16 +87,16 @@ export default function Courses() {
                     </h2>
                     <br />
                     <div className={styles.row}>
-                        {Courses.map((Course, index) => (
+                        {courses.map((course, index) => (
                             <div className={styles.col} key={index}>
                                 <div className={styles.courseTile}>
                                     <h3 className={styles.h3}>
-                                        {Course.title}
+                                        {course.title}
                                     </h3>
                                     <p className={styles.p}>
-                                        {Course.description}
+                                        {course.description}
                                     </p>
-                                    <Link to={`/courses/${Course.path}`}>
+                                    <Link to={`/courses/${course.path}`}>
                                         <Button
                                             variant='contained'
                                             color='primary'
