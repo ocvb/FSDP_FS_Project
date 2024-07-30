@@ -171,9 +171,15 @@ router.post('/search', async (req, res) => {
 
     // console.log(date);
     // console.log(new Date(date).toLocaleDateString());
-    console.log(events);
+    // console.log(events);
 
     res.status(200).json(events);
 });
+
+router.get('/details', async (req, res)=>{
+    console.log("")
+
+    res.status(200)
+})
 
 module.exports = router;

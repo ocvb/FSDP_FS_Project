@@ -9,6 +9,8 @@ import { UseAuth } from '@components/Auth/Auth';
 // Routes
 import Home from '@routes/Home/Home';
 import Events from '@routes/Events/Events';
+import EventsSearch from '@routes/Events/EventsSearch';
+import EventDetails from '@routes/Events/EventDetails';
 import Courses from '@routes/Courses/Courses';
 import Account from '@routes/Account/Account';
 import SkillShare from '@routes/SkillShare/SkillShare';
@@ -20,7 +22,6 @@ import Admin from '@routes/Account/Admin/Admin';
 import logo from '@assets/Navbar/logo.png';
 
 import './index.css';
-import EventsSearch from '@routes/Events/EventsSearch';
 
 export default function App() {
     const { fetchAuth } = UseAuth();
@@ -39,7 +40,7 @@ export default function App() {
                 <Route path='/events' element={<Events/>}/>
                 <Route path='/events/*' element={<Outlet/>}>
                     <Route path='search' element={<EventsSearch/>}/>
-                    {/* <Route path='details' element={<EventDetails/>}/> */}
+                    <Route path='details' element={<EventDetails/>}/>
                 </Route>
                 <Route path='/courses' element={<Courses />} />
                 <Route path='/skill-share' element={<SkillShare />} />
