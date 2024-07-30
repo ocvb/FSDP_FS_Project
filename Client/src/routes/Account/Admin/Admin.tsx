@@ -10,7 +10,10 @@ import styles from './Admin.module.css';
 
 import Editor from './Pages/Editor/Editor';
 import Analytics from './Pages/Analytics/Analytics';
-import { KeyboardDoubleArrowLeftRounded } from '@mui/icons-material';
+import {
+    KeyboardDoubleArrowLeftRounded,
+    KeyboardDoubleArrowRightRounded,
+} from '@mui/icons-material';
 
 import { motion } from 'framer-motion';
 
@@ -112,13 +115,25 @@ export default function Admin() {
                 >
                     {tabs.map((tab, index) => {
                         return (
-                            <motion.div key={index} className={styles.tab}>
+                            <motion.div
+                                key={index}
+                                className={styles.tab}
+                                initial={{
+                                    width: '0px',
+                                    borderRadius: '10px',
+                                }}
+                                animate={{
+                                    width: '100%',
+                                    borderRadius: collapse ? '0' : '10px',
+                                }}
+                            >
                                 {collapse ? (
                                     <IconButton
                                         onClick={tab.action}
                                         disableFocusRipple
+                                        className={styles.tabIconButton}
                                         sx={{
-                                            padding: '0.5rem',
+                                            padding: '0.62rem',
                                             '&:focus': {
                                                 outline: 'none',
                                             },
@@ -134,6 +149,7 @@ export default function Admin() {
                                                 backgroundColor: 'black',
                                                 color: 'white',
                                             },
+                                            width: 'fit-content',
                                         }}
                                     >
                                         {tab.icon}
@@ -177,11 +193,19 @@ export default function Admin() {
                     }}
                     onClick={handleCallapse}
                 >
-                    <KeyboardDoubleArrowLeftRounded
-                        sx={{
-                            color: (theme) => theme.palette.text.primary,
-                        }}
-                    />
+                    {collapse ? (
+                        <KeyboardDoubleArrowRightRounded
+                            sx={{
+                                color: (theme) => theme.palette.text.primary,
+                            }}
+                        />
+                    ) : (
+                        <KeyboardDoubleArrowLeftRounded
+                            sx={{
+                                color: (theme) => theme.palette.text.primary,
+                            }}
+                        />
+                    )}
                 </IconButton>
             </motion.div>
             <motion.div
