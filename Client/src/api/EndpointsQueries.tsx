@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-import { UsersDataResponse, EventsDataResponse } from './ApiType';
+import {
+    UsersDataResponse,
+    EventsDataResponse,
+    CoursesDataResponse,
+} from './ApiType';
 
 export const callAPI = axios.create({
     baseURL: 'http://localhost:3001/',
@@ -31,7 +35,20 @@ export const fetchEvents = async () => {
 };
 
 export const fetchCourses = async () => {
-    const response = await callAPI.get('/api/admin/courses/', {
+    const response = await callAPI.get<CoursesDataResponse['data'][]>(
+        '/api/admin/courses/',
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        }
+    );
+    return response.data;
+};
+
+// Non-admin endpoints
+export const fetchSkillshare = async () => {
+    const response = await callAPI.get('/api/skillshare/', {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
