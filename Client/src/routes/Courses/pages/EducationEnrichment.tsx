@@ -16,7 +16,6 @@ import { Query, useQuery } from '@tanstack/react-query';
 
 // Define the type for your course objects
 interface Course {
-    id: number;
     title: string;
     category: string;
     description: string;
@@ -79,7 +78,6 @@ export default function EducationEnrichment() {
                         {data != undefined ? (
                                 data.map((course) => (
                                     <TableRow key={course.id}>
-                                        <TableCell>{course.id}</TableCell>
                                         <TableCell>{course.title}</TableCell>
                                         <TableCell>{course.category}</TableCell>
                                         <TableCell>
