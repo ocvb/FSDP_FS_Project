@@ -60,49 +60,5 @@ Events.belongsTo(Users, {
   allowNull: true,
 });
 
-const Rewards = db.define("rewards", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  description: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  points: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  claimed: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-    allowNull: false,
-  },
-});
-
-const Support = db.define("support", {
-  location: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  urgency: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  description: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  sender: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-
-});
 
 module.exports = { db, Users, Events, Rewards, Support };
