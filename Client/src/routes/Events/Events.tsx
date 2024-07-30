@@ -26,6 +26,7 @@ interface EventDataResponse {
     createdAt?: string;
     updatedAt?: string;
 }
+
 interface SearchConditionType {
     what?: string;
     where?: string;

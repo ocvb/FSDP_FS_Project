@@ -2,13 +2,32 @@ import React, { useState, useEffect } from 'react';
 import styles from './css/EventsSearch.module.css';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { Box } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { Box, Button } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function EventsSearch() {
-    const [searchedEvents, setSearchedEvents] = useState([]);
+    interface EventDataResponse {
+        title?: string;
+        description?: string;
+        location?: string;
+        date?: string;
+        price?: number;
+        createdAt?: string;
+        updatedAt?: string;
+    }
 
+    const [searchedEvents, setSearchedEvents] = useState([]);
     const getPrevious = useLocation();
+    const navigate = useNavigate();
+    // const [eventData, setEventData] = useState({
+    //     title: '',
+    //     description: '',
+    //     location: '',
+    //     date: '',
+    //     price: 0,
+    //     createdAt: '',
+    //     updatedAt: '',
+    // } as EventDataResponse);
 
     const fetchEvents = useQuery({
         queryKey: ['conditionedEvents'],
@@ -25,6 +44,35 @@ export default function EventsSearch() {
         },
     });
 
+    // const selectEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setEventData({
+    //         title: e.target.name == 'title' ? e.target.value : eventData.title,
+    //         description:
+    //             e.target.name == 'description'
+    //                 ? e.target.value
+    //                 : eventData.description,
+    //         location:
+    //             e.target.name == 'location'
+    //                 ? e.target.value
+    //                 : eventData.location,
+    //         date: e.target.name == 'date' ? e.target.value : eventData.date,
+    //         price:
+    //             e.target.name == 'price'
+    //                 ? e.target.valueAsNumber
+    //                 : eventData.price,
+    //         createdAt:
+    //             e.target.name == 'createdAt'
+    //                 ? e.target.value
+    //                 : eventData.createdAt,
+    //         updatedAt:
+    //             e.target.name == 'updatedAt'
+    //                 ? e.target.value
+    //                 : eventData.updatedAt,
+    //     });
+
+    //     navigate('details', { state: eventData });
+    // };
+
     useEffect(() => {
         if (fetchEvents.data) {
             setSearchedEvents(fetchEvents.data); // Update searchedEvents state with fetched data
@@ -39,7 +87,9 @@ export default function EventsSearch() {
             <p className={styles.header2}>{numEventsFound} Results Found</p>
             {searchedEvents.map((item, index) => (
                 <div key={index} className={styles.row}>
-                    <p className={styles.p}>{item.title}</p>
+                    <Button onClick={() => navigate('/events/details/', { state: item })}>
+                        <p className={styles.p}>{item.title}</p>
+                    </Button>
                 </div>
             ))}
         </Box>
