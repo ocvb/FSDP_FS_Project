@@ -1,4 +1,4 @@
-import { Box, Container, colors } from '@mui/material';
+import { Box, Container, colors, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import axios from 'axios';
@@ -14,6 +14,7 @@ import styles from './css/EventDetails.module.css';
 
 // component
 import CustomButton from '@components/Button/CustomButton';
+import PopupModal from '@components/PopupModal/PopupModal';
 import Footer from '@components/Footer/Footer';
 import { useEffect, useState } from 'react';
 import { alignProperty } from '@mui/material/styles/cssUtils';
@@ -26,8 +27,16 @@ import {
 } from '@mui/icons-material';
 
 export default function EventDetails() {
+    const [openBookingModal, setOpenBookingModal] = useState(false);
+    const [isSignedUp, setIsSignedUp] = useState(false);
     const getPrevious = useLocation();
     console.log(getPrevious.state.id);
+    const handleCloseModal = () => {
+        setOpenBookingModal(false);
+    };
+    const handleSignUp = () => {
+        setIsSignedUp(true);
+    };
     const { data: fetchEvent } = useQuery({
         queryKey: ['conditionedEvents'],
         queryFn: async () => {
@@ -65,18 +74,49 @@ export default function EventDetails() {
                         margin: '40px',
                         marginLeft: '170px',
                         marginRight: '170px',
+                        alignItems: 'end',
+                        gap: '20px',
                     }}
                 >
-                    <h1>{fetchEvent.title}</h1>
-                    <p className={styles.p}>{fetchEvent.description}</p>
-                    <h3>Location: {fetchEvent.location}</h3>
-                    <h3>Date: {fetchEvent.date}</h3>
-                    <h3>
-                        Price:{' '}
-                        {fetchEvent.price == 0
-                            ? 'Free'
-                            : `$${fetchEvent.price}`}
-                    </h3>
+                    <Stack alignItems={'start'}>
+                        <h1>{fetchEvent.title}</h1>
+                        <p className={styles.p}>{fetchEvent.description}</p>
+                        <h3 style={{ marginTop: '20px' }}>
+                            Location: {fetchEvent.location}
+                        </h3>
+                        <h3>Date: {fetchEvent.date}</h3>
+                        <h3>
+                            Price:{' '}
+                            {fetchEvent.price == 0
+                                ? 'Free'
+                                : `$${fetchEvent.price}`}
+                        </h3>
+                    </Stack>
+                    <Button
+                        style={{
+                            color: 'white',
+                            backgroundColor: '#fd4444',
+                            borderRadius: '20px',
+                            width: '10%',
+                        }}
+                        onClick={() => {
+                            setOpenBookingModal(true);
+                            handleSignUp();
+                        }}
+                    >
+                        {isSignedUp ? 'Signed Up' : 'Sign Up'}
+                    </Button>
+                    <p>
+                        {isSignedUp
+                            ? `${fetchEvent.title} is now registered into your account`
+                            : ''}
+                    </p>
+                    <PopupModal
+                        open={openBookingModal}
+                        handleClose={handleCloseModal}
+                    >
+                        {openBookingModal && <p>Signed Up</p>}
+                    </PopupModal>
                 </div>
             </Box>
         </Stack>
