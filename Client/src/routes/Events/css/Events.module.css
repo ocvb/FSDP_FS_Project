@@ -173,16 +173,6 @@
     overflow: hidden;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-weight: 700;
-    text-align: center;
-}
-
 p {
     font-size: 2rem;
     font-weight: 400;

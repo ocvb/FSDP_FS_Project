@@ -1,3 +1,33 @@
-p {
-    font-size: 20px;
+.eventdetail p {
+    font-size: 1rem;
+}
+
+.row {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 5px;
+    width: 100%;
+}
+
+ .col p {
+    font-size: 1rem;
+}
+
+.col {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    min-height: 350px;
+    /* width: calc( 1vw + 100% ); */
+    width: 500px;
+    gap: 1rem;
+    z-index: 1;
 }

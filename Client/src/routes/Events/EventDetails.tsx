@@ -10,12 +10,20 @@ import { useQuery } from '@tanstack/react-query';
 
 import images from '@assets/Events/event-bg.jpg';
 
-import styles from './css/Events.module.css';
+import styles from './css/EventDetails.module.css';
 
 // component
 import CustomButton from '@components/Button/CustomButton';
 import Footer from '@components/Footer/Footer';
 import { useEffect, useState } from 'react';
+import { alignProperty } from '@mui/material/styles/cssUtils';
+import {
+    DisplaySettings,
+    Margin,
+    Padding,
+    Start,
+    WidthFull,
+} from '@mui/icons-material';
 
 export default function EventDetails() {
     const getPrevious = useLocation();
@@ -47,16 +55,30 @@ export default function EventDetails() {
     console.log(fetchEvent);
 
     return (
-        <Box>
-            <div >
-                <p className={styles.p}>{fetchEvent.title}</p>
-                <p className={styles.p}>{fetchEvent.description}</p>
-                <p className={styles.p}>{fetchEvent.location}</p>
-                <p className={styles.p}>{fetchEvent.date}</p>
-                <p className={styles.p}>{fetchEvent.price}</p>
-                <p className={styles.p}>{fetchEvent.createdAt}</p>
-                <p className={styles.p}>{fetchEvent.updatedAt}</p>
-            </div>
-        </Box>
+        <Stack flexDirection={'row'} className='eventdetail'>
+            <Box className={styles.row}>
+                <div
+                    className={styles.col}
+                    style={{
+                        padding: '20px',
+                        width: 'fit-content',
+                        margin: '40px',
+                        marginLeft: '170px',
+                        marginRight: '170px',
+                    }}
+                >
+                    <h1>{fetchEvent.title}</h1>
+                    <p className={styles.p}>{fetchEvent.description}</p>
+                    <h3>Location: {fetchEvent.location}</h3>
+                    <h3>Date: {fetchEvent.date}</h3>
+                    <h3>
+                        Price:{' '}
+                        {fetchEvent.price == 0
+                            ? 'Free'
+                            : `$${fetchEvent.price}`}
+                    </h3>
+                </div>
+            </Box>
+        </Stack>
     );
 }

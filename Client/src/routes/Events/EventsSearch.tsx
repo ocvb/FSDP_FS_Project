@@ -88,6 +88,7 @@ export default function EventsSearch() {
             {searchedEvents.map((item, index) => (
                 <div key={index} className={styles.row}>
                     <Button
+                        className={styles.eventButton}
                         onClick={() =>
                             navigate('/events/details/', {
                                 state: { id: item.id },

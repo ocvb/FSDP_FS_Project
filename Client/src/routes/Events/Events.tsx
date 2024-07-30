@@ -112,7 +112,7 @@ export default function Events() {
                                 top: '20%',
                             }}
                         >
-                            <p>Explore Events</p>
+                            <p className={styles.p}>Explore Events</p>
                             <TextField
                                 label='What'
                                 name='what'
