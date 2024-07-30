@@ -26,6 +26,7 @@ import PopupModal from '@components/PopupModal/PopupModal';
 
 import { fetchEvents } from '@api/EndpointsQueries';
 import { EventsDataResponse } from '@api/ApiType';
+import EditorSelector from '@components/Admin/EditorSelector';
 
 interface EventsProps {
     postSnackbar: (data: {
@@ -33,7 +34,7 @@ interface EventsProps {
         severity?: 'success' | 'error' | 'info' | 'warning' | undefined;
     }) => void;
     handleOnChangeSelect: (event: SelectChangeEvent<number>) => void;
-    selectedCategory?: number;
+    selectedCategory: number;
 }
 
 interface SelectedRow {
@@ -153,23 +154,10 @@ export default function Events({
                         gap: '1rem',
                     }}
                 >
-                    <Select
-                        variant='outlined'
-                        defaultValue={selectedCategory}
-                        onChange={handleOnChangeSelect}
-                        sx={{
-                            width: '200px',
-                            color: 'black',
-                            backgroundColor: 'white',
-                            '& .MuiMenu-list': {
-                                p: '5px',
-                            },
-                        }}
-                    >
-                        <MenuItem value={0}>Users</MenuItem>
-                        <MenuItem value={1}>Events</MenuItem>
-                        <MenuItem value={2}>Courses</MenuItem>
-                    </Select>
+                    <EditorSelector
+                        selectedCategory={selectedCategory}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                    />
                 </Box>
                 <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
                     <Button
