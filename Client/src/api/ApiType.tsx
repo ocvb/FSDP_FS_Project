@@ -25,18 +25,14 @@ export interface EventsDataResponse {
         userId?: number | null;
     };
     message?: string;
-    token?: string;
 }
 
-// export interface CoursesDataResponse {
-//     status?: string;
-//     data?: {
-//         id?: number;
-//         title?: string;
-//         path?: string;
-//         description?: string;
-//         createdAt?: string;
-//         updatedAt?: string;
-//     };
-//     token?: string;
-// }
+export interface CoursesDataResponse {
+    status?: string;
+    data?: {
+        id?: number;
+        title?: string;
+        description?: string;
+        category?: string;
+    };
+}
