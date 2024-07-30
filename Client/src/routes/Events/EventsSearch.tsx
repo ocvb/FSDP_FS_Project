@@ -87,7 +87,13 @@ export default function EventsSearch() {
             <p className={styles.header2}>{numEventsFound} Results Found</p>
             {searchedEvents.map((item, index) => (
                 <div key={index} className={styles.row}>
-                    <Button onClick={() => navigate('/events/details/', { state: item })}>
+                    <Button
+                        onClick={() =>
+                            navigate('/events/details/', {
+                                state: { id: item.id },
+                            })
+                        }
+                    >
                         <p className={styles.p}>{item.title}</p>
                     </Button>
                 </div>

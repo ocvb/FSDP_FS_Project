@@ -176,10 +176,35 @@ router.post('/search', async (req, res) => {
     res.status(200).json(events);
 });
 
+// details API
 router.get('/details', async (req, res)=>{
-    console.log("")
-
     res.status(200)
 })
+
+router.post('/details', async (req, res) => {
+    const { id } = req.body;
+
+    if (
+        id == null
+    ) {
+        res.status(400).json({
+            message: 'Please provide all the required fields',
+        });
+        return;
+    }
+
+    const event = await Events.findOne({
+        where: { id }
+    });
+
+    console.log(event)
+
+    if (event) {
+        res.status(201).json(event);
+    } else {
+        res.status(400).json({ message: 'Event creation failed' });
+    }
+});
+
 
 module.exports = router;
