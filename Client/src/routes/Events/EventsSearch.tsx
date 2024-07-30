@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import styles from './css/EventsSearch.module.css';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
+
 
 export default function EventsSearch() {
     interface EventDataResponse {
@@ -88,9 +89,48 @@ export default function EventsSearch() {
                 {numEventsFound > 0 ? `${numEventsFound} Results Found` : ''}
             </p>
             {numEventsFound < 1 ? (
-                <p className={styles.header2}>
-                    Sorry no events found that match those search conditions!
-                </p>
+                <Box>
+                    <div>
+                        <p
+                            className={styles.header2}
+                            style={{
+                                marginTop: '100px',
+                            }}
+                        >
+                            Nothing Found
+                        </p>
+                        <p
+                            style={{
+                                marginLeft: '96px',
+                                marginBottom: '50px',
+                            }}
+                        >
+                            Sorry. Please try again with different search
+                            conditions.
+                        </p>
+
+                        <Button
+                            onClick={() => navigate('/events')}
+                            className='styles.row'
+                            style={{
+                                marginLeft: '96px',
+                                width: '9%',
+                                borderRadius: '20px',
+                                color: 'white',
+                                backgroundColor: '#fd4444',
+                            }}
+                        >
+                            <p
+                                style={{
+                                    fontSize: '1rem',
+                                    color: 'white',
+                                }}
+                            >
+                                Try Again
+                            </p>
+                        </Button>
+                    </div>
+                </Box>
             ) : (
                 searchedEvents.map((item, index) => (
                     <div key={index} className={styles.row}>
