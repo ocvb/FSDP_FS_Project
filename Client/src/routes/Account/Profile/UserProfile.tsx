@@ -126,9 +126,6 @@ export default function UserProfile() {
                         width: '100%',
                     }}
                 >
-                    {/* <div>
-                        <img src="https://via.placeholder.com/80" alt="profile" />
-                    </div> */}
                     <div>
                         <p>Username</p>
                         <TextField
