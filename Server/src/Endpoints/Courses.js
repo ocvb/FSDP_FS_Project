@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const { Courses } = require('@models');
-const { TokenAuthentication } = require('@middleware/TokenAuthentication');
 const { CourseValidation } = require('@validations/CourseValidation');
 
 // Courses APIs
 
-
 // Get all courses
-router.get('/', async (req, res) => {
-    const { category } = req.query;
+router.post('/category', async (req, res) => {
+    const { category } = req.body;
 
     try {
         let courses;
@@ -34,7 +32,7 @@ router.get('/', async (req, res) => {
 });
 
 // Add a new course
-router.post('/', TokenAuthentication, CourseValidation, async (req, res) => {
+router.post('/', CourseValidation, async (req, res) => {
     const { title, category, description } = req.body;
 
     if (!title || !category || !description) {
@@ -65,56 +63,56 @@ router.post('/', TokenAuthentication, CourseValidation, async (req, res) => {
 });
 
 // Update an existing course
-router.put('/:id', TokenAuthentication, async (req, res) => {
-    const { id } = req.params;
-    const { title, category, description } = req.body;
+// router.put('/:id', async (req, res) => {
+//     const { id } = req.params;
+//     const { title, category, description } = req.body;
 
-    if (!title || !category || !description) {
-        res.status(400).json({
-            message: 'Please provide all the required fields',
-        });
-        return;
-    }
+//     if (!title || !category || !description) {
+//         res.status(400).json({
+//             message: 'Please provide all the required fields',
+//         });
+//         return;
+//     }
 
-    try {
-        const [updated] = await Courses.update(
-            { title, category, description },
-            { where: { id: id } }
-        );
+//     try {
+//         const [updated] = await Courses.update(
+//             { title, category, description },
+//             { where: { id: id } }
+//         );
 
-        if (updated) {
-            res.status(200).json({ message: 'Course updated successfully' });
-        } else {
-            res.status(400).json({ message: 'Course update failed' });
-        }
-    } catch (error) {
-        console.error('Error updating course', error.message);
-        res.status(500).json({
-            message: 'Course update failed',
-            error: error.message,
-        });
-    }
-});
+//         if (updated) {
+//             res.status(200).json({ message: 'Course updated successfully' });
+//         } else {
+//             res.status(400).json({ message: 'Course update failed' });
+//         }
+//     } catch (error) {
+//         console.error('Error updating course', error.message);
+//         res.status(500).json({
+//             message: 'Course update failed',
+//             error: error.message,
+//         });
+//     }
+// });
 
-// Delete a course
-router.delete('/:id', TokenAuthentication, async (req, res) => {
-    const { id } = req.params;
+// // Delete a course
+// router.delete('/:id', async (req, res) => {
+//     const { id } = req.params;
 
-    try {
-        const deleted = await Courses.destroy({ where: { id: id } });
+//     try {
+//         const deleted = await Courses.destroy({ where: { id: id } });
 
-        if (deleted) {
-            res.status(200).json({ message: 'Course deleted successfully' });
-        } else {
-            res.status(404).json({ message: 'Course not found' });
-        }
-    } catch (error) {
-        console.error('Error deleting course', error.message);
-        res.status(500).json({
-            message: 'Course deletion failed',
-            error: error.message,
-        });
-    }
-});
+//         if (deleted) {
+//             res.status(200).json({ message: 'Course deleted successfully' });
+//         } else {
+//             res.status(404).json({ message: 'Course not found' });
+//         }
+//     } catch (error) {
+//         console.error('Error deleting course', error.message);
+//         res.status(500).json({
+//             message: 'Course deletion failed',
+//             error: error.message,
+//         });
+//     }
+// });
 
 module.exports = router;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import images from '@/assets/Courses/Courses.jpg';
 import styles from '@/routes/Courses/css/Courses.module.css';
+import axios from 'axios';
 
 // Define the type for your course objects
 interface Course {
@@ -14,29 +15,18 @@ interface Course {
 // Function to fetch data from the API
 const fetchCoursesByCategory = async (category: string): Promise<Course[]> => {
     try {
-        const response = await fetch('http://localhost:3001/api/courses'); // Ensure this endpoint is correct
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
+        const response = await axios.post('http://localhost:3001/api/courses/', {category: "Health & Wellness"}); // Ensure this endpoint is correct
+        return response.data
     } catch (error) {
         console.error('Error fetching courses:', error);
         return [];
     }
 };
 
+
 export default function HealthWellness() {
     const [courses, setCourses] = useState<Course[]>([]);
-    const category = "Health & Wellness"
-
-    useEffect(() => {
-        const getData = async () => {
-            const data = await fetchCoursesByCategory(category);
-            setCourses(data); // Ensure the data structure matches your expectations
-        };
-        getData();
-    }, [category]);
+    
 
     return (
         <div style={{ position: 'relative' }}>
