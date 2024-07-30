@@ -2,11 +2,11 @@ import { useState, useRef } from 'react';
 import { AppBar, Toolbar } from '@mui/material';
 import { navigation } from './Navbar';
 
-import { UseAuth } from '../Auth/Auth';
+import { UseAuth } from '@contexts/Auth';
 import styles from './css/Navbar.module.css';
 import { Person } from '@mui/icons-material';
-import Dropdown from '../Dropdown/Dropdown';
-import Button from '../Button/CustomButton';
+import Dropdown from '@components/Dropdown/Dropdown';
+import Button from '@components/Button/CustomButton';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 interface NavbarAdminProps {
