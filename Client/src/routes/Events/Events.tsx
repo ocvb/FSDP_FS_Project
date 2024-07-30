@@ -181,11 +181,12 @@ export default function Events() {
                         </p>
                         <div className={styles.row}>
                             <Carousel
-                                autoPlay={false}
+                                autoPlay={true}
                                 animation='slide'
+                                interval={2500}
                                 indicatorIconButtonProps={{
                                     style: {
-                                        padding: '5px', // 1
+                                        display: 'none',
                                     },
                                 }}
                                 indicatorContainerProps={{
@@ -197,6 +198,7 @@ export default function Events() {
                                     width: '100vw',
                                     height: '100%',
                                     minHeight: '200px',
+                                    marginTop: '30px',
                                 }}
                             >
                                 <div className={styles.carouselItems}>
@@ -205,7 +207,7 @@ export default function Events() {
                                             ?.slice(0, 3)
                                             .map((item, index) => (
                                                 <div
-                                                    className={styles.carcol}
+                                                    className={styles.col}
                                                     key={index}
                                                 >
                                                     <div>
@@ -217,7 +219,9 @@ export default function Events() {
                                                             {item.title}
                                                         </h3>
                                                         <p className={styles.p}>
-                                                            {item.description}
+                                                            {item.description
+                                                                .slice(0, 250)
+                                                                .trim() + '...'}
                                                         </p>
                                                     </div>
                                                     <p
@@ -235,7 +239,7 @@ export default function Events() {
                                         ?.slice(3, 6)
                                         .map((item, index) => (
                                             <div
-                                                className={styles.carcol}
+                                                className={styles.col}
                                                 key={index}
                                             >
                                                 <div>
@@ -243,7 +247,9 @@ export default function Events() {
                                                         {item.title}
                                                     </h3>
                                                     <p className={styles.p}>
-                                                        {item.description}
+                                                        {item.description
+                                                            .slice(0, 250)
+                                                            .trim() + '...'}
                                                     </p>
                                                 </div>
                                                 <p className={styles.dateText}>
@@ -257,7 +263,7 @@ export default function Events() {
                                         ?.slice(6, 9)
                                         .map((item, index) => (
                                             <div
-                                                className={styles.carcol}
+                                                className={styles.col}
                                                 key={index}
                                             >
                                                 <div>
@@ -265,7 +271,9 @@ export default function Events() {
                                                         {item.title}
                                                     </h3>
                                                     <p className={styles.p}>
-                                                        {item.description}
+                                                        {item.description
+                                                            .slice(0, 250)
+                                                            .trim() + '...'}
                                                     </p>
                                                 </div>
                                                 <p className={styles.dateText}>
@@ -276,7 +284,7 @@ export default function Events() {
                                 </div>
                             </Carousel>
                         </div>
-                        <a href='#target-element'>
+                        {/* <a href='#target-element'>
                             <CustomButton
                                 type='button'
                                 text='more Events →'
@@ -291,7 +299,7 @@ export default function Events() {
                                     color: 'black',
                                 }}
                             />
-                        </a>
+                        </a> */}
                     </Container>
 
                     <Container
@@ -326,7 +334,9 @@ export default function Events() {
                                                 {item.title}
                                             </h3>
                                             <p className={styles.p}>
-                                                {item.description}
+                                                {item.description
+                                                    .slice(0, 250)
+                                                    .trim() + '...'}
                                             </p>
                                         </div>
                                         <p className={styles.dateText}>
@@ -367,7 +377,9 @@ export default function Events() {
                                                 {item.title}
                                             </h3>
                                             <p className={styles.p}>
-                                                {item.description}
+                                                {item.description
+                                                    .slice(0, 250)
+                                                    .trim() + '...'}
                                             </p>
                                         </div>
                                         <p className={styles.dateText}>
