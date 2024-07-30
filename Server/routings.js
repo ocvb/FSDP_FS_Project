@@ -17,9 +17,6 @@ router.use('/api/admin', adminAPI);
 const facilitiesAPI = require('@endpoints/Facilities');
 router.use('/api/facilities', facilitiesAPI);
 
-const eventsSearchAPI = require('@endpoints/EventsSearch');
-router.use('/api/eventsSearch', eventsSearchAPI);
-
 const skillshareAPI = require('@endpoints/SkillShare');
 router.use('/api/skillshare', skillshareAPI);
 

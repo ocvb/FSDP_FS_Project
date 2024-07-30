@@ -84,21 +84,29 @@ export default function EventsSearch() {
 
     return (
         <Box>
-            <p className={styles.header2}>{numEventsFound} Results Found</p>
-            {searchedEvents.map((item, index) => (
-                <div key={index} className={styles.row}>
-                    <Button
-                        className={styles.eventButton}
-                        onClick={() =>
-                            navigate('/events/details/', {
-                                state: { id: item.id },
-                            })
-                        }
-                    >
-                        <p className={styles.p}>{item.title}</p>
-                    </Button>
-                </div>
-            ))}
+            <p className={styles.header2}>
+                {numEventsFound > 0 ? `${numEventsFound} Results Found` : ''}
+            </p>
+            {numEventsFound < 1 ? (
+                <p className={styles.header2}>
+                    Sorry no events found that match those search conditions!
+                </p>
+            ) : (
+                searchedEvents.map((item, index) => (
+                    <div key={index} className={styles.row}>
+                        <Button
+                            className={styles.eventButton}
+                            onClick={() =>
+                                navigate('/events/details/', {
+                                    state: { id: item.id },
+                                })
+                            }
+                        >
+                            <p className={styles.p}>{item.title}</p>
+                        </Button>
+                    </div>
+                ))
+            )}
         </Box>
     );
 }
