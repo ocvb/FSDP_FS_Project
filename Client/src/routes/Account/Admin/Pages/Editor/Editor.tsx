@@ -47,6 +47,7 @@ export default function Editor() {
                     position: 'relative',
                     height: 'calc(100vh - 90px)',
                     width: '100%',
+                    maxWidth: '100%',
                     backgroundColor: 'white',
                 }}
             >
@@ -63,7 +64,11 @@ export default function Editor() {
                         selectedCategory={selected}
                     />
                 ) : (
-                    <Courses />
+                    <Courses
+                        postSnackbar={handleSnackbarFromModal}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                        selectedCategory={selected}
+                    />
                 )}
 
                 {snackbar != null && (
