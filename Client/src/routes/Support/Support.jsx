@@ -1,122 +1,89 @@
-import React, { useState, useRef, useContext } from "react";
-import { Container, TextField, Button, Typography, colors } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-// import { UserContext } from "@/context/UserContext";
+import React, { useState } from 'react';
 
-// import img from "@/assets/Support/support-img.jpg";
+// components
+import Navbar from '@/components/Navbar/Navbar.module'; // Importing the Navbar component
+import Footer from '@/components/Footer/Footer.module'; // Importing the Footer component
+import Button from '@/components/Button/CustomButton.module'; // Importing the existing Button component
+import Dropdown from '@/components/Dropdown/Dropdown.module'; // Importing the existing Dropdown component
 
-import style from "./css/Support.module.css";
+import './css/Support.css';
 
-// Components
-import Dropdown from "@/components/Dropdown/Dropdown.module"; 
-import Footer from "@/components/Footer/Footer.module";
+const EnquiryForm = () => {
+  const [formData, setFormData] = useState({
+    location: '',
+    urgency: '',
+    description: '',
+  });
 
-const SupportText = () => (
-  <div className={style.supportText}>
-    <Typography variant="h4" gutterBottom>
-    Is there something you want to inform us about?
-    </Typography>
-    <Typography variant="subtitle1" gutterBottom>
-    (i.e. incidents, repairs, feedback etc.)
-    </Typography>
-  </div>
-);
-
-const SupportImage = () => (
-  <div className={style.imgContainer}>
-    <img src="https://via.placeholder.com/400" alt="Placeholder" className={style.img} />
-  </div>
-);
-
-const SupportForm = () => {
-  const [form, setForm] = useState({ location: '', urgency: '', description: '' });
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
-
-  const handleInputChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleDropdownChange = (urgency) => {
-    setForm({ ...form, urgency });
-    setDropdownOpen(false);
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Data:', form);
-    try {
-      await axios.post('http://localhost:3001/api/support', form); 
-      setForm({ location: '', urgency: '', description: '' });
-    } catch (error) {
-      console.error('There was an error submitting the form!', error);
-    }
+    // Handle form submission, e.g., send data to backend
+    console.log(formData);
   };
-
-  const urgencyOptions = [
-    { name: 'None (feedback)', action: () => handleDropdownChange('None (feedback)') },
-    { name: 'Low (people are not too affected)', action: () => handleDropdownChange('Low (people are not too affected)') },
-    { name: 'Medium (people are moderately affected)', action: () => handleDropdownChange('Medium (people are moderately affected)') },
-    { name: 'High (people are severely affected)', action: () => handleDropdownChange('High (people are severely affected)') },
-  ];
 
   return (
-    <form onSubmit={handleSubmit} className={style.supportForm}>
-      <TextField
-        name="location"
-        label="Location"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={form.location}
-        onChange={handleInputChange}
-        required
-      />
-      <div className={style.dropdownWrapper}>
-        <Button
-          variant="outlined"
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-        >
-          {form.urgency || 'Select Urgency'}
-        </Button>
-        <Dropdown
-          ref={dropdownRef}
-          subitems={urgencyOptions}
-          dropdown={dropdownOpen}
-          onMouseLeave={() => setDropdownOpen(false)}
-        />
+    <div className="enquiry-form-container">
+      <div className="form-section">
+        <h2>Is there something you want to inform us about?</h2>
+        <p>(i.e. incidents, repairs, feedback etc.)</p>
+        <form onSubmit={handleSubmit} className="enquiry-form">
+          <label>
+            Location
+            <input
+              type="text"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              placeholder="Enter location..."
+            />
+          </label>
+          <label>
+            Urgency
+            <Dropdown
+              name="urgency"
+              value={formData.urgency}
+              onChange={handleChange}
+              options={[
+                { value: '', label: 'Select urgency level...' },
+                { value: 'None', label: 'None (message, feedback etc.)' },
+                { value: 'Low', label: 'Low (people are not too affected)' },
+                { value: 'Medium', label: 'Medium (people are moderately affected)' },
+                { value: 'High', label: 'High (people are severely affected)' },
+              ]}
+            />
+          </label>
+          <label>
+            Description
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Enter details..."
+            ></textarea>
+          </label>
+          <Button type="submit" text="Submit" />
+        </form>
       </div>
-      <TextField
-        name="description"
-        label="Description"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        multiline
-        rows={4}
-        value={form.description}
-        onChange={handleInputChange}
-        required
-      />
-      <Button type="submit" variant="contained" color="primary" className={style.submitButton}>
-        Submit
-      </Button>
-    </form>
+      <div className="image-container">
+        <img src="fsdp\Client\src\assets\Support\enquiries.png" alt="Community Image" />
+      </div>
+    </div>
   );
 };
 
-
-export default function Support() {
+const EnquiriesPage = () => {
   return (
-    <>
-      <SupportText />
-      <Container className={style.supportContainer}>
-        <SupportForm />
-        <SupportImage />
-      </Container>
+    <div>
+      <Navbar />
+      <EnquiryForm />
       <Footer />
-    </>
+    </div>
   );
-}
+};
+
+export default EnquiriesPage;

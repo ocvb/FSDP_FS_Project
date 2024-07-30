@@ -1,47 +1,53 @@
-.supportText {
-  text-align: left;
-  color: black;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.supportContainer {
+.enquiry-form-container {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  padding: 20px;
-  max-width: 1200px;
-  margin: auto;
-  flex-direction: row;
-  padding: 40px;
+  padding: 2rem;
 }
 
-.supportForm {
-  display: flex;
-  flex-direction: column;
-  width: 55%;
-  margin-right: 20px;
+.form-section {
+  flex: 1;
+  margin-right: 2rem;
 }
 
-.dropdownWrapper {
-  position: relative;
-  margin-top: 16px;
+.enquiry-form h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
 }
 
-.submitButton {
-  margin-top: 20px;
-  align-self: flex-start;
+.enquiry-form p {
+  font-size: 1rem;
+  margin-bottom: 2rem;
 }
 
-.imgContainer {
-  width: 40%;
+.enquiry-form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.enquiry-form input,
+.enquiry-form select,
+.enquiry-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.enquiry-form textarea {
+  height: 100px;
+}
+
+.image-container {
+  flex: 1;
   text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-.img {
+.image-container img {
   max-width: 100%;
   height: auto;
+  border-radius: 8px;
 }
