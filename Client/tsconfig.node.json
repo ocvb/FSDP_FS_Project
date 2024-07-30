@@ -18,7 +18,8 @@
             "@assets/*": ["./src/assets/*"],
             "@components/*": ["./src/components/*"],
             "@api/*": ["./src/api/*"],
-            "@routes/*": ["./src/routes/*"]
+            "@routes/*": ["./src/routes/*"],
+            "@contexts/*": ["./src/contexts/*"]
         }
     },
     "include": [
