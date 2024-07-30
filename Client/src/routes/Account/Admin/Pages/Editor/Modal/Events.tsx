@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Stack, TextField, IconButton, Link, Alert } from '@mui/material';
+import {
+    Stack,
+    TextField,
+    IconButton,
+    Link,
+    Alert,
+    Box,
+    Select,
+    MenuItem,
+    SelectChangeEvent,
+} from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -22,6 +32,8 @@ interface EventsProps {
         children?: string;
         severity?: 'success' | 'error' | 'info' | 'warning' | undefined;
     }) => void;
+    handleOnChangeSelect: (event: SelectChangeEvent<number>) => void;
+    selectedCategory?: number;
 }
 
 interface SelectedRow {
@@ -34,7 +46,11 @@ interface SelectedRow {
     userId?: number | null;
 }
 
-export default function Events({ postSnackbar }: EventsProps) {
+export default function Events({
+    postSnackbar,
+    handleOnChangeSelect,
+    selectedCategory,
+}: EventsProps) {
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState({
@@ -123,38 +139,76 @@ export default function Events({ postSnackbar }: EventsProps) {
             <GridToolbarContainer
                 sx={{
                     display: 'flex',
-                    justifyContent: 'end',
+                    justifyContent: ' space-between',
                     gap: '1rem',
                     alignItems: 'center',
                     padding: '1rem',
                 }}
             >
-                <IconButton
-                    onClick={() => {
-                        refetchEvents().catch(() =>
-                            console.log('Error refreshing')
-                        ),
-                            postSnackbar({
-                                children: 'Events refreshed',
-                                severity: 'success',
-                            });
+                <Box
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        gap: '1rem',
                     }}
                 >
-                    <RefreshIcon sx={{ fontSize: 25, color: 'black' }} />
-                </IconButton>
-                <Button
-                    type='button'
-                    text='Add record'
-                    startIcon={<AddIcon sx={{ fontSize: '25px !important' }} />}
-                    onClick={handleClick}
-                    sx={{
-                        backgroundColor: 'black',
-                        color: 'white',
-                        '&:hover': {
-                            backgroundColor: '#2a2a2a',
-                        },
-                    }}
-                />
+                    <Select
+                        variant='outlined'
+                        defaultValue={selectedCategory}
+                        onChange={handleOnChangeSelect}
+                        sx={{
+                            width: '200px',
+                            color: 'black',
+                            backgroundColor: 'white',
+                            '& .MuiMenu-list': {
+                                p: '5px',
+                            },
+                        }}
+                    >
+                        <MenuItem value={0}>Users</MenuItem>
+                        <MenuItem value={1}>Events</MenuItem>
+                        <MenuItem value={2}>Courses</MenuItem>
+                    </Select>
+                </Box>
+                <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
+                    <Button
+                        type='button'
+                        text='Refresh'
+                        startIcon={<RefreshIcon sx={{ fontSize: '25px' }} />}
+                        onClick={() => {
+                            refetchEvents().catch(() =>
+                                console.log('Error refreshing')
+                            ),
+                                postSnackbar({
+                                    children: 'Events refreshed',
+                                    severity: 'success',
+                                });
+                        }}
+                        sx={{
+                            backgroundColor: 'black',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#2a2a2a',
+                            },
+                        }}
+                    />
+                    <Button
+                        type='button'
+                        text='Add record'
+                        startIcon={
+                            <AddIcon sx={{ fontSize: '25px !important' }} />
+                        }
+                        onClick={handleClick}
+                        sx={{
+                            backgroundColor: 'black',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#2a2a2a',
+                            },
+                        }}
+                    />
+                </Box>
             </GridToolbarContainer>
         );
     }
@@ -270,7 +324,7 @@ export default function Events({ postSnackbar }: EventsProps) {
         },
         {
             field: 'userId',
-            headerName: 'Assigned Users',
+            headerName: 'Assigned ID(s)',
             type: 'number',
             editable: false,
             width: 160,
@@ -363,7 +417,7 @@ export default function Events({ postSnackbar }: EventsProps) {
             );
             setDate(row?.date ?? '');
             setPrice(row?.price ?? 0);
-            setUserId(row?.userId as null);
+            setUserId(row?.userId ?? 0);
         }
     };
 
@@ -414,7 +468,7 @@ export default function Events({ postSnackbar }: EventsProps) {
         setUserId(Number(event.target.value) ?? null);
     };
 
-    const handleSubmitUpdate = (event) => {
+    const handleSubmitUpdate = (event: React.FormEvent) => {
         event.preventDefault();
 
         interface EventData {
@@ -434,7 +488,7 @@ export default function Events({ postSnackbar }: EventsProps) {
             location,
             price,
             date,
-            userId: userId === null ? null : parseInt(userId),
+            userId: userId === null ? null : userId ?? 0,
         } as EventData;
 
         eventUpdateMutation.mutate(eventData, {
@@ -478,6 +532,7 @@ export default function Events({ postSnackbar }: EventsProps) {
                     }}
                     slots={{
                         toolbar: EditToolbar,
+                        pagination: () => null,
                     }}
                     sx={{
                         '& .MuiDataGrid-main': {

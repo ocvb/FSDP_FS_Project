@@ -21,9 +21,6 @@ router.get('/user', TokenAuthentication, async (req, res) => {
         } else {
             res.status(404).json({ message: 'No events found for this user' });
         }
-    } else {
-        const events = await Events.findAll();
-        res.status(200).json(events);
     }
 });
 

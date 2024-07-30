@@ -14,9 +14,12 @@ app.use(
         methods: 'GET, POST, PUT, DELETE',
     })
 );
+// Don't touch Above this line
+// Don't touch Beyond this line
 
-const startAPI = require('@endpoints/Api');
-app.use('/api', startAPI);
+// Add endpoints in routing.js
+const routings = require('./routings');
+app.use(routings);
 
 // Add your API endpoints here
 const userAPI = require('@endpoints/Account');

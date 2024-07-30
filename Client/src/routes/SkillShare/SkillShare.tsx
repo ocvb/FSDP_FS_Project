@@ -1,17 +1,11 @@
-import {
-    Box,
-    TextField,
-    FormLabel,
-    FormControl,
-    FormGroup,
-} from '@mui/material';
+import { Box, TextField, FormControl, FormGroup } from '@mui/material';
 import Button from '@components/Button/CustomButton';
 
 import css from './SkillShare.module.css';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-import { Form, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 interface SkillShareDataResponse {
@@ -213,6 +207,10 @@ function SkillshareForm() {
                 gap: '0.5rem',
                 alignItems: 'center',
                 width: '100%',
+            }}
+            onSubmit={(e) => {
+                e.preventDefault();
+                alert('Form submitted!');
             }}
         >
             <FormGroup

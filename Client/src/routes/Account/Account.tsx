@@ -8,13 +8,18 @@ import bgImage from '@/assets/Account/login-bg.jpg';
 import Login from './Modal/Login';
 import Register from './Modal/Register';
 
+interface ModalChangedData {
+    login?: boolean;
+    register?: boolean;
+}
+
 export default function Account() {
     const [modalChanged, setModalChanged] = useState({
         login: true,
         register: false,
-    } as { login: boolean; register: boolean });
+    } as ModalChangedData);
 
-    const handleRecievedData = (data: SetStateAction<{ login: boolean; register: boolean; }>) => {
+    const handleRecievedData = (data: SetStateAction<ModalChangedData>) => {
         setModalChanged(data);
     };
 

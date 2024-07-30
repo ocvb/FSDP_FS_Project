@@ -7,17 +7,6 @@ export default function Notifications() {
     return (
         <>
             <div
-                className={mainStyles.header}
-                style={{
-                    padding: '1rem',
-                    backgroundColor: '#F9F9F9',
-                    width: '100%',
-                }}
-            >
-                <p>Notifications</p>
-            </div>
-
-            <div
                 style={{
                     display: 'flex',
                     flexDirection: 'column',
