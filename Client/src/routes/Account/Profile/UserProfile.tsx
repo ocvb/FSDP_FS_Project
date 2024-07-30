@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { UseAuth } from '@components/Auth/Auth';
+import { UseAuth } from '@contexts/Auth';
 import { TextField, useTheme } from '@mui/material';
 import PasswordVisibility from '@components/PasswordVIsibility/PasswordVisibility';
 import Button from '@components/Button/CustomButton';
 
-import mainStyles from './css/Profile.module.css';
+import './css/Profile.module.css';
 import './css/UserProfile.module.css';
 import { useMutation } from '@tanstack/react-query';
 import { UsersDataResponse } from '@api/ApiType';
 
 export default function UserProfile() {
-    const theme = useTheme();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -22,8 +21,8 @@ export default function UserProfile() {
     const [success, setSuccess] = useState(false);
 
     useEffect(() => {
-        setUsername(fetchAuth.User?.username ?? '');
-        setUserId(fetchAuth.User?.id ?? 0);
+        setUsername(fetchAuth.User.username ?? '');
+        setUserId(fetchAuth.User.id ?? 0);
     }, [fetchAuth.User]);
 
     const handleUsernameChange = (event: {

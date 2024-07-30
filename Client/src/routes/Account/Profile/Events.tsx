@@ -12,7 +12,7 @@ import {
     Paper,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import { UseAuth } from '@components/Auth/Auth';
+import { UseAuth } from '@contexts/Auth';
 import { EventsDataResponse } from '@api/ApiType';
 
 export default function Events() {
@@ -26,7 +26,7 @@ export default function Events() {
                 'http://localhost:3001/api/events/user',
                 {
                     params: {
-                        userId: fetchAuth.User?.id,
+                        userId: fetchAuth.User.id,
                     },
                     headers: { Authorization: `Bearer ${retrieveToken}` },
                 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 // Components
-import { UseAuth } from '@components/Auth/Auth';
+import { UseAuth } from '@contexts/Auth';
 import { Box, Stack } from '@mui/material';
 import MuiButton from '@mui/material/Button';
 import UserProfile from './UserProfile';
@@ -25,7 +25,6 @@ export default function Profile() {
             tabs[index].skip != true
         ) {
             setNavigationTab(index);
-            console.log('Tab changed to:', tabs[index].name);
         }
     };
 
