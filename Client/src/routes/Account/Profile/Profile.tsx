@@ -20,10 +20,9 @@ export default function Profile() {
         event: React.MouseEvent<HTMLButtonElement>,
         index: number
     ) => {
-        console.log(event);
         if (
-            (event.target as HTMLButtonElement).id === tabs[index].name &&
-            tabs[index].name != 'Logout'
+            event.currentTarget.dataset.name === tabs[index].name &&
+            tabs[index].skip != true
         ) {
             setNavigationTab(index);
             console.log('Tab changed to:', tabs[index].name);
@@ -107,10 +106,11 @@ export default function Profile() {
                 className={styles.awdawdaw}
                 width={'100%'}
             >
+                {navigationTab}
                 {tabs.map((tab, index) => (
                     <MuiButton
+                        data-name={tab.name}
                         key={index}
-                        id={`${tab.name}`}
                         disableTouchRipple
                         disableFocusRipple
                         sx={{
@@ -155,8 +155,8 @@ export default function Profile() {
                             </Stack>
                             {navigationTab === index
                                 ? tab.render
-                                : tab.skip == false && (
-                                      <Stack>
+                                : tab.skip != true && (
+                                      <Stack alignItems={'start'}>
                                           <p style={{ fontSize: '1rem' }}>
                                               {tab.desc}
                                           </p>
