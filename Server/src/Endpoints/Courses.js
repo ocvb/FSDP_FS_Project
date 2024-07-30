@@ -14,13 +14,13 @@ router.post('/category', async (req, res) => {
         if (category) {
             courses = await Courses.findAll({
                 where: { category: category },
-                attributes: ['id', 'title', 'category', 'description'],
+                // attributes: ['id', 'title', 'category', 'description'],
             });
         } else {
             courses = await Courses.findAll();
         }
 
-
+        console.log(courses)
         res.status(200).json(courses);
     } catch (error) {
         console.error('Error fetching courses', error.message);

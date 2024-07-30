@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import {
+    Container,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+} from '@mui/material';
 import images from '@/assets/Courses/Courses.jpg';
 import styles from '@/routes/Courses/css/Courses.module.css';
 import axios from 'axios';
+import { Query, useQuery } from '@tanstack/react-query';
 
 // Define the type for your course objects
 interface Course {
@@ -15,8 +25,6 @@ interface Course {
 // Function to fetch data from the API
 const fetchCoursesByCategory = async (category: string): Promise<Course[]> => {
     try {
-        const response = await axios.post('http://localhost:3001/api/courses/', {category: "Health & Wellness"}); // Ensure this endpoint is correct
-        return response.data
     } catch (error) {
         console.error('Error fetching courses:', error);
         return [];
@@ -24,9 +32,21 @@ const fetchCoursesByCategory = async (category: string): Promise<Course[]> => {
 };
 
 
+
 export default function HealthWellness() {
     const [courses, setCourses] = useState<Course[]>([]);
-    
+
+    const { data } = useQuery({
+        queryKey: ['courses'],
+        queryFn: async () => {
+            const response = await axios.post(
+                'http://localhost:3001/api/courses/category',
+                { category: 'Health & Wellness' }
+            ); // Ensure this endpoint is correct
+            return response.data;
+        },
+    });
+
 
     return (
         <div style={{ position: 'relative' }}>
@@ -56,8 +76,8 @@ export default function HealthWellness() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {courses.length > 0 ? (
-                                courses.map((course) => (
+                            {data.length > 0 ?(
+                                data.map((course) => (
                                     <TableRow key={course.id}>
                                         <TableCell>{course.id}</TableCell>
                                         <TableCell>{course.title}</TableCell>
