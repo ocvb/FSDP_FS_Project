@@ -110,10 +110,9 @@
 
 .carouselItems {
     display: flex;
-    flex-wrap: wrap; /* Wrap items if they overflow the container width */
     gap: 1rem; /* Add spacing between items */
-    margin-left: 50px;
-    margin-right: 50px;
+    margin-left: 100px;
+    margin-right: 100px;
     height: 100%;
 }
 
