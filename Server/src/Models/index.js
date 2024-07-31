@@ -1,64 +1,18 @@
-const { Sequelize, DataTypes } = require("sequelize");
-const process = require("process");
-const db = new Sequelize({
-  dialect: "sqlite",
-  storage: __dirname + "/" + process.env.db_file,
-  logging: false,
-});
+const db = require('@models/db');
 
-const Users = db.define("users", {
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  uuid: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    allowNull: false,
-  },
-  role: {
-    type: DataTypes.STRING,
-    defaultValue: "member",
-    allowNull: false,
-  },
+const Users = require('@models/Users');
+const Events = require('@models/Events');
+const Facilities = require('@models/Facilities');
+const SkillShares = require('@models/SkillShares');
+const Courses = require('@models/Courses');
+const Support = require('@models/Support');
 
-});
-
-const Events = db.define("events", {
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  description: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  location: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  date: {
-    type: DataTypes.DATEONLY,
-    allowNull: false,
-  },
-  price: {
-    type: DataTypes.DOUBLE,
-    allowNull: false,
-  },
-});
-
-Users.hasMany(Events), {
-  foreignKey: 'userId',
+module.exports = {
+    Users,
+    Events,
+    SkillShares,
+    Facilities,
+    Courses,
+    Support,
+    db,
 };
-Events.belongsTo(Users, {
-  foreignKey: 'userId',
-  constraints: false,
-  allowNull: true,
-});
-
-
-module.exports = { db, Users, Events, Rewards, Support };
