@@ -29,4 +29,8 @@ router.use('/api/courses', coursesAPI);
 const supportAPI = require('@endpoints/Support');
 router.use('/api/support', supportAPI);
 
+const rewardAPI = require('@endpoints/Rewards');
+router.use('/api/rewards', rewardAPI);
+
+
 module.exports = router;
