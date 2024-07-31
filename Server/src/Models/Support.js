@@ -1,5 +1,5 @@
+const db = require('@models/db');
 const { DataTypes } = require('sequelize');
-const { db } = require('@models');
 
 const Support = db.define('support', {
     location: {
@@ -19,3 +19,5 @@ const Support = db.define('support', {
         allowNull: true,
     },
 });
+
+module.exports = Support;

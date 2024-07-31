@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
 const db = require('@models/db');
+const { DataTypes } = require('sequelize');
 
 const Courses = db.define('courses', {
     title: {
