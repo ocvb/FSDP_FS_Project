@@ -1,8 +1,12 @@
 const db = require('@models/db');
 const { DataTypes } = require('sequelize');
 
-const Courses = db.define('courses', {
-    title: {
+const Support = db.define('support', {
+    location: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    urgency: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -10,10 +14,10 @@ const Courses = db.define('courses', {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    category: {
-        type: DataTypes.TEXT,
-        allowNull: false,
+    sender: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
 });
 
-module.exports = Courses;
+module.exports = Support;

@@ -5,6 +5,7 @@ const Events = require('@models/Events');
 const Facilities = require('@models/Facilities');
 const SkillShares = require('@models/SkillShares');
 const Courses = require('@models/Courses');
+const Support = require('@models/Support');
 const Rewards = require('@models/Rewards');
 
 module.exports = {
@@ -13,6 +14,7 @@ module.exports = {
     SkillShares,
     Facilities,
     Courses,
+    Support,
     Rewards,
     db,
 };
