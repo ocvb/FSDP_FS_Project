@@ -27,6 +27,17 @@ export interface EventsDataResponse {
     message?: string;
 }
 
+export interface SkillShareDataResponse {
+    id: number;
+    title: string;
+    description: string;
+    category: string;
+    postedBy: string;
+    numberOfResponded: number;
+
+    message: string;
+}
+
 export interface CoursesDataResponse {
     status?: string;
     data?: {
