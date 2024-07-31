@@ -5,15 +5,7 @@ const Events = require('@models/Events');
 const Facilities = require('@models/Facilities');
 const SkillShares = require('@models/SkillShares');
 const Courses = require('@models/Courses');
-
-Users.hasMany(Events, {
-    foreignKey: 'userId',
-});
-Events.belongsTo(Users, {
-    foreignKey: 'userId',
-    constraints: false,
-    allowNull: true,
-});
+const Rewards = require('@models/Rewards');
 
 module.exports = {
     Users,
@@ -21,5 +13,6 @@ module.exports = {
     SkillShares,
     Facilities,
     Courses,
+    Rewards,
     db,
 };

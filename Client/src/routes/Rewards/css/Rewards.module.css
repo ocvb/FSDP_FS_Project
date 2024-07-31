@@ -1,0 +1,60 @@
+.header {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.headerImage {
+  width: 100%;
+  height: auto;
+}
+
+.headerText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.partners {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.partnersLogos {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.partnersLogos img {
+  max-width: 150px;
+  margin: 10px;
+}
+
+.howItWorks {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.steps {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.step {
+  flex: 1 1 30%;
+  margin: 10px;
+  padding: 20px;
+  background-color: #e0f7fa;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.step h3 {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
