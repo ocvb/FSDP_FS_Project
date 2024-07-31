@@ -1,4 +1,4 @@
-const { yup } = require('yup');
+const yup = require('yup');
 
 exports.UserSchema = yup.object().shape({
     username: yup.string().min(1).required(),
