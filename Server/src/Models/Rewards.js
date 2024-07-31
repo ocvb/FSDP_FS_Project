@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
 const db = require('@models/db');
+const { DataTypes } = require('sequelize');
 
 const Rewards = db.define('rewards', {
     title: {
@@ -17,6 +17,23 @@ const Rewards = db.define('rewards', {
     claimed: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+        allowNull: false,
+    },
+    popular: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+    },
+    endDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    category: {
+        type: DataTypes.STRING,
         allowNull: false,
     },
 });

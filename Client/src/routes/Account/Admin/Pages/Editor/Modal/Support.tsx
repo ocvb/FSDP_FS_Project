@@ -7,6 +7,7 @@ import {
     Alert,
     FormControl,
     Box,
+    SelectChangeEvent,
 } from '@mui/material';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import AddIcon from '@mui/icons-material/Add';
@@ -24,6 +25,8 @@ interface SupportProps {
         children?: string;
         severity?: 'success' | 'error' | 'info' | 'warning' | undefined;
     }) => void;
+    handleOnChangeSelect: (event: SelectChangeEvent<number>) => void;
+    selectedCategory: number;
 }
 
 interface SelectedRow {
