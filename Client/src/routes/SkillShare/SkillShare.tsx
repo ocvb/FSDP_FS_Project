@@ -2,35 +2,30 @@ import { Box, TextField, FormControl, FormGroup } from '@mui/material';
 import Button from '@components/Button/CustomButton';
 
 import css from './SkillShare.module.css';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { QueryObserverResult, useQuery } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
 
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { UseAuth } from '@contexts/Auth';
-
-interface SkillShareDataResponse {
-    title: string;
-    description: string;
-    category: string;
-    postedBy: string;
-    numberOfResponded: number;
-}
+import { SkillShareDataResponse } from '@api/ApiType';
 
 export default function SkillShare() {
     const { data: SkillshareData, refetch: refetchSkillshare } = useQuery({
         queryKey: ['skillshare'],
         queryFn: async () => {
-            const r = await axios.get<SkillShareDataResponse[]>(
-                'http://localhost:3001/api/skillshare'
-            );
-            return r.data;
+            return (
+                await axios.get<SkillShareDataResponse[]>(
+                    'http://localhost:3001/api/skillshare'
+                )
+            ).data;
         },
     });
 
     const maxDescriptionLength = 200;
     const navigate = useNavigate();
     const [displayForm, setDisplayForm] = useState(false);
+    const { fetchAuth } = UseAuth();
 
     return (
         <Box
@@ -102,9 +97,27 @@ export default function SkillShare() {
                         onClick={() => setDisplayForm(!displayForm)}
                     />
 
-                    {displayForm && (
-                        <SkillshareForm refetchSkillshare={refetchSkillshare} />
-                    )}
+                    {displayForm &&
+                        (fetchAuth.isAuthenticated ? (
+                            <SkillshareForm
+                                refetchSkillshare={refetchSkillshare}
+                            />
+                        ) : (
+                            <Button
+                                type='button'
+                                text='Sign in to post a request'
+                                sx={{
+                                    padding: '0.3rem 1.2rem',
+                                    backgroundColor: '#5cb794',
+                                    color: 'white',
+                                    borderRadius: '4rem',
+                                    '&:hover': {
+                                        backgroundColor: '#52a987',
+                                    },
+                                }}
+                                onClick={() => navigate('/account')}
+                            />
+                        ))}
                 </div>
             </Box>
 
@@ -127,8 +140,8 @@ export default function SkillShare() {
                     margin={'0 auto'}
                 >
                     {SkillshareData?.slice(
-                        Math.round(SkillshareData?.length / 3),
-                        Math.round(SkillshareData?.length * 2)
+                        Math.round(SkillshareData.length / 3),
+                        Math.round(SkillshareData.length * 2)
                     ).map((_, rowIndex) => {
                         return (
                             <div className={css.row} key={rowIndex}>
@@ -201,12 +214,22 @@ export default function SkillShare() {
 }
 
 interface SkillshareFormProp {
-    refetchSkillshare: () => void;
+    refetchSkillshare: () => Promise<QueryObserverResult>;
 }
 
 function SkillshareForm(props: SkillshareFormProp) {
     const { fetchAuth } = UseAuth();
-    const { refetchSkillshare } = props; // Assuming refetchSkillshare is passed as a prop
+    const { refetchSkillshare } = props;
+
+    interface MessageState {
+        message?: string;
+        error?: string;
+    }
+
+    const [message, setMessage] = useState<MessageState>({
+        message: '',
+        error: '',
+    });
 
     const postSkillshare = async (data) => {
         const response = await axios.post(
@@ -230,9 +253,10 @@ function SkillshareForm(props: SkillshareFormProp) {
             onSubmit={(e) => {
                 e.preventDefault();
                 const formData = new FormData(e.target as HTMLFormElement);
+
                 const formSubmittedData = {
                     title: formData.get('title'),
-                    postedBy: fetchAuth.User.username,
+                    postedBy: formData.get('postedBy'),
                     description: formData.get('description'),
                     category: formData.get('category'),
                 };
@@ -240,10 +264,19 @@ function SkillshareForm(props: SkillshareFormProp) {
                 postSkillshare(formSubmittedData)
                     .then((res) => {
                         console.log(res);
-                        refetchSkillshare();
+                        refetchSkillshare().catch(() => {
+                            return;
+                        });
+                        setMessage(() => ({
+                            message: 'Your request has been posted!',
+                        }));
                     })
-                    .catch((err) => {
-                        console.log(err);
+                    .catch((err: AxiosError<SkillShareDataResponse>) => {
+                        setMessage(() => ({
+                            error:
+                                err.response?.data.message ??
+                                'Please try again..',
+                        }));
                     });
             }}
         >
@@ -272,6 +305,7 @@ function SkillshareForm(props: SkillshareFormProp) {
                                 paddingTop: '0',
                             },
                         }}
+                        value={fetchAuth.User.username}
                     />
                 </div>
                 <div style={{ fontSize: '1.1rem' }}>
@@ -330,6 +364,14 @@ function SkillshareForm(props: SkillshareFormProp) {
                     </TextField>
                     {'.'}
                 </div>
+                <p
+                    style={{
+                        textAlign: 'center',
+                        color: message.message?.length ? 'green' : 'red',
+                    }}
+                >
+                    {message.message ?? message.error}
+                </p>
             </FormGroup>
 
             <Button
