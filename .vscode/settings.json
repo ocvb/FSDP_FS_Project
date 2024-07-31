@@ -1,5 +1,10 @@
 {
-    "dataworkspace.excludedProjects": [
-        "jnj/jnj.sqlproj"
-    ]
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "always"
+    },
+    "editor.formatOnType": false,
+    "editor.tabSize": 4,
+    "eslint.workingDirectories": ["./Client", "./Server"]
 }
