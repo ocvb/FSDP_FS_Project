@@ -26,4 +26,7 @@ router.use('/api/skillshare', skillshareAPI);
 const coursesAPI = require('@endpoints/Courses');
 router.use('/api/courses', coursesAPI);
 
+const rewardAPI = require('@endpoints/Rewards');
+app.use('/api/rewards', rewardAPI);
+
 module.exports = router;
