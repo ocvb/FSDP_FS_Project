@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-import mainStyles from './css/Profile.module.css';
+import './css/Profile.module.css';
 import styles from './css/Events.module.css';
 import {
     Table,
@@ -14,6 +12,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { UseAuth } from '@contexts/Auth';
 import { EventsDataResponse } from '@api/ApiType';
+import { callAPI } from '@api/EndpointsQueries';
 
 export default function Events() {
     const { fetchAuth } = UseAuth();
@@ -22,12 +21,10 @@ export default function Events() {
     const { data: eventData } = useQuery({
         queryKey: ['userEvents'],
         queryFn: async () => {
-            const response = await axios.get<EventsDataResponse['data'][]>(
-                'http://localhost:3001/api/events/user',
+            const response = await callAPI.post<EventsDataResponse['data'][]>(
+                '/user/event',
+                { userId: fetchAuth.User.id },
                 {
-                    params: {
-                        userId: fetchAuth.User.id,
-                    },
                     headers: { Authorization: `Bearer ${retrieveToken}` },
                 }
             );

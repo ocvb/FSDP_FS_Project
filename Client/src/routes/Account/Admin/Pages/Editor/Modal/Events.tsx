@@ -24,7 +24,7 @@ import { MoreHoriz } from '@mui/icons-material';
 import Dropdown from '@components/Dropdown/Dropdown';
 import PopupModal from '@components/PopupModal/PopupModal';
 
-import { fetchEvents } from '@api/EndpointsQueries';
+import { callAPI, fetchEvents } from '@api/EndpointsQueries';
 import { EventsDataResponse } from '@api/ApiType';
 import EditorSelector from '@components/Admin/EditorSelector';
 
@@ -90,8 +90,8 @@ export default function Events({
         mutationKey: ['events'],
         mutationFn: async (data: EventsDataResponse['data']) => {
             console.log(data);
-            const response = await axios.put<EventsDataResponse>(
-                `http://localhost:3001/api/admin/event/${data?.id}`,
+            const response = await callAPI.put<EventsDataResponse>(
+                `/admin/event/${data?.id}`,
                 data,
                 {
                     headers: {

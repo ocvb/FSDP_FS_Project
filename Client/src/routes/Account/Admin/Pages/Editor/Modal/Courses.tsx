@@ -25,7 +25,7 @@ import { MoreHoriz } from '@mui/icons-material';
 import Dropdown from '@components/Dropdown/Dropdown';
 import PopupModal from '@components/PopupModal/PopupModal';
 
-import { fetchCourses } from '@api/EndpointsQueries';
+import { callAPI, fetchCourses } from '@api/EndpointsQueries';
 import { CoursesDataResponse } from '@api/ApiType';
 import EditorSelector from '@components/Admin/EditorSelector';
 
@@ -77,8 +77,8 @@ export default function Course({
         mutationKey: ['courses'],
         mutationFn: async (data: CoursesDataResponse['data']) => {
             console.log(data);
-            const response = await axios.put<CoursesDataResponse>(
-                `http://localhost:3001/api/admin/course/${data?.id}`,
+            const response = await callAPI.put<CoursesDataResponse>(
+                `/admin/course/${data?.id}`,
                 data,
                 {
                     headers: {
