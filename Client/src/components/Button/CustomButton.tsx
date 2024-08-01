@@ -19,6 +19,7 @@ interface CustomButtonProps {
     ref?: ForwardedRef<HTMLButtonElement>;
     href?: string;
     color?: 'primary' | 'secondary';
+    disableRipple?: boolean;
 }
 
 const CustomButton = forwardRef(
@@ -37,6 +38,7 @@ const CustomButton = forwardRef(
             endIcon,
             href,
             color,
+            disableRipple,
         },
         ref
     ) => {
@@ -44,6 +46,7 @@ const CustomButton = forwardRef(
         return (
             <Button
                 ref={ref}
+                disableRipple={disableRipple}
                 fullWidth={fullWidth}
                 sx={{
                     color: theme.palette.text.primary,
