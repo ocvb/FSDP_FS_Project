@@ -5,24 +5,6 @@ const { TokenAuthentication } = require('@middleware/TokenAuthentication');
 const { EventValidation } = require('@validations/EventValidation');
 
 // Events APIs
-router.get('/user', TokenAuthentication, async (req, res) => {
-    const { userId } = req.query;
-
-    if (userId) {
-        const eventsByUserId = await Events.findAll({
-            where: { userId: userId },
-            attributes: ['id', 'title', 'location', 'date', 'price'],
-        });
-
-        console.log(eventsByUserId);
-        if (eventsByUserId.length > 0) {
-            res.status(200).json(eventsByUserId);
-        } else {
-            res.status(404).json({ message: 'No events found for this user' });
-        }
-    }
-});
-
 router.get('/', async (req, res) => {
     const events = await Events.findAll();
     res.status(200).json(events);
@@ -105,7 +87,7 @@ router.put('/:id', TokenAuthentication, async (req, res) => {
 });
 
 // For the DELETE request
-router.delete('/:id', TokenAuthentication, async (req, res) => {
+router.delete('/', TokenAuthentication, async (req, res) => {
     const { id } = req.params;
     try {
         const event = await Events.destroy({
