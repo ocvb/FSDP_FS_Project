@@ -10,9 +10,9 @@ import './css/Profile.module.css';
 import './css/UserProfile.module.css';
 import { useMutation } from '@tanstack/react-query';
 import { UsersDataResponse } from '@api/ApiType';
+import { callAPI } from '@api/EndpointsQueries';
 
 export default function UserProfile() {
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [userId, setUserId] = useState(0);
@@ -47,8 +47,8 @@ export default function UserProfile() {
 
     const userMutation = useMutation({
         mutationFn: async (data: DataResponses['data']) => {
-            const r = await axios.put<DataResponses>(
-                `http://localhost:3001/api/user/update/${userId}`,
+            const r = await callAPI.put<DataResponses>(
+                `/user/update/${userId}`,
                 data,
                 {
                     headers: {
