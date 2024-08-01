@@ -5,7 +5,9 @@ const {
     Events,
     Courses,
     SkillShares,
+    Rewards,
     UserEvents,
+    UserRewards,
 } = require('@models/index');
 const bcrypt = require('bcrypt');
 const process = require('process');
@@ -109,6 +111,12 @@ router.get('/', async (req, res) => {
         },
     ]);
 
+    // const presetRewards = await Rewards.bulkCreate([
+    //     {
+
+    //     }
+    // ])
+
     const presetUserEvent = await UserEvents.bulkCreate([
         {
             userId: 1,
@@ -128,11 +136,23 @@ router.get('/', async (req, res) => {
         },
     ]);
 
+    const presetUserReward = await UserRewards.bulkCreate([
+        {
+            userId: 2,
+            rewardId: 1,
+        },
+        {
+            userId: 2,
+            rewardId: 2,
+        },
+    ]);
+
     presetUsers;
     presetEvents;
     presetSkillshare;
     presetCourses;
     presetUserEvent;
+    presetUserReward;
 
     res.send('API is running, preset data have been loaded.');
 });
