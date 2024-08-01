@@ -11,6 +11,9 @@ import Events from './Events';
 import styles from './css/Profile.module.css';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Award, Bell, Calendar, Ticket, User } from 'lucide-react';
+import Rewards from './Reward';
+
+import { motion } from 'framer-motion';
 
 export default function Profile() {
     const [navigationTab, setNavigationTab] = useState(-1);
@@ -52,6 +55,7 @@ export default function Profile() {
             name: 'Rewards',
             icon: <Award />,
             desc: 'View and redeem your rewards points',
+            render: <Rewards />,
         },
         {
             skip: true,
@@ -105,7 +109,6 @@ export default function Profile() {
                 className={styles.awdawdaw}
                 width={'100%'}
             >
-                {navigationTab}
                 {tabs.map((tab, index) => (
                     <MuiButton
                         data-name={tab.name}
@@ -152,15 +155,30 @@ export default function Profile() {
                                 {tab.icon}
                                 <b>{tab.name}</b>
                             </Stack>
-                            {navigationTab === index
-                                ? tab.render
-                                : tab.skip != true && (
-                                      <Stack alignItems={'start'}>
-                                          <p style={{ fontSize: '1rem' }}>
-                                              {tab.desc}
-                                          </p>
-                                      </Stack>
-                                  )}
+
+                            {navigationTab === index ? (
+                                <motion.div
+                                    initial={{ maxHeight: '0vh' }}
+                                    animate={{
+                                        maxHeight: '100vh',
+                                    }}
+                                    transition={{
+                                        duration: 1.6,
+                                        ease: [0.55, 0.02, -0.15, 1.7],
+                                    }}
+                                    style={{ overflow: 'hidden' }}
+                                >
+                                    {tab.render}
+                                </motion.div>
+                            ) : (
+                                tab.skip != true && (
+                                    <Stack alignItems={'start'}>
+                                        <p style={{ fontSize: '1rem' }}>
+                                            {tab.desc}
+                                        </p>
+                                    </Stack>
+                                )
+                            )}
                         </Stack>
                     </MuiButton>
                 ))}
