@@ -20,6 +20,7 @@ import {
 import Account from '@routes/Account/Account';
 import SkillShare from '@routes/SkillShare/SkillShare';
 import Rewards from '@routes/Rewards/Rewards';
+import UserRewards from '@routes/Rewards/UserRewards';
 import Support from '@routes/Support/Support';
 import Profile from '@routes/Account/Profile/Profile';
 import Admin from '@routes/Account/Admin/Admin';
@@ -91,7 +92,11 @@ export default function App() {
                             element={<LifeLongLearning />}
                         />
                     </Route>
-                    <Route path='/rewards' element={<Rewards />} />
+                    <Route
+                        path='/rewards'
+                        element={fetchAuth ? <UserRewards /> : <Rewards />}
+                    />{' '}
+                    {/* Conditional rendering for rewards */}
                     <Route path='/support' element={<Support />} />
                     <Route path='/skill-share' element={<SkillShare />} />
                     <Route path='/account' element={<Account />} />

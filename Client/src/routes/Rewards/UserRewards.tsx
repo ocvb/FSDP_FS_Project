@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import headerImage from '@/assets/Rewards/rewards-header.jpg';
-import RewardDetailsModal from './Modals/RewardDetails';
+import RewardDetailsModal from './Modal/RewardDetails';
 import style from './css/UserRewards.module.css';
-import CustomButton from '@/components/Button/CustomButton';
-import Footer from '@/components/Footer/Footer';
+import CustomButton from '@components/Button/CustomButton';
+import Footer from '@components/Footer/Footer';
 
 interface Reward {
     id: number;

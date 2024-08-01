@@ -2,8 +2,8 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 
 // components
-import Footer from '@/components/Footer/Footer';
-import CustomButton from '@/components/Button/CustomButton';
+import Footer from '@components/Footer/Footer';
+import CustomButton from '@components/Button/CustomButton';
 
 import enquiryIMG from '@/assets/Support/enquiries.png';
 import styles from './css/Support.module.css';
