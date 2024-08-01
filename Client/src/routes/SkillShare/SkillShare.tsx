@@ -1,4 +1,4 @@
-import { Box, TextField, FormControl, FormGroup } from '@mui/material';
+import { Box, TextField, FormControl, FormGroup, Link } from '@mui/material';
 import Button from '@components/Button/CustomButton';
 
 import css from './SkillShare.module.css';
@@ -14,11 +14,8 @@ export default function SkillShare() {
     const { data: SkillshareData, refetch: refetchSkillshare } = useQuery({
         queryKey: ['skillshare'],
         queryFn: async () => {
-            return (
-                await axios.get<SkillShareDataResponse[]>(
-                    'http://localhost:3001/api/skillshare'
-                )
-            ).data;
+            return (await axios.get<SkillShareDataResponse[]>('/skillshare'))
+                .data;
         },
     });
 
@@ -172,10 +169,18 @@ export default function SkillShare() {
                                                         )
                                                         .trim() + '...'}
                                                 </p>
-                                                <Button
-                                                    type='button'
-                                                    text='View post...'
-                                                />
+                                                <Link
+                                                    component={'a'}
+                                                    href=''
+                                                    onClick={() => {
+                                                        navigate(
+                                                            `/skill-share/${item.id}`
+                                                        );
+                                                    }}
+                                                    underline='hover'
+                                                >
+                                                    Read more
+                                                </Link>
                                             </div>
 
                                             <div
