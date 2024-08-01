@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { Users, Events, UserEvents } = require('@models/index');
+const {
+    Users,
+    Events,
+    UserEvents,
+    Rewards,
+    UserRewards,
+} = require('@models/index');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { TokenAuthentication } = require('@middleware/TokenAuthentication');
-const { where } = require('sequelize/lib/sequelize');
 
 function generateToken(user) {
     return jwt.sign({ data: user }, process.env.JWT_SECRET, {
@@ -166,6 +171,12 @@ router.put('/update', TokenAuthentication, async (req, res) => {
 router.post('/event', TokenAuthentication, async (req, res) => {
     const { userId } = req.body;
 
+    if (userId <= 0) {
+        res.status(404).json({
+            message: 'Invalid User ID.',
+        });
+    }
+
     const checkUser = await UserEvents.findAll({
         where: { userId },
     });
@@ -179,6 +190,28 @@ router.post('/event', TokenAuthentication, async (req, res) => {
     console.log(retrieveEvent);
 
     res.status(200).json(retrieveEvent);
+});
+
+router.post('/rewards', async (req, res) => {
+    const { userId } = req.body;
+
+    if (userId <= 0) {
+        res.status(404).json({
+            message: 'Invalid User ID.',
+        });
+    }
+
+    const checkUser = await UserRewards.findAll({
+        where: { userId },
+    });
+
+    const rewardId = await checkUser.map((event) => event.rewardId);
+
+    const retrieveReward = await Rewards.findAll({
+        where: { id: rewardId },
+    });
+
+    res.status(200).json(retrieveReward);
 });
 
 module.exports = router;
