@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { SkillShares } = require('@models/index');
-const { SkillshareSchema } = require('@schema/SkillshareSchema');
 const { SkillshareValidation } = require('@validations/SkillshareValidation');
 
 // GET route to fetch all skill shares
@@ -16,6 +15,15 @@ router.post('/', SkillshareValidation, async (req, res) => {
         ...req.validation,
     });
     res.status(201).json(skillShare);
+});
+
+router.post('/:id', async (req, res) => {
+    console.log(req.params);
+    const skillShare = await SkillShares.findByPk(req.params.id);
+    if (!skillShare) {
+        return res.status(404).json({ message: 'Skill share not found' });
+    }
+    res.status(200).json(skillShare);
 });
 
 module.exports = router;
