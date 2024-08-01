@@ -43,18 +43,15 @@ export interface CoursesDataResponse {
     data?: {
         id?: number;
         title?: string;
-        description?: string;
-        category?: string;
-    };
-}
-
-export interface CoursesDataResponse {
-    status?: string;
-    data?: {
-        id?: number;
-        title?: string;
         category?: string;
         description?: string;
     };
     token?: string;
+}
+
+export interface RewardsDataResponse {
+    title: string;
+    description: string;
+    points: number;
+    claimed: number;
 }
