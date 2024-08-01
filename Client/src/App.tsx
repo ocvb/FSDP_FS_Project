@@ -34,6 +34,7 @@ import {
     ThemeProvider,
 } from '@mui/material';
 import { useState } from 'react';
+import SkillShareView from '@routes/SkillShare/SkillShareView';
 
 export default function App() {
     const { fetchAuth } = UseAuth();
@@ -92,6 +93,9 @@ export default function App() {
                     </Route>
                     <Route path='/rewards' element={<Rewards />} />
                     <Route path='/skill-share' element={<SkillShare />} />
+                    <Route path='/skill-share/*' element={<Outlet />}>
+                        <Route path=':id' element={<SkillShareView />} />
+                    </Route>
                     <Route path='/account' element={<Account />} />
                     <Route path='/account/*' element={<ProtectedRoute />}>
                         <Route path='admin' element={<Admin />} />
