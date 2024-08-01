@@ -9,12 +9,13 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { UseAuth } from '@contexts/Auth';
 import { SkillShareDataResponse } from '@api/ApiType';
+import { callAPI } from '@api/EndpointsQueries';
 
 export default function SkillShare() {
     const { data: SkillshareData, refetch: refetchSkillshare } = useQuery({
         queryKey: ['skillshare'],
         queryFn: async () => {
-            return (await axios.get<SkillShareDataResponse[]>('/skillshare'))
+            return (await callAPI.get<SkillShareDataResponse[]>('/skillshare'))
                 .data;
         },
     });
