@@ -20,6 +20,7 @@ import {
 import Account from '@routes/Account/Account';
 import SkillShare from '@routes/SkillShare/SkillShare';
 import Rewards from '@routes/Rewards/Rewards';
+import Support from '@routes/Support/Support';
 import Profile from '@routes/Account/Profile/Profile';
 import Admin from '@routes/Account/Admin/Admin';
 
@@ -91,6 +92,7 @@ export default function App() {
                         />
                     </Route>
                     <Route path='/rewards' element={<Rewards />} />
+                    <Route path='/support' element={<Support />} />
                     <Route path='/skill-share' element={<SkillShare />} />
                     <Route path='/account' element={<Account />} />
                     <Route path='/account/*' element={<ProtectedRoute />}>
