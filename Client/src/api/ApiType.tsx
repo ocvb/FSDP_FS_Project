@@ -47,3 +47,32 @@ export interface CoursesDataResponse {
     };
     token?: string;
 }
+
+export interface RewardsDataResponse {
+    status?: string;
+    data?: {
+        id?: number;
+        title?: string;
+        description?: string;
+        points?: number;
+        claimed?: boolean;
+        popular?: boolean;
+        endDate?: string | null;
+        imageUrl?: string;
+        category?: string;
+        createdAt?: string;
+        updatedAt?: string;
+    };
+}
+
+export interface SupportDataResponse {
+    status?: string;
+    data?: {
+        id?: number;
+        location?: string;
+        urgency?: string;
+        description?: string;
+        createdAt?: string;
+        updatedAt?: string;
+    };
+}

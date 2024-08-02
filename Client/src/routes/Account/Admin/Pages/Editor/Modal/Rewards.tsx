@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import {
     Stack,
     TextField,
     IconButton,
+    Link,
     Alert,
-    FormControl,
     Box,
     SelectChangeEvent,
 } from '@mui/material';
@@ -13,12 +12,21 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Button from '@/components/Button/CustomButton';
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@components/Button/CustomButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
 import { MoreHoriz } from '@mui/icons-material';
 import Dropdown from '@components/Dropdown/Dropdown';
 import PopupModal from '@components/PopupModal/PopupModal';
+import EditorSelector from '@components/Admin/EditorSelector';
+import { RewardsDataResponse } from '@api/ApiType';
+import {
+    fetchRewards,
+    createReward,
+    updateReward,
+    deleteReward,
+} from '@api/EndpointsQueries';
 
 interface RewardsProps {
     postSnackbar: (data: {
@@ -43,7 +51,11 @@ interface SelectedRow {
     updatedAt?: string;
 }
 
-export default function AdminRewards({ postSnackbar }: RewardsProps) {
+export default function AdminRewards({
+    postSnackbar,
+    handleOnChangeSelect,
+    selectedCategory,
+}: RewardsProps) {
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState<SelectedRow>({
@@ -74,57 +86,24 @@ export default function AdminRewards({ postSnackbar }: RewardsProps) {
         isFetching,
         isError,
         refetch: refetchRewards,
-    } = useQuery({
+    } = useQuery<RewardsDataResponse[]>({
         queryKey: ['rewards'],
-        queryFn: async () =>
-            await axios.get('http://localhost:3001/api/rewards'),
+        queryFn: fetchRewards,
     });
 
     const createRewardMutation = useMutation({
         mutationKey: ['rewards'],
-        mutationFn: async (data: SelectedRow) => {
-            const r = await axios.post(
-                'http://localhost:3001/api/rewards',
-                data,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                }
-            );
-            return r.data;
-        },
+        mutationFn: createReward,
     });
 
     const updateRewardMutation = useMutation({
         mutationKey: ['rewards'],
-        mutationFn: async (data: SelectedRow) => {
-            const r = await axios.put(
-                `http://localhost:3001/api/rewards/${data.id}`,
-                data,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                }
-            );
-            return r.data;
-        },
+        mutationFn: async (data: SelectedRow) => updateReward(data.id!, data),
     });
 
     const deleteRewardMutation = useMutation({
         mutationKey: ['rewards'],
-        mutationFn: async (data: SelectedRow) => {
-            const r = await axios.delete(
-                `http://localhost:3001/api/rewards/${data.id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                }
-            );
-            return r.data;
-        },
+        mutationFn: (id: number) => deleteReward(id),
     });
 
     function EditToolbar() {
@@ -135,11 +114,11 @@ export default function AdminRewards({ postSnackbar }: RewardsProps) {
                     severity: 'info',
                 });
 
-            const rowsIds = rewardsData?.map((value: SelectedRow) => value?.id);
-            const id = Math.max(0, ...rowsIds) + 1;
+            const rowsIds = rewardsData?.map((value) => value?.id);
+            const id = Math.max(0, ...(rowsIds || [])) + 1;
             setOpenAddModal(true);
 
-            setSelectedRow({ id } as SelectedRow);
+            setSelectedRow({ id });
         };
 
         return (
@@ -153,6 +132,10 @@ export default function AdminRewards({ postSnackbar }: RewardsProps) {
                 }}
             >
                 <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
+                    <EditorSelector
+                        selectedCategory={selectedCategory}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                    />
                     <Button
                         type='button'
                         text='Refresh'
@@ -286,7 +269,7 @@ export default function AdminRewards({ postSnackbar }: RewardsProps) {
             width: 0,
             cellClassName: 'actions',
             getActions: ({ id }: { id: number }) => {
-                const [dropdown, setDropdown] = React.useState(false);
+                const [dropdown, setDropdown] = useState(false);
                 const buttons = [
                     {
                         name: 'Edit',
@@ -435,29 +418,26 @@ export default function AdminRewards({ postSnackbar }: RewardsProps) {
     };
 
     const handleDeleteClick = (id: number) => () => {
-        deleteRewardMutation.mutate(
-            { id },
-            {
-                onSuccess: () => {
+        deleteRewardMutation.mutate(id, {
+            onSuccess: () => {
+                postSnackbar({
+                    children: `RewardID (${id}) has been deleted successfully`,
+                    severity: 'success',
+                });
+                refetchRewards().catch(() =>
                     postSnackbar({
-                        children: `RewardID (${id}) has been deleted successfully`,
-                        severity: 'success',
-                    });
-                    refetchRewards().catch(() =>
-                        postSnackbar({
-                            children: 'Error refreshing',
-                            severity: 'error',
-                        })
-                    );
-                },
-                onError: (error) => {
-                    postSnackbar({
-                        children: error.message,
+                        children: 'Error refreshing',
                         severity: 'error',
-                    });
-                },
-            }
-        );
+                    })
+                );
+            },
+            onError: (error) => {
+                postSnackbar({
+                    children: error.message,
+                    severity: 'error',
+                });
+            },
+        });
     };
 
     const handleSubmitUpdate = (event: React.FormEvent) => {
@@ -586,7 +566,7 @@ export default function AdminRewards({ postSnackbar }: RewardsProps) {
                     {openEditModal ? `Update "${title}"` : 'Add Reward'}
                 </p>
 
-                <FormControl onSubmit={handleSubmitUpdate}>
+                <form onSubmit={handleSubmitUpdate}>
                     <Stack spacing={2} sx={{ width: '100%' }}>
                         <TextField
                             label='Title'
@@ -595,7 +575,7 @@ export default function AdminRewards({ postSnackbar }: RewardsProps) {
                             size='small'
                             value={title}
                             onChange={handleTitleChange}
-                            autoFocus={true}
+                            autoFocus
                         />
                         <TextField
                             label='Description'
@@ -672,7 +652,7 @@ export default function AdminRewards({ postSnackbar }: RewardsProps) {
                             }}
                         />
                     </Stack>
-                </FormControl>
+                </form>
             </PopupModal>
         </>
     );

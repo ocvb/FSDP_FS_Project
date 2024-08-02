@@ -4,6 +4,8 @@ import {
     UsersDataResponse,
     EventsDataResponse,
     CoursesDataResponse,
+    RewardsDataResponse,
+    SupportDataResponse,
 } from './ApiType';
 
 export const callAPI = axios.create({
@@ -46,9 +48,70 @@ export const fetchCourses = async () => {
     return response.data;
 };
 
+export const fetchSupport = async () => {
+    const response = await callAPI.get<SupportDataResponse['data'][]>(
+        '/api/support/',
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        }
+    );
+    return response.data;
+};
+
 // Non-admin endpoints
 export const fetchSkillshare = async () => {
     const response = await callAPI.get('/api/skillshare/', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+};
+
+// Rewards endpoints
+export const fetchRewards = async (): Promise<RewardsDataResponse[]> => {
+    const response = await callAPI.get<RewardsDataResponse[]>('/api/rewards');
+    return response.data;
+};
+
+export const fetchPopularRewards = async (): Promise<RewardsDataResponse[]> => {
+    const response = await callAPI.get<RewardsDataResponse[]>(
+        '/api/rewards/popular'
+    );
+    return response.data;
+};
+
+export const fetchRewardsByCategory = async (
+    category: string
+): Promise<RewardsDataResponse[]> => {
+    const response = await callAPI.get<RewardsDataResponse[]>(
+        `/api/rewards/category/${category}`
+    );
+    return response.data;
+};
+
+export const createReward = async (data: RewardsDataResponse) => {
+    const response = await callAPI.post('/api/rewards', data, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+};
+
+export const updateReward = async (id: number, data: RewardsDataResponse) => {
+    const response = await callAPI.put(`/api/rewards/${id}`, data, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+};
+
+export const deleteReward = async (id: number) => {
+    const response = await callAPI.delete(`/api/rewards/${id}`, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         },

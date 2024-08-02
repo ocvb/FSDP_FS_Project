@@ -1,27 +1,20 @@
-import { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import headerImage from '@/assets/Rewards/rewards-header.jpg';
 import RewardDetailsModal from './Modal/RewardDetails';
 import style from './css/UserRewards.module.css';
 import CustomButton from '@components/Button/CustomButton';
 import Footer from '@components/Footer/Footer';
-
-interface Reward {
-    id: number;
-    title: string;
-    description: string;
-    points: number;
-    claimed: boolean;
-    popular: boolean;
-    endDate?: string;
-    imageUrl?: string;
-    category?: string;
-}
+import { fetchRewards, fetchPopularRewards } from '@api/EndpointsQueries';
+import { RewardsDataResponse } from '@api/ApiType';
 
 const UserRewards: React.FC = () => {
-    const [rewards, setRewards] = useState<Reward[]>([]);
-    const [popularRewards, setPopularRewards] = useState<Reward[]>([]);
-    const [selectedReward, setSelectedReward] = useState<Reward | null>(null);
+    const [rewards, setRewards] = useState<RewardsDataResponse[]>([]);
+    const [popularRewards, setPopularRewards] = useState<RewardsDataResponse[]>(
+        []
+    );
+    const [selectedReward, setSelectedReward] =
+        useState<RewardsDataResponse | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(
         null
@@ -37,37 +30,38 @@ const UserRewards: React.FC = () => {
     ];
 
     useEffect(() => {
-        fetchRewards();
-        fetchPopularRewards();
+        fetchRewardsData();
+        fetchPopularRewardsData();
     }, [selectedCategory]);
 
-    const fetchRewards = async () => {
+    const fetchRewardsData = async () => {
         try {
-            let url = '/api/rewards';
+            const rewardsData = await fetchRewards();
             if (selectedCategory) {
-                url = `/api/rewards/category/${selectedCategory}`;
+                const filteredRewards = rewardsData.filter(
+                    (reward) => reward.category === selectedCategory
+                );
+                setRewards(filteredRewards);
+            } else {
+                setRewards(rewardsData);
             }
-            const response = await axios.get(url);
-            setRewards(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching rewards:', error);
             setRewards([]);
         }
     };
 
-    const fetchPopularRewards = async () => {
+    const fetchPopularRewardsData = async () => {
         try {
-            const response = await axios.get('/api/rewards/popular');
-            setPopularRewards(
-                Array.isArray(response.data) ? response.data : []
-            );
+            const popularRewardsData = await fetchPopularRewards();
+            setPopularRewards(popularRewardsData);
         } catch (error) {
             console.error('Error fetching popular rewards:', error);
             setPopularRewards([]);
         }
     };
 
-    const handleRewardClick = (reward: Reward) => {
+    const handleRewardClick = (reward: RewardsDataResponse) => {
         setSelectedReward(reward);
         setIsModalOpen(true);
     };

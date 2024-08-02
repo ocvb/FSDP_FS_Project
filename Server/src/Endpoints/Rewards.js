@@ -46,8 +46,17 @@ router.get('/category/:category', async (req, res) => {
 });
 
 // Create a new reward
-router.post('/', async (req, res) => {
-    const { title, description, points, claimed, popular } = req.body;
+router.post('/', TokenAuthentication, async (req, res) => {
+    const {
+        title,
+        description,
+        points,
+        claimed,
+        popular,
+        endDate,
+        imageUrl,
+        category,
+    } = req.body;
 
     if (!title || !description || !points) {
         res.status(400).json({
@@ -63,6 +72,9 @@ router.post('/', async (req, res) => {
             points,
             claimed: claimed || false,
             popular: popular || false,
+            endDate: endDate || null,
+            imageUrl: imageUrl || '',
+            category: category || '',
         });
         if (reward) {
             return res
@@ -79,16 +91,16 @@ router.post('/', async (req, res) => {
 // Update a reward
 router.put('/:id', TokenAuthentication, async (req, res) => {
     const { id } = req.params;
-    const { title, description, points, claimed, popular } = req.body;
-
-    // Log the data received by the server
-    console.log('Data received by the server:', {
+    const {
         title,
         description,
         points,
         claimed,
         popular,
-    });
+        endDate,
+        imageUrl,
+        category,
+    } = req.body;
 
     if (!title || !description || !points) {
         res.status(400).json({
@@ -106,6 +118,9 @@ router.put('/:id', TokenAuthentication, async (req, res) => {
                 points,
                 claimed: claimed || false,
                 popular: popular || false,
+                endDate: endDate || null,
+                imageUrl: imageUrl || '',
+                category: category || '',
             },
             {
                 where: {
