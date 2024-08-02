@@ -14,7 +14,7 @@ export const callAPI = axios.create({
 
 export const fetchUsers = async () => {
     const response = await callAPI.get<UsersDataResponse['data'][]>(
-        '/admin/users/',
+        '/api/admin/users/',
         {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -77,9 +77,8 @@ export const fetchRewards = async (): Promise<RewardsDataResponse[]> => {
 };
 
 export const fetchPopularRewards = async (): Promise<RewardsDataResponse[]> => {
-    const response = await callAPI.get<RewardsDataResponse[]>(
-        '/api/rewards/popular'
-    );
+    const response =
+        await callAPI.get<RewardsDataResponse[]>('/rewards/popular');
     return response.data;
 };
 
