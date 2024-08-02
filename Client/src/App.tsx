@@ -37,6 +37,7 @@ import {
     ThemeProvider,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+import Facilities from '@routes/Facilities/Facilities';
 
 export default function App() {
     const { fetchAuth } = UseAuth();
@@ -69,11 +70,12 @@ export default function App() {
                 )}
                 <Routes>
                     <Route path='/' element={<Home />} />
-                    <Route path='/events' element={<Events/>}/>
-                    <Route path='/events/*' element={<Outlet/>}>
-                        <Route path='search' element={<EventsSearch/>}/>
-                        <Route path='details' element={<EventDetails/>}/>
+                    <Route path='/events' element={<Events />} />
+                    <Route path='/events/*' element={<Outlet />}>
+                        <Route path='search' element={<EventsSearch />} />
+                        <Route path='details' element={<EventDetails />} />
                     </Route>
+                    <Route path='/facilities' element={<Facilities />}></Route>
                     <Route path='/courses/*' element={<Courses />} />
                     <Route path='/courses/*' element={<Outlet />}>
                         <Route

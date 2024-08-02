@@ -27,16 +27,21 @@ import {
 } from '@mui/icons-material';
 
 export default function EventDetails() {
-    const [openBookingModal, setOpenBookingModal] = useState(false);
     const [isSignedUp, setIsSignedUp] = useState(false);
     const getPrevious = useLocation();
     console.log(getPrevious.state.id);
-    const handleCloseModal = () => {
-        setOpenBookingModal(false);
-    };
     const handleSignUp = () => {
         setIsSignedUp(true);
     };
+    const { data: signUp } = useQuery({
+        queryKey: ['signedupEvent'],
+        queryFn: async () => {
+            const response = await axios.post(
+                'http://localhost:3001/api/events/details',
+            )
+        }
+
+    })
     const { data: fetchEvent } = useQuery({
         queryKey: ['conditionedEvents'],
         queryFn: async () => {
@@ -44,24 +49,24 @@ export default function EventDetails() {
                 'http://localhost:3001/api/events/details',
                 {
                     id: getPrevious.state.id,
-                    //     title: getPrevious.state.title,
-                    //     location: getPrevious.state.location,
-                    //     date: getPrevious.state.date,
-
-                    //     // title?: string;
-                    //     // description?: string;
-                    //     // location?: string;
-                    //     // date?: string;
-                    //     // price?: number;
-                    //     // createdAt?: string;
-                    //     // updatedAt?: string;
                 }
             );
-            return response.data; // Assuming response.data is an array of events
+            return response.data;
         },
     });
 
-    console.log(fetchEvent);
+    // const { data: fetchUser } = useQuery({
+    //     queryKey: ['conditionedEvents'],
+    //     queryFn: async () => {
+    //         const response = await axios.post(
+    //             'http://localhost:3001/api/events/signup',
+    //             {
+    //                 uuid: getPrevious.state.uuid,
+    //             }
+    //         );
+    //         return response.data;
+    //     },
+    // });
 
     return (
         <Stack flexDirection={'row'} className='eventdetail'>
@@ -78,7 +83,7 @@ export default function EventDetails() {
                         gap: '20px',
                     }}
                 >
-                    <Stack alignItems={'start'}>
+                    <Stack alignItems={'start'} style={{ margin: '20px' }}>
                         <h1>{fetchEvent.title}</h1>
                         <p className={styles.p}>{fetchEvent.description}</p>
                         <h3 style={{ marginTop: '20px' }}>
@@ -100,7 +105,6 @@ export default function EventDetails() {
                             width: '10%',
                         }}
                         onClick={() => {
-                            setOpenBookingModal(true);
                             handleSignUp();
                         }}
                     >
@@ -111,12 +115,6 @@ export default function EventDetails() {
                             ? `${fetchEvent.title} is now registered into your account`
                             : ''}
                     </p>
-                    <PopupModal
-                        open={openBookingModal}
-                        handleClose={handleCloseModal}
-                    >
-                        {openBookingModal && <p>Signed Up</p>}
-                    </PopupModal>
                 </div>
             </Box>
         </Stack>
