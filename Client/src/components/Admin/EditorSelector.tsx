@@ -26,6 +26,8 @@ export default function EditorSelector({
             <MenuItem value={0}>Users</MenuItem>
             <MenuItem value={1}>Events</MenuItem>
             <MenuItem value={2}>Courses</MenuItem>
+            <MenuItem value={3}>Rewards</MenuItem>
+            <MenuItem value={4}>Support</MenuItem>
         </Select>
     );
 }
