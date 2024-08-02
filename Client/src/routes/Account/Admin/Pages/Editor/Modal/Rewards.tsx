@@ -8,6 +8,7 @@ import {
     Alert,
     Box,
     SelectChangeEvent,
+    FormControl,
 } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import AddIcon from '@mui/icons-material/Add';
@@ -23,7 +24,7 @@ import Dropdown from '@components/Dropdown/Dropdown';
 import PopupModal from '@components/PopupModal/PopupModal';
 
 import { callAPI, fetchEvents } from '@api/EndpointsQueries';
-import { EventsDataResponse } from '@api/ApiType';
+import { EventsDataResponse, RewardsDataResponse } from '@api/ApiType';
 import EditorSelector from '@components/Admin/EditorSelector';
 
 interface EventsProps {
@@ -80,18 +81,26 @@ export default function Events({
         isError,
         refetch: refetchRewawrd,
     } = useQuery({
-        queryKey: ['events'],
+        queryKey: ['rewards'],
         queryFn: async () => {
-            console.log('Unfnishied');
+            const response = await callAPI.get<RewardsDataResponse[]>(
+                '/admin/rewards',
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+            return response.data;
         },
     });
 
-    const eventUpdateMutation = useMutation({
-        mutationKey: ['events'],
-        mutationFn: async (data: EventsDataResponse['data']) => {
+    const rewardsUpdateMutation = useMutation({
+        mutationKey: ['rewards'],
+        mutationFn: async (data: RewardsDataResponse) => {
             console.log(data);
-            const response = await callAPI.put<EventsDataResponse>(
-                `/admin/event/${data?.id}`,
+            const response = await callAPI.put<RewardsDataResponse[]>(
+                `/admin/rewards/${data.id}`,
                 data,
                 {
                     headers: {
@@ -103,11 +112,11 @@ export default function Events({
         },
     });
 
-    const eventDeleteMutation = useMutation({
+    const rewardsDeleteMutation = useMutation({
         mutationKey: ['events'],
-        mutationFn: async (data: EventsDataResponse['data']) => {
-            const response = await axios.delete<EventsDataResponse>(
-                `http://localhost:3001/api/admin/event/${data?.id}`,
+        mutationFn: async (data: RewardsDataResponse) => {
+            const response = await callAPI.delete<RewardsDataResponse>(
+                `/admin/rewards/${data.id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -125,7 +134,7 @@ export default function Events({
                     children: 'Please wait for the data to load',
                     severity: 'info',
                 });
-            const rowsIds = eventsData?.map((value) => value?.id);
+            const rowsIds = rewardsData?.map((value) => value?.id);
             const id = Math.max(0, ...rowsIds) + 1;
             setOpenAddModal(true);
 
@@ -165,7 +174,7 @@ export default function Events({
                         text='Refresh'
                         startIcon={<RefreshIcon sx={{ fontSize: '25px' }} />}
                         onClick={() => {
-                            refetchEvents().catch(() =>
+                            refetchRewawrd().catch(() =>
                                 console.log('Error refreshing')
                             ),
                                 postSnackbar({
@@ -223,7 +232,7 @@ export default function Events({
     }
 
     const handleDeleteClick = (id: number) => () => {
-        eventDeleteMutation.mutate(
+        rewardsDeleteMutation.mutate(
             { id },
             {
                 onSuccess: () => {
@@ -231,7 +240,7 @@ export default function Events({
                         children: 'Event deleted successfully',
                         severity: 'success',
                     });
-                    refetchEvents().catch(() => {
+                    refetchRewawrd().catch(() => {
                         console.log('Error refreshing');
                     });
                 },
@@ -266,59 +275,20 @@ export default function Events({
             renderCell: (params) => <ExpandableCell {...params} />,
         },
         {
-            field: 'location',
-            headerName: 'Location',
-            type: 'string',
+            field: 'points',
+            headerName: 'Points',
+            type: 'number',
             flex: 1,
         },
         {
-            field: 'date',
-            headerName: 'Date',
-            type: 'date',
-            width: 130,
-            renderCell: (params: { formattedValue: string }) => {
-                return (
-                    <Tooltip title={params.formattedValue}>
-                        <span>
-                            {new Date(params.formattedValue).toLocaleDateString(
-                                'en-GB',
-                                {
-                                    day: 'numeric',
-                                    month: 'long',
-                                    year: 'numeric',
-                                }
-                            )}
-                        </span>
-                    </Tooltip>
-                );
-            },
-            valueGetter: (value: string) => {
-                const date = new Date(value);
-                return date;
-            },
-        },
-        {
-            field: 'price',
-            headerName: 'Price',
+            field: 'claimed',
+            headerName: 'Claimed',
             type: 'number',
             renderCell: (params: { value: number }) => {
                 if (params.value === 0) {
                     return 'Free';
                 } else if (params.value > 0) {
                     return `$${params.value.toFixed(2)}`;
-                }
-                return params.value;
-            },
-        },
-        {
-            field: 'userId',
-            headerName: 'Assigned ID(s)',
-            type: 'number',
-            editable: false,
-            width: 160,
-            renderCell: (params: { value: number }) => {
-                if (params.value === null) {
-                    return '-';
                 }
                 return params.value;
             },
@@ -387,7 +357,7 @@ export default function Events({
     ];
 
     const handleOpenEditModal = (id: number) => {
-        const row = eventsData?.find(
+        const row = rewardsData?.find(
             (value) => value?.id === id
         ) as SelectedRow;
         if (row === undefined || row === null) {
@@ -469,7 +439,7 @@ export default function Events({
             userId: number | null;
         }
 
-        const eventData = {
+        const rewardsData = {
             id: selectedRow.id,
             title,
             description,
@@ -479,13 +449,13 @@ export default function Events({
             userId: userId === null ? null : userId ?? 0,
         } as EventData;
 
-        eventUpdateMutation.mutate(eventData, {
+        rewardsUpdateMutation.mutate(rewardsData, {
             onSuccess: () => {
                 postSnackbar({
                     children: 'Event updated successfully',
                     severity: 'success',
                 });
-                refetchEvents().catch(() => {
+                refetchRewawrd().catch(() => {
                     console.log('Error refreshing');
                 });
             },
@@ -503,7 +473,7 @@ export default function Events({
                 <Alert severity='error'>Error fetching data</Alert>
             ) : (
                 <DataGrid
-                    rows={eventsData ?? []}
+                    rows={rewardsData ?? []}
                     columns={columns}
                     getEstimatedRowHeight={() => 100}
                     getRowHeight={() => 'auto'}
@@ -568,7 +538,7 @@ export default function Events({
                     {openEditModal ? `Update "${title}"` : 'Add Event'}
                 </p>
 
-                <form onSubmit={handleSubmitUpdate}>
+                <FormControl onSubmit={handleSubmitUpdate}>
                     <Stack spacing={2} sx={{ width: '100%' }}>
                         <TextField
                             label='Title'
@@ -661,7 +631,7 @@ export default function Events({
                             />
                         )}
                     </Stack>
-                </form>
+                </FormControl>
             </PopupModal>
         </>
     );
