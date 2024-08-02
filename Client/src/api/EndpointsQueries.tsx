@@ -14,7 +14,7 @@ export const callAPI = axios.create({
 
 export const fetchUsers = async () => {
     const response = await callAPI.get<UsersDataResponse['data'][]>(
-        '/api/admin/users/',
+        '/admin/users/',
         {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
