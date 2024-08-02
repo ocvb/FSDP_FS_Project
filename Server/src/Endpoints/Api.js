@@ -153,8 +153,8 @@ router.get('/', async (req, res) => {
     presetEvents;
     presetSkillshare;
     presetCourses;
-    presetUserEvent;
-    presetUserReward;
+    // presetUserEvent;
+    // presetUserReward;
 
     res.send('API is running, preset data have been loaded.');
 });
