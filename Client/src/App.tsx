@@ -9,6 +9,8 @@ import { UseAuth } from '@contexts/Auth';
 // Routes
 import Home from '@routes/Home/Home';
 import Events from '@routes/Events/Events';
+import EventsSearch from '@routes/Events/EventsSearch';
+import EventDetails from '@routes/Events/EventDetails';
 import Courses from '@routes/Courses/Courses';
 import {
     EducationEnrichment,
@@ -35,7 +37,9 @@ import {
     PaletteMode,
     ThemeProvider,
 } from '@mui/material';
-import { useState } from 'react';
+import SkillShareView from '@routes/SkillShare/SkillShareView';
+import { useEffect, useState } from 'react';
+import Facilities from '@routes/Facilities/Facilities';
 
 export default function App() {
     const { fetchAuth } = UseAuth();
@@ -70,6 +74,11 @@ export default function App() {
                 <Routes>
                     <Route path='/' element={<Home />} />
                     <Route path='/events' element={<Events />} />
+                    <Route path='/events/*' element={<Outlet />}>
+                        <Route path='search' element={<EventsSearch />} />
+                        <Route path='details' element={<EventDetails />} />
+                    </Route>
+                    <Route path='/facilities' element={<Facilities />}></Route>
                     <Route path='/courses/*' element={<Courses />} />
                     <Route path='/courses/*' element={<Outlet />}>
                         <Route

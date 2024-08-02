@@ -10,6 +10,7 @@ import {
     TableRow,
     TableCell,
     Paper,
+    Box,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { UseAuth } from '@contexts/Auth';
@@ -44,66 +45,65 @@ export default function Events() {
         { name: 'Price' },
     ];
     return (
-        <>
-            <div
-                className={styles.events}
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    position: 'relative',
-                    padding: '1rem',
+        <Box
+            className={styles.events}
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'relative',
+                padding: '1rem',
+                width: '100%',
+                alignItems: 'start',
+            }}
+        >
+            <p>Your current participated Events</p>
+            <TableContainer
+                component={Paper}
+                sx={{
                     width: '100%',
                 }}
             >
-                <p>You have participate in these Events</p>
-                <TableContainer
-                    component={Paper}
+                <Table
                     sx={{
-                        width: '100%',
+                        backgroundColor: 'rgba(255,255,255, 0.2)',
                     }}
+                    aria-label='simple table'
                 >
-                    <Table
+                    <TableHead
                         sx={{
-                            backgroundColor: 'rgba(255,255,255, 0.8)',
+                            backgroundColor: 'rgba(0,0,0, 0.05)',
                         }}
-                        aria-label='simple table'
                     >
-                        <TableHead
-                            sx={{
-                                backgroundColor: 'rgba(0,0,0, 0.15)',
-                            }}
-                        >
-                            <TableRow>
-                                {head.map((item, index) => (
-                                    <TableCell key={index}>
-                                        {item.name}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {eventData?.map((item, index) => (
-                                <TableRow
-                                    key={index}
-                                    sx={{
-                                        '&:last-child td, &:last-child th': {
-                                            border: 0,
-                                        },
-                                    }}
-                                >
-                                    <TableCell component='th' scope='row'>
-                                        {item?.id}
-                                    </TableCell>
-                                    <TableCell>{item?.title}</TableCell>
-                                    <TableCell>{item?.location}</TableCell>
-                                    <TableCell>{item?.date}</TableCell>
-                                    <TableCell>{item?.price}</TableCell>
-                                </TableRow>
+                        <TableRow>
+                            {head.map((item, index) => (
+                                <TableCell key={index}>{item.name}</TableCell>
                             ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </div>
-        </>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {eventData?.map((item, index) => (
+                            <TableRow
+                                key={index}
+                                sx={{
+                                    '&:last-child td, &:last-child th': {
+                                        border: 0,
+                                    },
+                                }}
+                            >
+                                <TableCell component='th' scope='row'>
+                                    {item?.id}
+                                </TableCell>
+                                <TableCell>{item?.title}</TableCell>
+                                <TableCell>{item?.location}</TableCell>
+                                <TableCell>{item?.date}</TableCell>
+                                <TableCell>
+                                    {item?.price == 0 ? 'Free' : item?.price}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Box>
     );
 }

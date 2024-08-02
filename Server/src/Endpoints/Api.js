@@ -1,6 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { Users, Events, Courses, SkillShares } = require('@models/index');
+const {
+    Users,
+    Events,
+    Courses,
+    SkillShares,
+    Rewards,
+    Support,
+    UserEvents,
+    UserRewards,
+} = require('@models/index');
 const bcrypt = require('bcrypt');
 const process = require('process');
 
@@ -87,24 +96,65 @@ router.get('/', async (req, res) => {
         {
             title: 'Makeup and Skincare',
             category: 'Health & Wellness',
-            description: 'Learn the different types of makeup and how to take care of your skin',
+            description:
+                'Learn the different types of makeup and how to take care of your skin',
         },
         {
             title: 'Healthy Cooking',
             category: 'Health & Wellness',
-            description: 'Learn how to cook healthy, delicious meals that can contribute to overall wellness and a balanced diet.'
+            description:
+                'Learn how to cook healthy, delicious meals that can contribute to overall wellness and a balanced diet.',
         },
         {
             title: 'Cardio Workout',
             category: 'Sports & Fitness',
-            description: 'This course offers a variety of cardio exercises to help you improve your cardiovascular health and fitness.'
-        }
+            description:
+                'This course offers a variety of cardio exercises to help you improve your cardiovascular health and fitness.',
+        },
+    ]);
+
+    // const presetRewards = await Rewards.bulkCreate([
+    //     {
+
+    //     }
+    // ])
+
+    const presetUserEvent = await UserEvents.bulkCreate([
+        {
+            userId: 1,
+            eventId: 1,
+        },
+        {
+            userId: 1,
+            eventId: 2,
+        },
+        {
+            userId: 2,
+            eventId: 1,
+        },
+        {
+            userId: 2,
+            eventId: 2,
+        },
+    ]);
+
+    const presetUserReward = await UserRewards.bulkCreate([
+        {
+            userId: 2,
+            rewardId: 1,
+        },
+        {
+            userId: 2,
+            rewardId: 2,
+        },
     ]);
 
     presetUsers;
     presetEvents;
     presetSkillshare;
     presetCourses;
+    presetUserEvent;
+    presetUserReward;
 
     res.send('API is running, preset data have been loaded.');
 });

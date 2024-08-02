@@ -8,23 +8,15 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { UseAuth } from '@contexts/Auth';
-
-interface SkillShareDataResponse {
-    title: string;
-    description: string;
-    category: string;
-    postedBy: string;
-    numberOfResponded: number;
-}
+import { SkillShareDataResponse } from '@api/ApiType';
+import { callAPI } from '@api/EndpointsQueries';
 
 export default function SkillShare() {
     const { data: SkillshareData, refetch: refetchSkillshare } = useQuery({
         queryKey: ['skillshare'],
         queryFn: async () => {
-            const r = await axios.get<SkillShareDataResponse[]>(
-                'http://localhost:3001/api/skillshare'
-            );
-            return r.data;
+            return (await callAPI.get<SkillShareDataResponse[]>('/skillshare'))
+                .data;
         },
     });
 
