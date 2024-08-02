@@ -50,8 +50,9 @@ export interface CoursesDataResponse {
 }
 
 export interface RewardsDataResponse {
-    title: string;
-    description: string;
-    points: number;
-    claimed: number;
+    id?: number;
+    title?: string;
+    description?: string;
+    points?: number;
+    claimed?: number;
 }
