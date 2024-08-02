@@ -9,6 +9,7 @@ import ChangeThemeModeButton from '@components/ThemeMode/ChangeThemeModeButton';
 export const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Events', href: '/events' },
+    { name: 'Facilities', href: '/facilities' },
     {
         name: 'Courses',
         href: '/courses',

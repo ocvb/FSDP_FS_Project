@@ -21,6 +21,13 @@ app.use(
 const routings = require('./routings');
 app.use(routings);
 
+// Don't touch beyond this line
+app.get('/', (req, res) => {
+    res.send(
+        'You have reached the server. Please use the client to view the website.'
+    );
+});
+
 db.sync()
     .then(() => {
         console.log('Database is ready');
