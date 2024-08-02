@@ -353,7 +353,7 @@ export default function Course({
 
     const handleSubmitUpdate = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const formData = new FormData(event.currentTarget);
+        const formData = new FormData(event.target as HTMLFormElement);
 
         interface data {
             id: number;
