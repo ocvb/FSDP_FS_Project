@@ -7,12 +7,13 @@
 
 .header2 {
     position: relative;
-    text-align: center;
     font-weight: bold;
     font-size: 40px;
     line-height: 2rem;
     word-break: keep-all;
     min-width: fit-content;
+    margin: 30px;
+    margin-left: 6rem;
 }
 
 .header .img {
@@ -59,22 +60,19 @@
 
 .row {
     display: flex !important;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    gap: 1rem;
+    gap: 2rem;
     padding: 5px;
-    width: 100%;
-}
-
-.bar {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    color: black;
-    border-radius: 6px;
+    margin: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+    border-radius: 5px;
+    width: auto;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .col {
-    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -87,11 +85,6 @@
     /* width: calc( 1vw + 100% ); */
     width: 500px;
     gap: 1rem;
-    z-index: 1;
-}
-
-.col p {
-    color: black;
 }
 
 .carcol {
@@ -110,10 +103,10 @@
 
 .carouselItems {
     display: flex;
+    flex-wrap: wrap; /* Wrap items if they overflow the container width */
     gap: 1rem; /* Add spacing between items */
-    margin-left: 100px;
-    margin-right: 100px;
-    height: 100%;
+    margin-left: 50px;
+    margin-right: 50px;
 }
 
 .col > div {
@@ -172,17 +165,20 @@
     overflow: hidden;
 }
 
-p {
-    font-size: 2rem;
-    font-weight: 400;
-    margin-block-end: 0;
+.eventButton {
+    width: 100%;
+}
+
+.eventButton p {
+    color: black;
+    margin: 0%;
 }
 
 @media screen and (max-width: 1066px) {
-    .row {
-        flex-direction: column;
-        align-items: center;
-    }
+    /* .row {
+    flex-direction: column;
+    align-items: center;
+} */
 
     .col {
         width: 100%;
