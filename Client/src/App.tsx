@@ -39,6 +39,7 @@ import { useState } from 'react';
 
 export default function App() {
     const { fetchAuth } = UseAuth();
+    const { isAuthenticated } = fetchAuth;
     const location = useLocation();
     const checkIfAdmin = fetchAuth.userRole === 'Admin';
     const isAdminRoute = location.pathname.includes('admin');
@@ -94,7 +95,9 @@ export default function App() {
                     </Route>
                     <Route
                         path='/rewards'
-                        element={fetchAuth ? <UserRewards /> : <Rewards />}
+                        element={
+                            isAuthenticated ? <UserRewards /> : <Rewards />
+                        }
                     />{' '}
                     {/* Conditional rendering for rewards */}
                     <Route path='/support' element={<Support />} />
