@@ -72,7 +72,7 @@ export const fetchSkillshare = async () => {
 
 // Rewards endpoints
 export const fetchRewards = async (): Promise<RewardsDataResponse[]> => {
-    const response = await callAPI.get<RewardsDataResponse[]>('/api/rewards');
+    const response = await callAPI.get<RewardsDataResponse[]>('/rewards');
     return response.data;
 };
 
@@ -93,7 +93,7 @@ export const fetchRewardsByCategory = async (
 };
 
 export const createReward = async (data: RewardsDataResponse) => {
-    const response = await callAPI.post('/api/rewards', data, {
+    const response = await callAPI.post('/rewards', data, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -102,7 +102,7 @@ export const createReward = async (data: RewardsDataResponse) => {
 };
 
 export const updateReward = async (id: number, data: RewardsDataResponse) => {
-    const response = await callAPI.put(`/api/rewards/${id}`, data, {
+    const response = await callAPI.put(`/rewards/${id}`, data, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -111,7 +111,7 @@ export const updateReward = async (id: number, data: RewardsDataResponse) => {
 };
 
 export const deleteReward = async (id: number) => {
-    const response = await callAPI.delete(`/api/rewards/${id}`, {
+    const response = await callAPI.delete(`/rewards/${id}`, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
