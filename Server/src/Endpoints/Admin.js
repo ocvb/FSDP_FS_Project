@@ -173,4 +173,29 @@ router.put('/course/:id', TokenAuthentication, async (req, res) => {
     }
 });
 
+router.delete('/course/:id', TokenAuthentication, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const course = await Courses.destroy({
+            where: { id: id },
+        });
+
+        if (course) {
+            res.status(200).json({ message: 'Course deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'Course not found' });
+        }
+    } catch (error) {
+        console.error('Error deleting course', error.message);
+        res.status(500).json({
+            message: 'Course deletion failed',
+            error: error.message,
+        });
+    }
+});
+
+// Reward
+
+
+
 module.exports = router;
