@@ -456,7 +456,12 @@ export default function Course({
                     {openEditModal ? `Update "${title}"` : 'Add Event'}
                 </p>
 
-                <FormControl onSubmit={handleSubmitUpdate}>
+                <FormControl
+                    onSubmit={(e) => {
+                        console.log(e);
+                        handleSubmitUpdate(e);
+                    }}
+                >
                     <Stack spacing={2} sx={{ width: '100%' }}>
                         <TextField
                             label='Title'
@@ -489,7 +494,7 @@ export default function Course({
                                 text='Update'
                                 type='submit'
                                 fullWidth
-                                onClick={handleSubmitUpdate}
+                                // onClick={(e) => handleSubmitUpdate(e)}
                                 sx={{
                                     backgroundColor: 'black',
                                     color: 'white',
@@ -503,7 +508,7 @@ export default function Course({
                                 text='Add'
                                 type='submit'
                                 fullWidth
-                                onClick={handleSubmitUpdate}
+                                // onClick={handleSubmitUpdate}
                                 sx={{
                                     backgroundColor: 'black',
                                     color: 'white',
