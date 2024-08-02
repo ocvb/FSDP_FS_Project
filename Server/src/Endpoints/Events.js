@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Events } = require('@models');
+const { Events, Users } = require('@models/index');
 const { TokenAuthentication } = require('@middleware/TokenAuthentication');
 const { EventValidation } = require('@validations/EventValidation');
 const { Op } = require('sequelize');
@@ -174,16 +174,10 @@ router.post('/search', async (req, res) => {
 });
 
 // details API
-router.get('/details', async (req, res)=>{
-    res.status(200)
-})
-
 router.post('/details', async (req, res) => {
     const { id } = req.body;
 
-    if (
-        id == null
-    ) {
+    if (id == null) {
         res.status(400).json({
             message: 'Please provide all the required fields',
         });
@@ -191,10 +185,8 @@ router.post('/details', async (req, res) => {
     }
 
     const event = await Events.findOne({
-        where: { id }
+        where: { id },
     });
-
-    console.log(event)
 
     if (event) {
         res.status(201).json(event);
@@ -203,5 +195,31 @@ router.post('/details', async (req, res) => {
     }
 });
 
+router.post('/signup', TokenAuthentication, async (req, res) => {
+    const { username, password, eventId } = req.body;
+
+    if (!username || !password || !eventId) {
+        return res.status(400).json({ message: 'Username, password, and event ID are required' });
+    }
+
+    try {
+        const event = await Event.findByPk(eventId);
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+
+        const [user] = await Users.findOne({
+            where: { username },
+            defaults: { password }
+        });
+
+        await event.addUser(user);
+
+        res.status(201).json({ message: 'User signed up for event successfully', event });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 module.exports = router;
