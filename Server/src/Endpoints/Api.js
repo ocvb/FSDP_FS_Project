@@ -6,6 +6,7 @@ const {
     Courses,
     SkillShares,
     Rewards,
+    Support,
     UserEvents,
     UserRewards,
 } = require('@models/index');
@@ -60,6 +61,7 @@ router.get('/', async (req, res) => {
             location: 'Ang Mo Kio',
             date: new Date(),
             price: 0,
+            userId: 2,
         },
     ]);
 
@@ -151,8 +153,8 @@ router.get('/', async (req, res) => {
     presetEvents;
     presetSkillshare;
     presetCourses;
-    presetUserEvent;
-    presetUserReward;
+    // presetUserEvent;
+    // presetUserReward;
 
     res.send('API is running, preset data have been loaded.');
 });

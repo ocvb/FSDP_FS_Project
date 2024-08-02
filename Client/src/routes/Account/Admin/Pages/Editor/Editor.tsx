@@ -8,6 +8,7 @@ import Events from './Modal/Events';
 import Users from './Modal/Users';
 import Courses from './Modal/Courses';
 import Rewards from './Modal/Rewards';
+import Support from './Modal/Support';
 
 interface snackBar {
     message?: string;
@@ -76,9 +77,11 @@ export default function Editor() {
                         handleOnChangeSelect={handleOnChangeSelect}
                         selectedCategory={selected}
                     />
+
                 ) : (
                     <div>Not Found</div>
-                )}
+                )} 
+                
 
                 {snackbar != null && (
                     <Snackbar

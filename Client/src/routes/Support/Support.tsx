@@ -1,26 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 
 // components
-import Footer from '@/components/Footer/Footer.module';
-import CustomButton from '@/components/Button/CustomButton.module';
+import Footer from '@components/Footer/Footer';
+import CustomButton from '@components/Button/CustomButton';
 
 import enquiryIMG from '@/assets/Support/enquiries.png';
 import styles from './css/Support.module.css';
 
-const EnquiriesPage = () => {
-    const [formData, setFormData] = useState({
+interface FormData {
+    location: string;
+    urgency: string;
+    description: string;
+}
+
+const EnquiriesPage: React.FC = () => {
+    const [formData, setFormData] = useState<FormData>({
         location: '',
         urgency: '',
         description: '',
     });
 
-    const handleChange = (e) => {
+    const handleChange = (
+        e: ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('Form Data:', formData);
         try {

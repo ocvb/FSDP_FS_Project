@@ -119,7 +119,7 @@ router.post('/register', async (req, res) => {
     });
 });
 
-router.put('/update', TokenAuthentication, async (req, res) => {
+router.put('/update/:id', TokenAuthentication, async (req, res) => {
     console.log('Update User', req.body.username);
     const { username, password } = req.body;
     const { id } = req.params;

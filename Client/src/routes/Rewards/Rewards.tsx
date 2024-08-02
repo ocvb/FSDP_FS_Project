@@ -1,7 +1,7 @@
 import { colors } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-import headerImage from '@assets/Rewards/rewards-header.jpg';
+import headerImage from '@assets/Rewards/rewards-header1.png';
 
 import style from './css/Rewards.module.css';
 

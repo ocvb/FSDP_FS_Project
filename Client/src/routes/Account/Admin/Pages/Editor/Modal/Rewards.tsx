@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import {
     Stack,
     TextField,
@@ -8,26 +7,28 @@ import {
     Alert,
     Box,
     SelectChangeEvent,
-    FormControl,
 } from '@mui/material';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@components/Button/CustomButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
-
 import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
 import { MoreHoriz } from '@mui/icons-material';
 import Dropdown from '@components/Dropdown/Dropdown';
 import PopupModal from '@components/PopupModal/PopupModal';
-
-import { callAPI, fetchEvents } from '@api/EndpointsQueries';
-import { EventsDataResponse, RewardsDataResponse } from '@api/ApiType';
 import EditorSelector from '@components/Admin/EditorSelector';
+import { RewardsDataResponse } from '@api/ApiType';
+import {
+    fetchRewards,
+    createReward,
+    updateReward,
+    deleteReward,
+} from '@api/EndpointsQueries';
 
-interface EventsProps {
+interface RewardsProps {
     postSnackbar: (data: {
         children?: string;
         severity?: 'success' | 'error' | 'info' | 'warning' | undefined;
@@ -40,91 +41,69 @@ interface SelectedRow {
     id?: number;
     title?: string;
     description?: string;
-    location?: string;
-    price?: number;
-    date?: string;
-    userId?: number | null;
+    points?: number;
+    claimed?: boolean;
+    popular?: boolean;
+    endDate?: string | null;
+    imageUrl?: string;
+    category?: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
-export default function Events({
+export default function AdminRewards({
     postSnackbar,
     handleOnChangeSelect,
     selectedCategory,
-}: EventsProps) {
+}: RewardsProps) {
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
-    const [selectedRow, setSelectedRow] = useState({
+    const [selectedRow, setSelectedRow] = useState<SelectedRow>({
         id: 0,
         title: '',
         description: '',
-        location: '',
-        price: 0,
-        date: '',
-        userId: null,
-    } as SelectedRow);
+        points: 0,
+        claimed: false,
+        popular: false,
+        endDate: null,
+        imageUrl: '',
+        category: '',
+        createdAt: '',
+        updatedAt: '',
+    });
+
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [location, setLocation] = useState('Yishun');
-    const [price, setPrice] = useState(0);
-    const [date, setDate] = useState(
-        new Date().toLocaleDateString('en-GB', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-        })
-    );
-    const [userId, setUserId] = useState(0);
+    const [points, setPoints] = useState(0);
+    const [claimed, setClaimed] = useState(false);
+    const [popular, setPopular] = useState(false);
+    const [endDate, setEndDate] = useState<string | null>(null);
+    const [imageUrl, setImageUrl] = useState('');
+    const [category, setCategory] = useState('');
 
     const {
         data: rewardsData,
         isFetching,
         isError,
-        refetch: refetchRewawrd,
-    } = useQuery({
+        refetch: refetchRewards,
+    } = useQuery<RewardsDataResponse[]>({
         queryKey: ['rewards'],
-        queryFn: async () => {
-            const response = await callAPI.get<RewardsDataResponse[]>(
-                '/admin/rewards',
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                }
-            );
-            return response.data;
-        },
+        queryFn: fetchRewards,
     });
 
-    const rewardsUpdateMutation = useMutation({
+    const createRewardMutation = useMutation({
         mutationKey: ['rewards'],
-        mutationFn: async (data: RewardsDataResponse) => {
-            console.log(data);
-            const response = await callAPI.put<RewardsDataResponse[]>(
-                `/admin/rewards/${data.id}`,
-                data,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                }
-            );
-            return response.data;
-        },
+        mutationFn: createReward,
     });
 
-    const rewardsDeleteMutation = useMutation({
-        mutationKey: ['events'],
-        mutationFn: async (data: RewardsDataResponse) => {
-            const response = await callAPI.delete<RewardsDataResponse>(
-                `/admin/rewards/${data.id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                }
-            );
-            return response.data;
-        },
+    const updateRewardMutation = useMutation({
+        mutationKey: ['rewards'],
+        mutationFn: async (data: SelectedRow) => updateReward(data.id!, data),
+    });
+
+    const deleteRewardMutation = useMutation({
+        mutationKey: ['rewards'],
+        mutationFn: (id: number) => deleteReward(id),
     });
 
     function EditToolbar() {
@@ -134,53 +113,41 @@ export default function Events({
                     children: 'Please wait for the data to load',
                     severity: 'info',
                 });
+
             const rowsIds = rewardsData?.map((value) => value?.id);
-            const id = Math.max(0, ...rowsIds) + 1;
+            const id = Math.max(0, ...(rowsIds || [])) + 1;
             setOpenAddModal(true);
 
-            interface EventData {
-                id?: number;
-            }
-
-            setSelectedRow({ id } as EventData);
+            setSelectedRow({ id });
         };
 
         return (
             <GridToolbarContainer
                 sx={{
                     display: 'flex',
-                    justifyContent: ' space-between',
+                    justifyContent: 'space-between',
                     gap: '1rem',
                     alignItems: 'center',
                     padding: '1rem',
                 }}
             >
-                <Box
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        gap: '1rem',
-                    }}
-                >
+                <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
                     <EditorSelector
                         selectedCategory={selectedCategory}
                         handleOnChangeSelect={handleOnChangeSelect}
                     />
-                </Box>
-                <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
                     <Button
                         type='button'
                         text='Refresh'
                         startIcon={<RefreshIcon sx={{ fontSize: '25px' }} />}
                         onClick={() => {
-                            refetchRewawrd().catch(() =>
+                            refetchRewards().catch(() =>
                                 console.log('Error refreshing')
-                            ),
-                                postSnackbar({
-                                    children: 'Events refreshed',
-                                    severity: 'success',
-                                });
+                            );
+                            postSnackbar({
+                                children: 'Rewards refreshed',
+                                severity: 'success',
+                            });
                         }}
                         sx={{
                             backgroundColor: 'black',
@@ -210,54 +177,11 @@ export default function Events({
         );
     }
 
-    function ExpandableCell(param: { value: string }) {
-        const [expanded, setExpanded] = useState(false);
-        const length = 300;
-        return (
-            <div>
-                {expanded ? param.value : param.value.slice(0, length)}
-                &nbsp;
-                {param.value.length > length && (
-                    <Link
-                        type='button'
-                        component='button'
-                        sx={{ fontSize: 'inherit' }}
-                        onClick={() => setExpanded(!expanded)}
-                    >
-                        {expanded ? 'view less' : 'view more'}
-                    </Link>
-                )}
-            </div>
-        );
-    }
-
-    const handleDeleteClick = (id: number) => () => {
-        rewardsDeleteMutation.mutate(
-            { id },
-            {
-                onSuccess: () => {
-                    postSnackbar({
-                        children: 'Event deleted successfully',
-                        severity: 'success',
-                    });
-                    refetchRewawrd().catch(() => {
-                        console.log('Error refreshing');
-                    });
-                },
-                onError: (error) => {
-                    postSnackbar({
-                        children: error.message,
-                        severity: 'error',
-                    });
-                },
-            }
-        );
-    };
-
     const columns = [
         {
             field: 'id',
             headerName: 'ID',
+            editable: false,
             width: 30,
             maxWidth: 70,
         },
@@ -265,43 +189,86 @@ export default function Events({
             field: 'title',
             headerName: 'Title',
             type: 'string',
-            width: 160,
+            editable: false,
+            flex: 1,
+            width: 0,
+            maxWidth: 200,
         },
         {
             field: 'description',
             headerName: 'Description',
             type: 'string',
+            editable: false,
             flex: 1,
-            renderCell: (params) => <ExpandableCell {...params} />,
+            width: 0,
         },
         {
             field: 'points',
             headerName: 'Points',
             type: 'number',
+            editable: false,
             flex: 1,
+            width: 0,
         },
         {
             field: 'claimed',
             headerName: 'Claimed',
-            type: 'number',
-            renderCell: (params: { value: number }) => {
-                if (params.value === 0) {
-                    return 'Free';
-                } else if (params.value > 0) {
-                    return `$${params.value.toFixed(2)}`;
-                }
-                return params.value;
-            },
+            type: 'boolean',
+            editable: false,
+            flex: 1,
+            width: 0,
         },
-        { field: 'createdAt', headerName: 'Created At', editable: false },
-        { field: 'updatedAt', headerName: 'Updated At', editable: false },
+        {
+            field: 'popular',
+            headerName: 'Popular',
+            type: 'boolean',
+            editable: false,
+            flex: 1,
+            width: 0,
+        },
+        {
+            field: 'endDate',
+            headerName: 'End Date',
+            type: 'string',
+            editable: false,
+            flex: 1,
+            width: 0,
+        },
+        {
+            field: 'imageUrl',
+            headerName: 'Image URL',
+            type: 'string',
+            editable: false,
+            flex: 1,
+            width: 0,
+        },
+        {
+            field: 'category',
+            headerName: 'Category',
+            type: 'string',
+            editable: false,
+            flex: 1,
+            width: 0,
+        },
+        {
+            field: 'createdAt',
+            headerName: 'Created At',
+            editable: false,
+            width: 0,
+        },
+        {
+            field: 'updatedAt',
+            headerName: 'Updated At',
+            editable: false,
+            width: 0,
+        },
         {
             field: 'action',
             type: 'actions',
             headerName: 'Action',
+            width: 0,
             cellClassName: 'actions',
             getActions: ({ id }: { id: number }) => {
-                // eslint-disable-next-line react-hooks/rules-of-hooks
                 const [dropdown, setDropdown] = useState(false);
                 const buttons = [
                     {
@@ -357,25 +324,26 @@ export default function Events({
     ];
 
     const handleOpenEditModal = (id: number) => {
-        const row = rewardsData?.find(
-            (value) => value?.id === id
+        const data = rewardsData?.find(
+            (row: SelectedRow) => row?.id === id
         ) as SelectedRow;
-        if (row === undefined || row === null) {
-            return postSnackbar({
-                children: 'Error fetching data',
+
+        if (data) {
+            setOpenEditModal(true);
+            setSelectedRow(data);
+            setTitle(data.title ?? '');
+            setDescription(data.description ?? '');
+            setPoints(data.points ?? 0);
+            setClaimed(data.claimed ?? false);
+            setPopular(data.popular ?? false);
+            setEndDate(data.endDate ?? null);
+            setImageUrl(data.imageUrl ?? '');
+            setCategory(data.category ?? '');
+        } else {
+            postSnackbar({
+                children: `Reward with ID ${id} not found.`,
                 severity: 'error',
             });
-        }
-        if (row) {
-            setOpenEditModal(true);
-            setSelectedRow(row);
-            setTitle(row?.title ?? '');
-            setDescription(
-                row?.description ?? 'No description available for this event'
-            );
-            setDate(row?.date ?? '');
-            setPrice(row?.price ?? 0);
-            setUserId(row?.userId ?? 0);
         }
     };
 
@@ -386,16 +354,23 @@ export default function Events({
             id: 0,
             title: '',
             description: '',
-            location: '',
-            price: 0,
-            date: '',
-            userId: null,
+            points: 0,
+            claimed: false,
+            popular: false,
+            endDate: null,
+            imageUrl: '',
+            category: '',
+            createdAt: '',
+            updatedAt: '',
         });
         setTitle('');
         setDescription('');
-        setPrice(0);
-        setDate('');
-        setUserId(0);
+        setPoints(0);
+        setClaimed(false);
+        setPopular(false);
+        setEndDate(null);
+        setImageUrl('');
+        setCategory('');
     };
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -408,63 +383,123 @@ export default function Events({
         setDescription(event.target.value);
     };
 
-    const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPrice(parseFloat(event.target.value));
+    const handlePointsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPoints(Number(event.target.value));
     };
 
-    const handleLocationChange = (
+    const handleClaimedChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        setLocation(event.target.value);
+        setClaimed(event.target.checked);
     };
 
-    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDate(event.target.value);
+    const handlePopularChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setPopular(event.target.checked);
     };
 
-    const handleUserIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUserId(Number(event.target.value) ?? null);
+    const handleEndDateChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setEndDate(event.target.value);
+    };
+
+    const handleImageUrlChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setImageUrl(event.target.value);
+    };
+
+    const handleCategoryChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setCategory(event.target.value);
+    };
+
+    const handleDeleteClick = (id: number) => () => {
+        deleteRewardMutation.mutate(id, {
+            onSuccess: () => {
+                postSnackbar({
+                    children: `RewardID (${id}) has been deleted successfully`,
+                    severity: 'success',
+                });
+                refetchRewards().catch(() =>
+                    postSnackbar({
+                        children: 'Error refreshing',
+                        severity: 'error',
+                    })
+                );
+            },
+            onError: (error) => {
+                postSnackbar({
+                    children: error.message,
+                    severity: 'error',
+                });
+            },
+        });
     };
 
     const handleSubmitUpdate = (event: React.FormEvent) => {
         event.preventDefault();
 
-        interface EventData {
-            id: number;
-            title: string;
-            description: string;
-            location: string;
-            price: number;
-            date: string;
-            userId: number | null;
-        }
-
-        const rewardsData = {
+        const data: SelectedRow = {
             id: selectedRow.id,
             title,
             description,
-            location,
-            price,
-            date,
-            userId: userId === null ? null : userId ?? 0,
-        } as EventData;
+            points,
+            claimed,
+            popular,
+            endDate,
+            imageUrl,
+            category,
+        };
 
-        rewardsUpdateMutation.mutate(rewardsData, {
-            onSuccess: () => {
-                postSnackbar({
-                    children: 'Event updated successfully',
-                    severity: 'success',
-                });
-                refetchRewawrd().catch(() => {
-                    console.log('Error refreshing');
-                });
-            },
-            onError: (error) => {
-                postSnackbar({ children: error.message, severity: 'error' });
-            },
-        });
-        setOpenEditModal(false);
-        setOpenAddModal(false);
+        if (selectedRow.id === 0) {
+            createRewardMutation.mutate(data, {
+                onSuccess: () => {
+                    postSnackbar({
+                        children: 'Reward created successfully',
+                        severity: 'success',
+                    });
+                    refetchRewards().catch(() =>
+                        postSnackbar({
+                            children: 'Error refreshing',
+                            severity: 'error',
+                        })
+                    );
+                },
+                onError: (error) => {
+                    postSnackbar({
+                        children: error.message,
+                        severity: 'error',
+                    });
+                },
+            });
+        } else {
+            updateRewardMutation.mutate(data, {
+                onSuccess: () => {
+                    postSnackbar({
+                        children: 'Reward updated successfully',
+                        severity: 'success',
+                    });
+                    refetchRewards().catch(() =>
+                        postSnackbar({
+                            children: 'Error refreshing',
+                            severity: 'error',
+                        })
+                    );
+                },
+                onError: (error) => {
+                    postSnackbar({
+                        children: error.message,
+                        severity: 'error',
+                    });
+                },
+            });
+        }
+
+        handleCloseModal();
     };
 
     return (
@@ -475,8 +510,6 @@ export default function Events({
                 <DataGrid
                     rows={rewardsData ?? []}
                     columns={columns}
-                    getEstimatedRowHeight={() => 100}
-                    getRowHeight={() => 'auto'}
                     disableSelectionOnClick
                     disableColumnResize
                     loading={isFetching}
@@ -493,15 +526,10 @@ export default function Events({
                         pagination: () => null,
                     }}
                     sx={{
+                        width: '100%',
                         '& .MuiDataGrid-main': {
                             borderTop: '1px solid #e0e0e0',
                         },
-                        '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell':
-                            {
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                            },
                         '& .actions': {
                             display: 'flex',
                             justifyContent: 'center',
@@ -535,10 +563,10 @@ export default function Events({
                         textTransform: 'capitalize',
                     }}
                 >
-                    {openEditModal ? `Update "${title}"` : 'Add Event'}
+                    {openEditModal ? `Update "${title}"` : 'Add Reward'}
                 </p>
 
-                <FormControl onSubmit={handleSubmitUpdate}>
+                <form onSubmit={handleSubmitUpdate}>
                     <Stack spacing={2} sx={{ width: '100%' }}>
                         <TextField
                             label='Title'
@@ -553,85 +581,78 @@ export default function Events({
                             label='Description'
                             variant='outlined'
                             fullWidth
-                            multiline
-                            maxRows={10}
+                            size='small'
                             value={description}
                             onChange={handleDescriptionChange}
                         />
                         <TextField
-                            label='Price'
+                            label='Points'
                             variant='outlined'
                             fullWidth
                             size='small'
-                            value={price}
-                            onChange={handlePriceChange}
+                            type='number'
+                            value={points}
+                            onChange={handlePointsChange}
                         />
                         <TextField
+                            label='Category'
                             variant='outlined'
-                            label='Location'
                             fullWidth
-                            select
-                            SelectProps={{
-                                native: true,
-                            }}
                             size='small'
-                            value={location}
-                            onChange={handleLocationChange}
-                            defaultChecked={true}
-                        >
-                            <option value='Ang Mo Kio'>Ang Mo Kio</option>
-                            <option value='Yishun'>Yishun</option>
-                        </TextField>
+                            value={category}
+                            onChange={handleCategoryChange}
+                        />
                         <TextField
-                            label='Date'
+                            label='Image URL'
+                            variant='outlined'
+                            fullWidth
+                            size='small'
+                            value={imageUrl}
+                            onChange={handleImageUrlChange}
+                        />
+                        <TextField
+                            label='End Date'
+                            variant='outlined'
+                            fullWidth
+                            size='small'
                             type='date'
-                            variant='outlined'
-                            fullWidth
-                            size='small'
-                            value={date}
-                            onChange={handleDateChange}
+                            value={endDate || ''}
+                            onChange={handleEndDateChange}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
                         />
-                        <TextField
-                            label='User Id'
-                            variant='outlined'
-                            fullWidth
-                            size='small'
-                            value={userId}
-                            defaultValue={null}
-                            onChange={handleUserIdChange}
+                        <label>
+                            <input
+                                type='checkbox'
+                                checked={claimed}
+                                onChange={handleClaimedChange}
+                            />
+                            Claimed
+                        </label>
+                        <label>
+                            <input
+                                type='checkbox'
+                                checked={popular}
+                                onChange={handlePopularChange}
+                            />
+                            Popular
+                        </label>
+                        <Button
+                            text={openEditModal ? 'Update' : 'Add'}
+                            type='submit'
+                            fullWidth={true}
+                            onClick={handleSubmitUpdate}
+                            sx={{
+                                backgroundColor: 'black',
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: '#2a2a2a',
+                                },
+                            }}
                         />
-
-                        {(openEditModal && (
-                            <Button
-                                text='Update'
-                                type='submit'
-                                fullWidth
-                                onClick={handleSubmitUpdate}
-                                sx={{
-                                    backgroundColor: 'black',
-                                    color: 'white',
-                                    '&:hover': {
-                                        backgroundColor: '#2a2a2a',
-                                    },
-                                }}
-                            />
-                        )) || (
-                            <Button
-                                text='Add'
-                                type='submit'
-                                fullWidth
-                                onClick={handleSubmitUpdate}
-                                sx={{
-                                    backgroundColor: 'black',
-                                    color: 'white',
-                                    '&:hover': {
-                                        backgroundColor: '#2a2a2a',
-                                    },
-                                }}
-                            />
-                        )}
                     </Stack>
-                </FormControl>
+                </form>
             </PopupModal>
         </>
     );
