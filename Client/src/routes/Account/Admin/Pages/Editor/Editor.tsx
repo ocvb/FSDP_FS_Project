@@ -7,6 +7,7 @@ import Alert from '@mui/material/Alert';
 import Events from './Modal/Events';
 import Users from './Modal/Users';
 import Courses from './Modal/Courses';
+import Rewards from './Modal/Rewards';
 
 interface snackBar {
     message?: string;
@@ -63,12 +64,20 @@ export default function Editor() {
                         handleOnChangeSelect={handleOnChangeSelect}
                         selectedCategory={selected}
                     />
-                ) : (
+                ) : selected == 2 ? (
                     <Courses
                         postSnackbar={handleSnackbarFromModal}
                         handleOnChangeSelect={handleOnChangeSelect}
                         selectedCategory={selected}
                     />
+                ) : selected == 3 ? (
+                    <Rewards
+                        postSnackbar={handleSnackbarFromModal}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                        selectedCategory={selected}
+                    />
+                ) : (
+                    <div>Not Found</div>
                 )}
 
                 {snackbar != null && (
