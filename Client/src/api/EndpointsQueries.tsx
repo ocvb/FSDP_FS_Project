@@ -55,3 +55,51 @@ export const fetchSkillshare = async () => {
     });
     return response.data;
 };
+
+// Rewards endpoints
+export const fetchRewards = async (): Promise<RewardsDataResponse[]> => {
+    const response = await callAPI.get<RewardsDataResponse[]>('/rewards');
+    return response.data;
+};
+
+export const fetchPopularRewards = async (): Promise<RewardsDataResponse[]> => {
+    const response =
+        await callAPI.get<RewardsDataResponse[]>('/rewards/popular');
+    return response.data;
+};
+
+export const fetchRewardsByCategory = async (
+    category: string
+): Promise<RewardsDataResponse[]> => {
+    const response = await callAPI.get<RewardsDataResponse[]>(
+        `/api/rewards/category/${category}`
+    );
+    return response.data;
+};
+
+export const createReward = async (data: RewardsDataResponse) => {
+    const response = await callAPI.post('/rewards', data, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+};
+
+export const updateReward = async (id: number, data: RewardsDataResponse) => {
+    const response = await callAPI.put(`/rewards/${id}`, data, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+};
+
+export const deleteReward = async (id: number) => {
+    const response = await callAPI.delete(`/rewards/${id}`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+};

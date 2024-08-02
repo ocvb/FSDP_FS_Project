@@ -88,7 +88,7 @@ router.put('/:id', TokenAuthentication, async (req, res) => {
 });
 
 // For the DELETE request
-router.delete('/', TokenAuthentication, async (req, res) => {
+router.delete('/:id', TokenAuthentication, async (req, res) => {
     const { id } = req.params;
     try {
         const event = await Events.destroy({
@@ -181,7 +181,9 @@ router.post('/signup', TokenAuthentication, async (req, res) => {
     const { username, password, eventId } = req.body;
 
     if (!username || !password || !eventId) {
-        return res.status(400).json({ message: 'Username, password, and event ID are required' });
+        return res
+            .status(400)
+            .json({ message: 'Username, password, and event ID are required' });
     }
 
     try {
@@ -192,12 +194,15 @@ router.post('/signup', TokenAuthentication, async (req, res) => {
 
         const [user] = await Users.findOne({
             where: { username },
-            defaults: { password }
+            defaults: { password },
         });
 
         await event.addUser(user);
 
-        res.status(201).json({ message: 'User signed up for event successfully', event });
+        res.status(201).json({
+            message: 'User signed up for event successfully',
+            event,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });

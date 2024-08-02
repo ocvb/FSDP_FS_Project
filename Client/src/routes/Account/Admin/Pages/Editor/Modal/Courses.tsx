@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import {
     Stack,
     TextField,
@@ -7,8 +6,6 @@ import {
     Link,
     Alert,
     Box,
-    Select,
-    MenuItem,
     SelectChangeEvent,
     FormControl,
 } from '@mui/material';
@@ -93,8 +90,8 @@ export default function Course({
     const courseDeleteMutation = useMutation({
         mutationKey: ['courses'],
         mutationFn: async (data: CoursesDataResponse['data']) => {
-            const response = await axios.delete<CoursesDataResponse>(
-                `http://localhost:3001/api/admin/course/${data?.id}`,
+            const response = await callAPI.delete<CoursesDataResponse>(
+                `/admin/course/${data?.id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -353,7 +350,7 @@ export default function Course({
 
     const handleSubmitUpdate = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const formData = new FormData(event.currentTarget);
+        const formData = new FormData(event.target as HTMLFormElement);
 
         interface data {
             id: number;
@@ -456,7 +453,12 @@ export default function Course({
                     {openEditModal ? `Update "${title}"` : 'Add Event'}
                 </p>
 
-                <FormControl onSubmit={handleSubmitUpdate}>
+                <FormControl
+                    onSubmit={(e) => {
+                        console.log(e);
+                        handleSubmitUpdate(e);
+                    }}
+                >
                     <Stack spacing={2} sx={{ width: '100%' }}>
                         <TextField
                             label='Title'
@@ -489,7 +491,7 @@ export default function Course({
                                 text='Update'
                                 type='submit'
                                 fullWidth
-                                onClick={handleSubmitUpdate}
+                                // onClick={(e) => handleSubmitUpdate(e)}
                                 sx={{
                                     backgroundColor: 'black',
                                     color: 'white',
@@ -503,7 +505,7 @@ export default function Course({
                                 text='Add'
                                 type='submit'
                                 fullWidth
-                                onClick={handleSubmitUpdate}
+                                // onClick={handleSubmitUpdate}
                                 sx={{
                                     backgroundColor: 'black',
                                     color: 'white',

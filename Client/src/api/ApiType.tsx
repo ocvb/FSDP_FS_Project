@@ -26,7 +26,6 @@ export interface EventsDataResponse {
     };
     message?: string;
 }
-
 export interface SkillShareDataResponse {
     id: number;
     title: string;
@@ -37,7 +36,6 @@ export interface SkillShareDataResponse {
 
     message: string;
 }
-
 export interface CoursesDataResponse {
     status?: string;
     data?: {
@@ -50,9 +48,30 @@ export interface CoursesDataResponse {
 }
 
 export interface RewardsDataResponse {
-    id?: number;
-    title?: string;
-    description?: string;
-    points?: number;
-    claimed?: number;
+    status?: string;
+    data?: {
+        id?: number;
+        title?: string;
+        description?: string;
+        points?: number;
+        claimed?: boolean;
+        popular?: boolean;
+        endDate?: string | null;
+        imageUrl?: string;
+        category?: string;
+        createdAt?: string;
+        updatedAt?: string;
+    };
+}
+
+export interface SupportDataResponse {
+    status?: string;
+    data?: {
+        id?: number;
+        location?: string;
+        urgency?: string;
+        description?: string;
+        createdAt?: string;
+        updatedAt?: string;
+    };
 }
