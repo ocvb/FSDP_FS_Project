@@ -45,8 +45,6 @@ export default function Events() {
 
     const {
         data: eventData,
-        isFetching,
-        isFetched,
         isError,
         refetch,
     } = useQuery({
@@ -201,7 +199,7 @@ export default function Events() {
                                     marginTop: '30px',
                                 }}
                             >
-                                <div className={styles.carouselItems}>
+                                <div className={styles.carouselItems} style={{  maxWidth: 'fit-content', marginLeft: 'auto', marginRight: 'auto',}}>
                                     {!isError &&
                                         eventData
                                             ?.slice(0, 3)
@@ -234,7 +232,7 @@ export default function Events() {
                                                 </div>
                                             ))}
                                 </div>
-                                <div className={styles.carouselItems}>
+                                <div className={styles.carouselItems} style={{margin: 'auto',}}>
                                     {eventData
                                         ?.slice(3, 6)
                                         .map((item, index) => (
