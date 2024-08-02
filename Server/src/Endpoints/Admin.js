@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Users, Events, Courses } = require('@models/index');
+const { Users, Events, Courses, Rewards } = require('@models/index');
 const { TokenAuthentication } = require('@middleware/TokenAuthentication');
 const bcrypt = require('bcrypt');
 const process = require('process');
@@ -194,8 +194,89 @@ router.delete('/course/:id', TokenAuthentication, async (req, res) => {
     }
 });
 
-// Reward
+// Rewards
+router.get('/rewards', TokenAuthentication, async (req, res) => {
+    console.log('awdwa');
+    const rewards = await Rewards.findAll();
 
+    res.status(200).json(rewards);
+});
 
+router.put('/reward', TokenAuthentication, async (req, res) => {
+    const { id, title, description, claimed, points } = req.body;
+
+    if (!title || !description || !cost) {
+        res.status(400).json({
+            message: 'Please provide all the required fields',
+        });
+        return;
+    }
+
+    try {
+        const reward = await Rewards.upsert(
+            {
+                id,
+                title,
+                description,
+                claimed,
+                points,
+            },
+            {
+                where: { id: id },
+            }
+        );
+
+        if (reward) {
+            res.status(200).json({ message: 'Reward created successfully' });
+        } else {
+            res.status(400).json({ message: 'Reward creation failed' });
+        }
+    } catch (error) {
+        console.error('Error creating reward', error.message);
+        res.status(500).json({
+            message: 'Reward creation failed',
+            error: error.message,
+        });
+    }
+});
+
+router.put('/reward/:id', TokenAuthentication, async (req, res) => {
+    const { id } = req.params;
+    const { title, description, claimed, points } = req.body;
+
+    if (!title || !description || !claimed || !points) {
+        res.status(400).json({
+            message: 'Please provide all the required fields',
+        });
+        return;
+    }
+
+    try {
+        const reward = await Rewards.upsert(
+            {
+                id,
+                title,
+                description,
+                claimed,
+                points,
+            },
+            {
+                where: { id: id },
+            }
+        );
+
+        if (reward) {
+            res.status(200).json({ message: 'Reward updated successfully' });
+        } else {
+            res.status(400).json({ message: 'Reward update failed' });
+        }
+    } catch (error) {
+        console.error('Error updating reward', error.message);
+        res.status(500).json({
+            message: 'Reward update failed',
+            error: error.message,
+        });
+    }
+});
 
 module.exports = router;
