@@ -7,7 +7,7 @@ const process = require('process');
 //     logging: false,
 // });
 
-// // MYSQL
+// // // MYSQL
 const db = new Sequelize({
     dialect: 'mysql',
     database: process.env.MYSQL_DB,
