@@ -110,8 +110,8 @@ export default function Courses() {
                         ))}
                     </div>
                 </div>
-                <div style={{ marginTop: '2rem' }}>
-                    <Link to="/courses/booking">
+                <div style={{ marginTop: '2rem'}}>
+                    <Link to={'/courses/coursebooking'}>
                         <Button
                             variant="contained"
                             color="secondary"
