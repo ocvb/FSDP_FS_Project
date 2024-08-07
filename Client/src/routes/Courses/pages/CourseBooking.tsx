@@ -1,7 +1,6 @@
 import images from '@/assets/Courses/Courses.jpg';
 import styles from '@/routes/Courses/css/Courses.module.css';
 
-
 export default function CourseBooking() {
     return (
         <div style={{ position: 'relative' }}>
@@ -20,4 +19,5 @@ export default function CourseBooking() {
                 </div>
             </div>
         </div>
-)};
+    );
+}
