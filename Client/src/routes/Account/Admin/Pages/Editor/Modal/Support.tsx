@@ -19,6 +19,7 @@ import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
 import { MoreHoriz } from '@mui/icons-material';
 import Dropdown from '@components/Dropdown/Dropdown';
 import PopupModal from '@components/PopupModal/PopupModal';
+import EditorSelector from '@components/Admin/EditorSelector';
 
 interface SupportProps {
     postSnackbar: (data: {
@@ -38,7 +39,11 @@ interface SelectedRow {
     updatedAt?: string;
 }
 
-export default function Support({ postSnackbar }: SupportProps) {
+export default function Support({
+    postSnackbar,
+    handleOnChangeSelect,
+    selectedCategory,
+}: SupportProps) {
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState<SelectedRow>({
@@ -137,6 +142,19 @@ export default function Support({ postSnackbar }: SupportProps) {
                     padding: '1rem',
                 }}
             >
+                <Box
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        gap: '1rem',
+                    }}
+                >
+                    <EditorSelector
+                        selectedCategory={selectedCategory}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                    />
+                </Box>
                 <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
                     <Button
                         type='button'
