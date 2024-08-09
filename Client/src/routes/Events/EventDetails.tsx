@@ -38,10 +38,10 @@ export default function EventDetails() {
         queryFn: async () => {
             const response = await axios.post(
                 'http://localhost:3001/api/events/details',
-            )
+            );
         }
 
-    })
+    });
     const { data: fetchEvent } = useQuery({
         queryKey: ['conditionedEvents'],
         queryFn: async () => {
