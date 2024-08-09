@@ -171,10 +171,11 @@ router.put('/update/:id', TokenAuthentication, async (req, res) => {
 router.post('/event', TokenAuthentication, async (req, res) => {
     const { userId } = req.body;
 
-    if (userId <= 0) {
+    if (userId <= 0 || userId == null || userId != 0) {
         res.status(404).json({
             message: 'Invalid User ID.',
         });
+        return;
     }
 
     const checkUser = await UserEvents.findAll({
@@ -195,7 +196,7 @@ router.post('/event', TokenAuthentication, async (req, res) => {
 router.post('/rewards', async (req, res) => {
     const { userId } = req.body;
 
-    if (userId <= 0) {
+    if (userId <= 0 || userId == null || userId != 0) {
         res.status(404).json({
             message: 'Invalid User ID.',
         });
