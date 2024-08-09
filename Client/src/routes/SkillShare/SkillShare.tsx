@@ -238,10 +238,7 @@ function SkillshareForm(props: SkillshareFormProp) {
     });
 
     const postSkillshare = async (data) => {
-        const response = await axios.post(
-            'http://localhost:3001/api/skillshare',
-            data
-        );
+        const response = await callAPI.post('/skillshare', data);
         return response;
     };
 
@@ -262,7 +259,7 @@ function SkillshareForm(props: SkillshareFormProp) {
 
                 const formSubmittedData = {
                     title: formData.get('title'),
-                    postedBy: formData.get('postedBy'),
+                    postedBy: fetchAuth.User.username,
                     description: formData.get('description'),
                     category: formData.get('category'),
                 };
@@ -289,6 +286,7 @@ function SkillshareForm(props: SkillshareFormProp) {
             <FormGroup
                 sx={{
                     flexDirection: 'row',
+                    alignItems: 'center',
                     flexWrap: 'wrap',
                     width: '100%',
                     gap: '0.5rem',
@@ -298,21 +296,14 @@ function SkillshareForm(props: SkillshareFormProp) {
             >
                 <div>
                     Hi! My name is{' '}
-                    <TextField
-                        type='text'
-                        name='postedBy'
-                        placeholder='Name'
-                        variant='standard'
-                        size='small'
-                        autoComplete='off'
-                        sx={{
-                            width: '100px',
-                            '.MuiInput-input ': {
-                                paddingTop: '0',
-                            },
+                    <span
+                        style={{
+                            color: 'black',
+                            fontWeight: 'bold',
                         }}
-                        value={fetchAuth.User.username}
-                    />
+                    >
+                        {fetchAuth.User.username}
+                    </span>
                 </div>
                 <div style={{ fontSize: '1.1rem' }}>
                     request to help with{' '}
