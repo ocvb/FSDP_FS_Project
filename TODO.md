@@ -3,7 +3,9 @@
 ### Kai Jie
 
 1. Forget password
-2. Skillshare not finished
+2. Calculate the Position using transfrom DropDown.tsx
+3. Skillshare not finisheds
+4. SkillshareView needs WYSIWYG allow users to response
 
 ### EH
 
