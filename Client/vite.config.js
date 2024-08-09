@@ -9,6 +9,7 @@ export default defineConfig({
     plugins: [
         react(),
         eslintPlugin({
+            fix: true,
             emitError: false,
             failOnError: false,
         }),
