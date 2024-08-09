@@ -33,6 +33,8 @@ export interface SkillShareDataResponse {
     category: string;
     postedBy: string;
     numberOfResponded: number;
+    createdAt?: string;
+    updatedAt?: string;
 
     message: string;
 }
