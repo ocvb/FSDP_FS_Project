@@ -1,4 +1,4 @@
-import { forwardRef, memo } from 'react';
+import { forwardRef, memo, useEffect, useState } from 'react';
 
 import styles from './css/Dropdown.module.css';
 
@@ -27,7 +27,7 @@ const Dropdown = memo(
                 style,
                 allowHover,
             }: DropdownProps,
-            ref: React.Ref<HTMLDivElement>
+            ref: React.ForwardedRef<HTMLDivElement>
         ) => {
             const anchorStyle = {
                 display: 'flex',
@@ -35,6 +35,39 @@ const Dropdown = memo(
                 justifyContent: 'start',
                 gap: '0.5rem',
             };
+            const [adjustedStyle, setAdjustedStyle] = useState(style);
+            useEffect(() => {
+                const checkOverflow = () => {
+                    if (ref?.current) {
+                        const rect = ref.current.getBoundingClientRect();
+                        const isOverflowing =
+                            rect.bottom > window.innerHeight ||
+                            rect.right > window.innerWidth;
+
+                        if (isOverflowing) {
+                            setAdjustedStyle((prevStyle) => ({
+                                ...prevStyle,
+                                top:
+                                    rect.bottom > window.innerHeight
+                                        ? 'auto'
+                                        : prevStyle.top,
+                                bottom:
+                                    rect.bottom > window.innerHeight
+                                        ? 0
+                                        : 'auto',
+                                left:
+                                    rect.right > window.innerWidth
+                                        ? 'auto'
+                                        : prevStyle.left,
+                                right:
+                                    rect.right > window.innerWidth ? 0 : 'auto',
+                            }));
+                        }
+                    }
+                };
+
+                checkOverflow();
+            }, [dropdown, style, ref]);
 
             return (
                 <>
@@ -64,7 +97,7 @@ const Dropdown = memo(
                             position: 'absolute',
                             zIndex: 3,
                             fontSize: '1rem',
-                            ...style,
+                            ...adjustedStyle,
                         }}
                     >
                         <div className={styles.dropdownContent}>
