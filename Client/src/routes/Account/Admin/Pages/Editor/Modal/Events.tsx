@@ -508,7 +508,6 @@ export default function Events({
                     getEstimatedRowHeight={() => 100}
                     getRowHeight={() => 'auto'}
                     disableSelectionOnClick
-                    disableColumnResize
                     loading={isFetching}
                     initialState={{
                         columns: {
@@ -520,7 +519,7 @@ export default function Events({
                     }}
                     slots={{
                         toolbar: EditToolbar,
-                        pagination: () => null,
+                        footer: () => null,
                     }}
                     sx={{
                         '& .MuiDataGrid-main': {
