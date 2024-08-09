@@ -37,31 +37,26 @@ export interface SkillShareDataResponse {
     message: string;
 }
 export interface CoursesDataResponse {
-    status?: string;
-    data?: {
-        id?: number;
-        title?: string;
-        category?: string;
-        description?: string;
-    };
-    token?: string;
+    id?: number;
+    title?: string;
+    category?: string;
+    description?: string;
 }
 
 export interface RewardsDataResponse {
-    status?: string;
-    data?: {
-        id?: number;
-        title?: string;
-        description?: string;
-        points?: number;
-        claimed?: boolean;
-        popular?: boolean;
-        endDate?: string | null;
-        imageUrl?: string;
-        category?: string;
-        createdAt?: string;
-        updatedAt?: string;
-    };
+    id?: number;
+    title?: string;
+    description?: string;
+    points?: number;
+    claimed?: boolean;
+    popular?: boolean;
+    endDate?: string | null;
+    imageUrl?: string;
+    category?: string;
+    createdAt?: string;
+    updatedAt?: string;
+
+    message?: string;
 }
 
 export interface SupportDataResponse {
