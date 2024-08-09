@@ -9,6 +9,7 @@ const Support = require('@models/Support');
 const Rewards = require('@models/Rewards');
 const UserEvents = require('@models/UserEvents');
 const UserRewards = require('@models/UserRewards');
+const UserSkillshareResponse = require('@models/UserSkillshareResponse');
 
 // User to Events Relation
 Users.belongsToMany(Events, { through: UserEvents, foreignKey: 'userId' });
@@ -18,11 +19,22 @@ Events.belongsToMany(Users, { through: UserEvents, foreignKey: 'eventId' });
 Users.belongsToMany(Rewards, { through: UserRewards, foreignKey: 'userId' });
 Rewards.belongsToMany(Users, { through: UserRewards, foreignKey: 'rewardId' });
 
+// User to SkillShares Relation
+Users.belongsToMany(SkillShares, {
+    through: UserSkillshareResponse,
+    foreignKey: 'userId',
+});
+SkillShares.belongsToMany(Users, {
+    through: UserSkillshareResponse,
+    foreignKey: 'skillshareId',
+});
+
 module.exports = {
     Users,
     Events,
     UserEvents,
     UserRewards,
+    UserSkillshareResponse,
     SkillShares,
     Facilities,
     Courses,
