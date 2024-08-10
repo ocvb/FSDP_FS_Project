@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import './Volunteer.module.css';
+import css from './Volunteer.module.css';
+import { Box } from '@mui/material';
 
 const Volunteer = () => {
     const [formData, setFormData] = useState({
@@ -43,14 +44,14 @@ const Volunteer = () => {
     };
 
     return (
-        <div className='music_120_77'>
+        <Box className={css.music_120_77}>
             {/* bg img */}
             <img
-                className='music_125_96'
+                className={css.music_125_96}
                 src='https://seal-img.nos-jd.163yun.com/obj/w5rCgMKVw6DCmGzCmsK-/45116901770/5823/b995/80b0/4b88f9c238dbfe89635ca4bd48457c3c.png'
                 alt='Image description'
             />
-            <div className='stacked-bars-container'>
+            <div className={'stacked-bars-container'}>
                 <span className='stacked-bar'>
                     Connect with people to forge multi-racial harmony and social
                     cohesion, and inculcate a sense of belonging among
@@ -78,16 +79,16 @@ const Volunteer = () => {
                     Singaporeans
                 </span>
             </div>
-            <div className='music_211_1402'>
-                <span className='music_211_1403'>Volunteer Here!</span>
+            <div className={css.music_211_1402}>
+                <span className={css.music_211_1403}>Volunteer Here!</span>
                 <form onSubmit={handleSubmit}>
-                    <div className='music_211_1410'>
-                        <span className='music_211_1411'>
+                    <div className={css.music_211_1410}>
+                        <span className={css.music_211_1411}>
                             Name
                             <br />
                         </span>
                         <input
-                            className='music_211_1412'
+                            className={css.music_211_1412}
                             type='text'
                             name='name'
                             value={formData.name}
@@ -95,10 +96,10 @@ const Volunteer = () => {
                             required
                         />
                     </div>
-                    <div className='music_211_1407'>
-                        <span className='music_211_1408'>Number</span>
+                    <div className={css.music_211_1407}>
+                        <span className={css.music_211_1408}>Number</span>
                         <input
-                            className='music_211_1409'
+                            className={css.music_211_1409}
                             type='text'
                             name='number'
                             value={formData.number}
@@ -106,10 +107,12 @@ const Volunteer = () => {
                             required
                         />
                     </div>
-                    <div className='music_211_1404'>
-                        <span className='music_211_1405'>Email Address</span>
+                    <div className={css.music_211_1404}>
+                        <span className={css.music_211_1405}>
+                            Email Address
+                        </span>
                         <input
-                            className='music_211_1406'
+                            className={css.music_211_1406}
                             type='email'
                             name='email'
                             value={formData.email}
@@ -117,14 +120,14 @@ const Volunteer = () => {
                             required
                         />
                     </div>
-                    <div className='music_646_1825'>
-                        <button className='music_211_1415' type='submit'>
+                    <div className={css.music_646_1825}>
+                        <button className={css.music_211_1415} type='submit'>
                             Sign Up
                         </button>
                     </div>
                 </form>
             </div>
-        </div>
+        </Box>
     );
 };
 

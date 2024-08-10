@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './Donation.module.css';
+import css from './Donation.module.css';
 
 const Donation = () => {
     const [email, setEmail] = useState('');
