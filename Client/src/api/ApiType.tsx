@@ -38,6 +38,18 @@ export interface SkillShareDataResponse {
 
     message: string;
 }
+
+export interface SkillShareRepliesDataResponse {
+    id?: number;
+    response?: string | undefined | null;
+    userId?: number;
+    skillShareId?: number;
+    createdAt?: string;
+    updatedAt?: string;
+    respondentUsername?: string;
+    message?: string;
+}
+
 export interface CoursesDataResponse {
     id?: number;
     title?: string;
