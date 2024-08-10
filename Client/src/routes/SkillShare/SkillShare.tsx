@@ -12,7 +12,11 @@ import { SkillShareDataResponse } from '@api/ApiType';
 import { callAPI } from '@api/EndpointsQueries';
 
 export default function SkillShare() {
-    const { data: SkillshareData, refetch: refetchSkillshare } = useQuery({
+    const {
+        data: SkillshareData,
+        refetch: refetchSkillshare,
+        isFetching: SkillshareDataStillFetching,
+    } = useQuery({
         queryKey: ['skillshare'],
         queryFn: async () => {
             return (await callAPI.get<SkillShareDataResponse[]>('/skillshare'))
@@ -137,6 +141,7 @@ export default function SkillShare() {
                     width={'auto'}
                     margin={'0 auto'}
                 >
+                    {SkillshareDataStillFetching ? <p>Loading...</p> : null}
                     {SkillshareData?.slice(
                         Math.round(SkillshareData.length / 3),
                         Math.round(SkillshareData.length * 2)
