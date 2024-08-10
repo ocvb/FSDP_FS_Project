@@ -172,10 +172,9 @@ router.post('/event', TokenAuthentication, async (req, res) => {
     const { userId } = req.body;
 
     if (userId <= 0 || userId == null || userId != 0) {
-        res.status(404).json({
+        return res.status(404).json({
             message: 'Invalid User ID.',
         });
-        return;
     }
 
     const checkUser = await UserEvents.findAll({
@@ -197,7 +196,7 @@ router.post('/rewards', async (req, res) => {
     const { userId } = req.body;
 
     if (userId <= 0 || userId == null || userId != 0) {
-        res.status(404).json({
+        return res.status(404).json({
             message: 'Invalid User ID.',
         });
     }
@@ -212,7 +211,7 @@ router.post('/rewards', async (req, res) => {
         where: { id: rewardId },
     });
 
-    res.status(200).json(retrieveReward);
+    return res.status(200).json(retrieveReward);
 });
 
 module.exports = router;
