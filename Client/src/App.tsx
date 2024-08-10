@@ -24,6 +24,7 @@ import SkillShare from '@routes/SkillShare/SkillShare';
 import Rewards from '@routes/Rewards/Rewards';
 import UserRewards from '@routes/Rewards/UserRewards';
 import Support from '@routes/Support/Support';
+import Donation from '@routes/Donation/Donation';
 import Profile from '@routes/Account/Profile/Profile';
 import Admin from '@routes/Account/Admin/Admin';
 
@@ -40,6 +41,7 @@ import {
 import SkillShareView from '@routes/SkillShare/SkillShareView';
 import { useEffect, useState } from 'react';
 import Facilities from '@routes/Facilities/Facilities';
+import Volunteer from '@routes/Volunteer/Volunteer';
 
 export default function App() {
     const { fetchAuth } = UseAuth();
@@ -109,6 +111,10 @@ export default function App() {
                         }
                     />
                     <Route path='/support' element={<Support />} />
+                    <Route path='/support/*' element={<Outlet />}>
+                        <Route path='volunteer' element={<Volunteer />}></Route>
+                        <Route path='donate' element={<Donation />} />
+                    </Route>
                     <Route path='/skill-share' element={<SkillShare />} />
                     <Route path='/skill-share/*' element={<Outlet />}>
                         <Route path=':id' element={<SkillShareView />} />
