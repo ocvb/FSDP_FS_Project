@@ -19,6 +19,7 @@ interface fetchAuthType {
     };
     isAuthenticated?: boolean;
     userRole?: string | null;
+    AccessToken?: string | null;
 }
 
 export interface AuthType {
@@ -74,10 +75,13 @@ export default function AuthProvider({ children }: AuthContextType) {
         }
     }, [isAuthenticated, userRole, location, loginInEffect, navigate]);
 
+    const AccessToken = localStorage.getItem('token');
+
     const fetchAuth = {
         User: user,
         isAuthenticated: isAuthenticated,
         userRole: userRole,
+        AccessToken,
     } as fetchAuthType;
 
     const checkTokenIsValid = async (token: string) => {
