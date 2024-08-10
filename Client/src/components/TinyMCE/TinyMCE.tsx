@@ -1,8 +1,8 @@
 import { Editor } from '@tinymce/tinymce-react';
 
 interface TinyMCEProps {
-    value: string;
-    handler: (content: string) => void;
+    value?: string;
+    handler?: (content: string) => void;
 }
 
 export default function TinyMCE({ value, handler }: TinyMCEProps) {
