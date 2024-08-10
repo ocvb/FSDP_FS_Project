@@ -5,7 +5,7 @@ const cors = require('cors');
 const express = require('express');
 const port = process.env.PORT || 3001;
 const app = express();
-const { db } = require('@models');
+const { db, removeUniqueConstraint } = require('@models/index');
 
 app.use(express.json());
 app.use(
@@ -28,29 +28,57 @@ app.get('/', (req, res) => {
     );
 });
 
-db.sync()
-    .then(() => {
-        console.log('Database is ready');
-    })
-    .catch((error) => {
-        if (error.code == 'ER_BAD_DB_ERROR') {
-            console.error('Database does not exist');
-        }
-        if (error.code == 'ER_ACCESS_DENIED_ERROR') {
-            console.error('Database username or password is incorrect');
-        }
-        if (error.code == 'ECONNREFUSED') {
-            console.error('Database connection refused');
-        }
-        if (error.code == 'ENOTFOUND') {
-            console.error(`Unable to connect ${error.syscall}`);
-        }
-        if (error.code == 'ETIMEDOUT') {
-            console.error('Connection Timed Out');
-        }
-        console.error('Error:', error);
-    });
+// db.sync({ alter: true })
+// db.sync()
+//     .then(() => {
+//         console.log('Database is ready');
+//         // removeUniqueConstraint();
+//     })
+//     .catch((error) => {
+//         if (error.code === 'ER_BAD_DB_ERROR') {
+//             console.error('Database does not exist');
+//         } else if (error.code === 'ER_ACCESS_DENIED_ERROR') {
+//             console.error('Database username or password is incorrect');
+//         } else if (error.code === 'ECONNREFUSED') {
+//             console.error('Database connection refused');
+//         } else if (error.code === 'ENOTFOUND') {
+//             console.error(`Unable to connect: ${error.syscall}`);
+//         } else if (error.code === 'ETIMEDOUT') {
+//             console.error('Connection Timed Out');
+//         } else {
+//             console.error('Error:', error);
+//         }
+//     });
 
-app.listen(port, () => {
-    console.log(`Server is running on port http://localhost:${port}`);
-});
+(async () => {
+    try {
+        await db.sync({ alter: true });
+        // Ensure removeUniqueConstraint is defined before calling it
+        if (typeof removeUniqueConstraint === 'function') {
+            removeUniqueConstraint();
+        } else {
+            console.warn(
+                'removeUniqueConstraint is not defined or not a function'
+            );
+        }
+        console.log('Database is ready');
+
+        app.listen(port, () => {
+            console.log(`Server is running on port http://localhost:${port}`);
+        });
+    } catch (error) {
+        if (error.code === 'ER_BAD_DB_ERROR') {
+            console.error('Database does not exist');
+        } else if (error.code === 'ER_ACCESS_DENIED_ERROR') {
+            console.error('Database username or password is incorrect');
+        } else if (error.code === 'ECONNREFUSED') {
+            console.error('Database connection refused');
+        } else if (error.code === 'ENOTFOUND') {
+            console.error(`Unable to connect: ${error.syscall}`);
+        } else if (error.code === 'ETIMEDOUT') {
+            console.error('Connection Timed Out');
+        } else {
+            console.error('Error:', error);
+        }
+    }
+})();
