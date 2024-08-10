@@ -50,6 +50,13 @@ app.get('/', (req, res) => {
 //         }
 //     });
 
+console.log(
+    `Usage for the server: \
+    \nnpm start - server will continue to run in background \
+    \npm2 log - will show the logs of the server \
+    \npm2 stop 0 - will stop the server`
+);
+
 (async () => {
     try {
         await db.sync({ alter: true });
