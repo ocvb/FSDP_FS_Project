@@ -18,10 +18,6 @@ const SkillShares = db.define('skillshares', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    numberOfResponded: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-    },
 });
 
 module.exports = SkillShares;
