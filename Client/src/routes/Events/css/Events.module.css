@@ -172,11 +172,12 @@
     overflow: hidden;
 }
 
-p {
+/* Do not use this, its global and destructive*/
+/* p {
     font-size: 2rem;
     font-weight: 400;
     margin-block-end: 0;
-}
+} */
 
 @media screen and (max-width: 1066px) {
     .row {
