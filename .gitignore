@@ -7,3 +7,6 @@
 
 /Server/node_modules
 /Server/build
+
+
+/Server/.env
