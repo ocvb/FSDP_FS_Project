@@ -6,18 +6,20 @@ import { useQuery } from '@tanstack/react-query';
 
 export default function Rewards() {
     const { fetchAuth } = UseAuth();
-    const retrieveToken = localStorage.getItem('token');
 
     const { data: userData } = useQuery({
         queryKey: ['rewards'],
         queryFn: async () => {
+            console.log(fetchAuth.User.id);
             const response = await callAPI.post<RewardsDataResponse[]>(
                 '/user/rewards',
                 {
                     userId: fetchAuth.User.id,
                 },
                 {
-                    headers: { Authorization: `Bearer ${retrieveToken}` },
+                    headers: {
+                        Authorization: `Bearer ${fetchAuth.AccessToken}`,
+                    },
                 }
             );
 
