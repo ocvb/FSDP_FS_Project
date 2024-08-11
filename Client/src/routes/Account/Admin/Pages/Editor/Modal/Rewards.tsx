@@ -131,11 +131,20 @@ export default function AdminRewards({
                     padding: '1rem',
                 }}
             >
-                <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
+                <Box
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        gap: '1rem',
+                    }}
+                >
                     <EditorSelector
                         selectedCategory={selectedCategory}
                         handleOnChangeSelect={handleOnChangeSelect}
                     />
+                </Box>
+                <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
                     <Button
                         type='button'
                         text='Refresh'

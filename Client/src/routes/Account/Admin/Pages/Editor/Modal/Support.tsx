@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Stack, TextField, IconButton, Alert, Box } from '@mui/material';
+import {
+    Stack,
+    TextField,
+    IconButton,
+    Alert,
+    Box,
+    SelectChangeEvent,
+} from '@mui/material';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,6 +19,7 @@ import {
     updateSupportRequest,
     deleteSupportRequest,
 } from '@api/EndpointsQueries';
+import EditorSelector from '@components/Admin/EditorSelector';
 import { SupportDataResponse } from '@api/ApiType';
 
 interface SupportProps {
@@ -19,6 +27,8 @@ interface SupportProps {
         children?: string;
         severity?: 'success' | 'error' | 'info' | 'warning' | undefined;
     }) => void;
+    handleOnChangeSelect: (event: SelectChangeEvent<number>) => void;
+    selectedCategory: number;
 }
 
 interface SelectedRow {
@@ -29,7 +39,11 @@ interface SelectedRow {
     reply?: string;
 }
 
-export default function SupportEditor({ postSnackbar }: SupportProps) {
+export default function SupportEditor({
+    postSnackbar,
+    handleOnChangeSelect,
+    selectedCategory,
+}: SupportProps) {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState<SelectedRow>({
         id: 0,
@@ -72,27 +86,42 @@ export default function SupportEditor({ postSnackbar }: SupportProps) {
                     padding: '1rem',
                 }}
             >
-                <Button
-                    type='button'
-                    text='Refresh'
-                    startIcon={<RefreshIcon sx={{ fontSize: '25px' }} />}
-                    onClick={() => {
-                        refetchSupport().catch(() =>
-                            console.log('Error refreshing')
-                        );
-                        postSnackbar({
-                            children: 'Support requests refreshed',
-                            severity: 'success',
-                        });
+                <Box
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        gap: '1rem',
                     }}
-                    sx={{
-                        backgroundColor: 'black',
-                        color: 'white',
-                        '&:hover': {
-                            backgroundColor: '#2a2a2a',
-                        },
-                    }}
-                />
+                >
+                    <EditorSelector
+                        selectedCategory={selectedCategory}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                    />
+                </Box>
+                <Box display={'flex'} flexDirection={'row'} gap={'0.6rem'}>
+                    <Button
+                        type='button'
+                        text='Refresh'
+                        startIcon={<RefreshIcon sx={{ fontSize: '25px' }} />}
+                        onClick={() => {
+                            refetchSupport().catch(() =>
+                                console.log('Error refreshing')
+                            );
+                            postSnackbar({
+                                children: 'Support requests refreshed',
+                                severity: 'success',
+                            });
+                        }}
+                        sx={{
+                            backgroundColor: 'black',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#2a2a2a',
+                            },
+                        }}
+                    />
+                </Box>
             </GridToolbarContainer>
         );
     }
