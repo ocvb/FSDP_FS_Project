@@ -69,7 +69,7 @@ router.post('/login', async (req, res) => {
         });
 });
 
-// Token authentication
+// User authentication
 router.get('/auth', TokenAuthentication, async (req, res) => {
     console.log('Checking Authentication');
 
@@ -167,11 +167,11 @@ router.put('/update/:id', TokenAuthentication, async (req, res) => {
 });
 
 // Account page
-
 router.post('/event', TokenAuthentication, async (req, res) => {
     const { userId } = req.body;
+    console.log('Reading events for user', userId);
 
-    if (userId <= 0 || userId == null || userId != 0) {
+    if (userId <= 0 || userId == null || userId == '') {
         return res.status(404).json({
             message: 'Invalid User ID.',
         });
@@ -187,16 +187,15 @@ router.post('/event', TokenAuthentication, async (req, res) => {
         where: { id: eventId },
     });
 
-    console.log(retrieveEvent);
-
     res.status(200).json(retrieveEvent);
 });
 
 router.post('/rewards', async (req, res) => {
     const { userId } = req.body;
+    console.log('Reading rewards for user', userId);
 
-    if (userId <= 0 || userId == null || userId != 0) {
-        return res.status(404).json({
+    if (userId <= 0 || userId == null || userId == '') {
+        return res.status(401).json({
             message: 'Invalid User ID.',
         });
     }
@@ -205,13 +204,13 @@ router.post('/rewards', async (req, res) => {
         where: { userId },
     });
 
-    const rewardId = await checkUser.map((event) => event.rewardId);
+    const rewardId = checkUser.map((event) => event.rewardId);
 
     const retrieveReward = await Rewards.findAll({
         where: { id: rewardId },
     });
 
-    return res.status(200).json(retrieveReward);
+    res.status(200).json(retrieveReward);
 });
 
 module.exports = router;
