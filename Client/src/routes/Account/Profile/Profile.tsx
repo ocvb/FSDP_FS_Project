@@ -10,8 +10,17 @@ import Events from './Events';
 
 import styles from './css/Profile.module.css';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Award, Bell, Calendar, Ticket, User } from 'lucide-react';
+import {
+    Award,
+    Bell,
+    Calendar,
+    Ticket,
+    User,
+    HandHelping,
+    Hand,
+} from 'lucide-react';
 import Rewards from './Reward';
+import Support from './Support';
 
 import { motion } from 'framer-motion';
 
@@ -56,6 +65,12 @@ export default function Profile() {
             icon: <Award />,
             desc: 'View and redeem your rewards points',
             render: <Rewards />,
+        },
+        {
+            name: 'Support',
+            icon: <HandHelping />,
+            desc: 'View your support tickets',
+            render: <Support />,
         },
         {
             skip: true,
