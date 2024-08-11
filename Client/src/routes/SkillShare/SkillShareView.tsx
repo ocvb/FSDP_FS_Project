@@ -22,11 +22,13 @@ export default function SkillShareView() {
     interface StatusMessageState {
         message?: string;
         error?: string;
+        sucess?: boolean;
     }
 
     const [statusMessage, setStatusMessage] = useState<StatusMessageState>({
         message: '',
         error: '',
+        sucess: false,
     });
 
     const { data: SkillshareData } = useQuery({
@@ -39,12 +41,12 @@ export default function SkillShareView() {
         },
     });
 
-    const handlePostReply = () => {
-        callAPI
+    const handlePostReply = async () => {
+        await callAPI
             .post(
                 `/skillshare/${getId}/reply`,
                 {
-                    userResponseContent: editorContent,
+                    response: editorContent,
                     userId: fetchAuth.User.id,
                 },
                 {
@@ -59,6 +61,7 @@ export default function SkillShareView() {
                     setEditorContent('');
                     setStatusMessage(() => ({
                         message: 'Reply posted successfully',
+                        sucess: true,
                     }));
                 }
             })
@@ -90,8 +93,11 @@ export default function SkillShareView() {
 
     const handleSubmission = () => {
         if (editorContent === '') return;
-        handlePostReply();
-        refetchReplies().catch((err) => console.log(err));
+        handlePostReply()
+            .then(() => {
+                refetchReplies().catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
     };
 
     return (
@@ -197,8 +203,7 @@ export default function SkillShareView() {
                                         textAlign: 'right',
                                     }}
                                 >
-                                    {statusMessage.message} <br />
-                                    Refresh the page to see your reply
+                                    {statusMessage.message}
                                 </Box>
                             )}
                             {statusMessage.error && (
