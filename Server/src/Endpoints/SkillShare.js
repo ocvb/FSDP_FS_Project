@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { SkillShares, UserSkillshareResponse, Users } = require('@models/index');
 const { SkillshareValidation } = require('@validations/SkillshareValidation');
+const {
+    SkillshareViewValidation,
+} = require('@validations/SkillshareViewValidation');
 const { TokenAuthentication } = require('@src/Middlewares/TokenAuthentication');
-const { where } = require('sequelize');
 
 // GET route to fetch all skill shares
 router.get('/', async (_, res) => {
@@ -94,29 +96,32 @@ router.get('/:skillshareId/replies', async (req, res) => {
     return res.status(200).json(updatedResponses);
 });
 
-router.post('/:skillshareId/reply', TokenAuthentication, async (req, res) => {
-    const { userId, userResponseContent } = req.body;
-    const { skillshareId } = req.params;
-    const skillShare = await SkillShares.findByPk(skillshareId);
-    console.log(
-        `User ${userId} is replying to skillshare ${skillshareId} with content ${userResponseContent}`
-    );
+router.post(
+    '/:skillshareId/reply',
+    SkillshareViewValidation,
+    TokenAuthentication,
+    async (req, res) => {
+        const { userId, response } = req.body;
+        const { skillshareId } = req.params;
+        const skillShare = await SkillShares.findByPk(skillshareId);
+        console.log(
+            `User ${userId} is replying to skillshare ${skillshareId} with content ${response}`
+        );
 
-    if (!skillShare) {
-        return res.status(404).json({
-            message: 'Skillshare not found',
+        if (!skillShare) {
+            return res.status(404).json({
+                message: 'Skillshare not found',
+            });
+        }
+
+        const r = await UserSkillshareResponse.create({
+            userId,
+            skillshareId,
+            response,
         });
+
+        return res.status(201).json(r);
     }
-
-    const response = await UserSkillshareResponse.create({
-        userId,
-        skillshareId,
-        response: userResponseContent,
-    });
-
-    console.log(response);
-
-    return res.status(201).json(response);
-});
+);
 
 module.exports = router;
