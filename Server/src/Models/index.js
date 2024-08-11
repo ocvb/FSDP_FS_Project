@@ -23,38 +23,20 @@ Rewards.belongsToMany(Users, { through: UserRewards, foreignKey: 'rewardId' });
 
 // User to SkillShares Relation
 Users.belongsToMany(SkillShares, {
-    through: UserSkillshareResponse,
+    through: {
+        model: UserSkillshareResponse,
+        unique: false,
+    },
     foreignKey: 'userId',
 });
 
 SkillShares.belongsToMany(Users, {
-    through: UserSkillshareResponse,
+    through: {
+        model: UserSkillshareResponse,
+        unique: false,
+    },
     foreignKey: 'skillshareId',
 });
-
-// Function to remove the unique constraint
-async function removeUniqueConstraint() {
-    try {
-        // Check if the unique constraint exists
-        const [results] = await db.query(
-            "SHOW INDEX FROM `user_skillshare_responses` WHERE Key_name = 'user_skillshare_responses_skillshareId_userId_unique'"
-        );
-
-        if (results.length > 0) {
-            // Unique constraint exists, proceed to remove it
-            await db.query(
-                'ALTER TABLE `user_skillshare_responses` DROP INDEX `user_skillshare_responses_skillshareId_userId_unique`'
-            );
-            console.log('Unique constraint removed successfully');
-        } else {
-            console.log('Unique constraint does not exist');
-        }
-    } catch (error) {
-        if (error.errno === '1091') return;
-
-        console.error('Error removing unique constraint', error);
-    }
-}
 
 module.exports = {
     Users,
