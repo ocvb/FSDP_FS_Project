@@ -19,6 +19,7 @@ import Carousel from 'react-material-ui-carousel';
 // Images
 import BadmintonPlayers from '@assets/Home/Badminton-Players.jpg';
 import Championship from '@assets/Home/community_championship_thumbnail.png';
+import { callAPI } from '@api/EndpointsQueries';
 
 interface EventDataResponse {
     title: string;
@@ -44,9 +45,7 @@ export default function Home() {
     } = useQuery({
         queryKey: ['events'],
         queryFn: async () => {
-            const r = await axios.get<EventDataResponse[]>(
-                'http://localhost:3001/api/events'
-            );
+            const r = await callAPI.get<EventDataResponse[]>('/events');
             return r.data;
         },
     });
