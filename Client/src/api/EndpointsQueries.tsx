@@ -4,6 +4,8 @@ import {
     UsersDataResponse,
     EventsDataResponse,
     CoursesDataResponse,
+    RewardsDataResponse,
+    SupportDataResponse,
 } from './ApiType';
 
 export const callAPI = axios.create({
@@ -72,7 +74,7 @@ export const fetchRewardsByCategory = async (
     category: string
 ): Promise<RewardsDataResponse[]> => {
     const response = await callAPI.get<RewardsDataResponse[]>(
-        `/api/rewards/category/${category}`
+        `/rewards/category/${category}`
     );
     return response.data;
 };
@@ -102,4 +104,48 @@ export const deleteReward = async (id: number) => {
         },
     });
     return response.data;
+};
+
+// Support APIs
+// Fetch all support requests
+export const fetchSupportRequests = async (): Promise<
+    SupportDataResponse[]
+> => {
+    const response = await callAPI.get<SupportDataResponse[]>('/support');
+    return response.data;
+};
+
+// Create a new support request
+export const createSupportRequest = async (
+    data: SupportDataResponse
+): Promise<SupportDataResponse> => {
+    const token = localStorage.getItem('token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+    const response = await callAPI.post('/support', data, {
+        headers, // Conditionally include the Authorization header
+    });
+    return response.data;
+};
+
+// Update an existing support request
+export const updateSupportRequest = async (
+    id: number,
+    data: SupportDataResponse
+): Promise<SupportDataResponse> => {
+    const response = await callAPI.put(`/support/${id}`, data, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+};
+
+// Delete a support request
+export const deleteSupportRequest = async (id: number): Promise<void> => {
+    await callAPI.delete(`/support/${id}`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
 };

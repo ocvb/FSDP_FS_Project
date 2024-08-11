@@ -77,11 +77,13 @@ export default function Editor() {
                         handleOnChangeSelect={handleOnChangeSelect}
                         selectedCategory={selected}
                     />
-
                 ) : (
-                    <div>Not Found</div>
-                )} 
-                
+                    <Support
+                        postSnackbar={handleSnackbarFromModal}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                        selectedCategory={selected}
+                    />
+                )}
 
                 {snackbar != null && (
                     <Snackbar
