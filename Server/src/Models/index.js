@@ -52,5 +52,4 @@ module.exports = {
     Rewards,
     Volunteer,
     db,
-    removeUniqueConstraint,
 };
