@@ -14,6 +14,7 @@ import { Award, Bell, Calendar, Ticket, User } from 'lucide-react';
 import Rewards from './Reward';
 
 import { motion } from 'framer-motion';
+import { AccountCircle } from '@mui/icons-material';
 
 export default function Profile() {
     const [navigationTab, setNavigationTab] = useState(-1);
@@ -81,10 +82,18 @@ export default function Profile() {
                 maxWidth: '460px',
             }}
         >
-            <Stack alignItems={'start'}>
-                <p>Dashboard</p>
-                <Stack flexDirection={'row'} gap={'1rem'} alignItems={'start'}>
-                    <img
+            <Stack alignItems={'start'} gap={'0.7rem'}>
+                <Box
+                    sx={{
+                        fontSize: '1.5rem',
+                        fontWeight: '600',
+                        color: (theme) => theme.palette.text.primary,
+                    }}
+                >
+                    Dashboard
+                </Box>
+                <Stack flexDirection={'row'} gap={'1rem'} alignItems={'center'}>
+                    {/* <img
                         src='https://via.placeholder.com/80'
                         alt='profile'
                         style={{
@@ -92,12 +101,21 @@ export default function Profile() {
                             width: '80px',
                             height: '80px',
                         }}
-                    />
+                    /> */}
+                    <AccountCircle sx={{ fontSize: '4rem' }} />
+
                     <Stack alignItems={'start'}>
-                        <p style={{ fontSize: '1.5rem', fontWeight: '500' }}>
+                        <Box
+                            sx={{
+                                fontSize: '1.5rem',
+                                fontWeight: '500',
+                                color: (theme) => theme.palette.text.primary,
+                                textTransform: 'capitalize',
+                            }}
+                        >
                             {fetchAuth.User?.username}
-                        </p>
-                        <p style={{ fontSize: '1.1rem' }}>email@email.com</p>
+                        </Box>
+                        {/* <p style={{ fontSize: '1.1rem' }}>email@email.com</p> */}
                     </Stack>
                 </Stack>
             </Stack>
