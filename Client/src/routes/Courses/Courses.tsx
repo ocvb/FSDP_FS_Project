@@ -110,7 +110,19 @@ export default function Courses() {
                         ))}
                     </div>
                 </div>
+                <div style={{ marginTop: '2rem'}}>
+                    <Link to={'/courses/coursebooking'}>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            className={styles.bookingButton}
+                        >
+                            Book Courses
+                        </Button>
+                    </Link>
+                </div>
             </Container>
         </div>
     );
 }
+

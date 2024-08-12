@@ -18,6 +18,7 @@ import {
     LifeLongLearning,
     LifestyleLeisure,
     SportsFitness,
+    CourseBooking
 } from '@routes/Courses/pages/CoursePages';
 import Account from '@routes/Account/Account';
 import SkillShare from '@routes/SkillShare/SkillShare';
@@ -102,6 +103,10 @@ export default function App() {
                         <Route
                             path='lifelonglearning'
                             element={<LifeLongLearning />}
+                        />
+                        <Route
+                            path='coursebooking'
+                            element={<CourseBooking />}
                         />
                     </Route>
                     <Route
