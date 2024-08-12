@@ -1,117 +1,101 @@
-/* fsdp/Client/src/components/css/Support.module.css */
+body {
+    background-color: #f2f2f2; /* Set the entire page background color */
+}
+
 .enquiry-form-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 2rem;
-  background-color: #f9f9f9;
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+    padding: 2rem;
+    height: 100vh; /* Make the container full height */
+}
+
+.enquiry-form-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    /* text-align: center; */
+    font-family: 'Aramate', sans-serif;
+    color: #333;
+}
+
+.enquiry-form-container p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    /* text-align: center; */
+    font-family: 'Aramate', sans-serif;
+    color: #666;
 }
 
 .form-section {
-  flex: 2;
-  margin-right: 2rem;
-  background-color: #fff; /* Add background color to the form section */
-  padding: 2rem; /* Add padding inside the form section */
-  border-radius: 8px; /* Add border-radius for rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+    flex: 1;
+    margin-right: 2rem;
 }
 
 .enquiry-form {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.enquiry-form h2 {
-  font-size: 2.5rem; /* Increased size */
-  margin-bottom: 0.5rem;
-  text-align: center; /* Center align the text */
-  font-family: 'Aramate', sans-serif; /* Changed font family */
-  color: #333; /* Added color */
-}
-
-.enquiry-form p {
-  font-size: 1.2rem; /* Increased size */
-  margin-bottom: 2rem;
-  text-align: center; /* Center align the text */
-  font-family: 'Aramate', sans-serif; /* Changed font family */
-  color: #666; /* Added color */
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: white; /* Ensure the form is white */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .enquiry-form label {
-  display: block;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-  font-family: 'Aramate', sans-serif; /* Changed font family */
-  color: #333; /* Added color */
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-family: 'Aramate', sans-serif;
+    color: #333;
 }
 
 .enquiry-form input,
 .enquiry-form select,
 .enquiry-form textarea {
-  width: 100%;
-  padding: 0.75rem;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  color: #333; /* Ensured text color is visible */
-  background-color: #fff;
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+    background-color: #fff;
 }
 
 .enquiry-form input::placeholder,
 .enquiry-form textarea::placeholder {
-  color: #888;
-}
-
-.enquiry-form select {
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 0.75rem;
-  width: 100%;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
-  background-color: #fff; /* Changed dropdown color to white */
-}
-
-.dropdown {
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 0.75rem;
-  width: 100%;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
-  background-color: #fff; /* Changed dropdown color to white */
+    color: #888;
 }
 
 .image-container {
-  flex: 1;
-  text-align: center;
+    flex: 1.5; /* Increase flex to make image bigger */
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
 .image-container img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .enquiry-form .button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
 }
 
 .enquiry-form .button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
 
 .textarea {
-  height: 200px; /* Increased height */
+    height: 200px;
 }

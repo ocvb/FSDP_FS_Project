@@ -74,13 +74,12 @@ export interface RewardsDataResponse {
 }
 
 export interface SupportDataResponse {
-    status?: string;
-    data?: {
-        id?: number;
-        location?: string;
-        urgency?: string;
-        description?: string;
-        createdAt?: string;
-        updatedAt?: string;
-    };
+    id?: number;
+    location?: string;
+    urgency?: string;
+    description?: string;
+    reply?: string;
+    senderID?: number;
+    createdAt?: string;
+    updatedAt?: string;
 }

@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import {
     Stack,
     TextField,
     IconButton,
     Alert,
-    FormControl,
     Box,
     SelectChangeEvent,
 } from '@mui/material';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@components/Button/CustomButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
-import { MoreHoriz } from '@mui/icons-material';
-import Dropdown from '@components/Dropdown/Dropdown';
 import PopupModal from '@components/PopupModal/PopupModal';
+import {
+    fetchSupportRequests,
+    updateSupportRequest,
+    deleteSupportRequest,
+} from '@api/EndpointsQueries';
 import EditorSelector from '@components/Admin/EditorSelector';
+import { SupportDataResponse } from '@api/ApiType';
 
 interface SupportProps {
     postSnackbar: (data: {
@@ -35,11 +36,10 @@ interface SelectedRow {
     location?: string;
     urgency?: string;
     description?: string;
-    createdAt?: string;
-    updatedAt?: string;
+    reply?: string;
 }
 
-export default function Support({
+export default function SupportEditor({
     postSnackbar,
     handleOnChangeSelect,
     selectedCategory,
@@ -51,13 +51,9 @@ export default function Support({
         location: '',
         urgency: '',
         description: '',
-        createdAt: '',
-        updatedAt: '',
+        reply: '',
     });
-
-    const [location, setLocation] = useState('');
-    const [urgency, setUrgency] = useState('');
-    const [description, setDescription] = useState('');
+    const [reply, setReply] = useState('');
 
     const {
         data: supportData,
@@ -66,72 +62,21 @@ export default function Support({
         refetch: refetchSupport,
     } = useQuery({
         queryKey: ['support'],
-        queryFn: async () =>
-            await axios.get('http://localhost:3001/api/support'),
-    });
-
-    const createSupportMutation = useMutation({
-        mutationKey: ['support'],
-        mutationFn: async (data: SelectedRow) => {
-            const r = await axios.post(
-                'http://localhost:3001/api/support',
-                data,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                }
-            );
-            return r.data;
-        },
+        queryFn: fetchSupportRequests,
     });
 
     const updateSupportMutation = useMutation({
         mutationKey: ['support'],
-        mutationFn: async (data: SelectedRow) => {
-            const r = await axios.put(
-                `http://localhost:3001/api/support/${data.id}`,
-                data,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                }
-            );
-            return r.data;
-        },
+        mutationFn: async (data: SelectedRow) =>
+            updateSupportRequest(data.id!, data),
     });
 
     const deleteSupportMutation = useMutation({
         mutationKey: ['support'],
-        mutationFn: async (data: SelectedRow) => {
-            const r = await axios.delete(
-                `http://localhost:3001/api/support/${data.id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                }
-            );
-            return r.data;
-        },
+        mutationFn: (id: number) => deleteSupportRequest(id),
     });
 
     function EditToolbar() {
-        const handleClick = () => {
-            if (isFetching)
-                return postSnackbar({
-                    children: 'Please wait for the data to load',
-                    severity: 'info',
-                });
-
-            const rowsIds = supportData?.map((value: SelectedRow) => value?.id);
-            const id = Math.max(0, ...rowsIds) + 1;
-            setOpenAddModal(true);
-
-            setSelectedRow({ id } as SelectedRow);
-        };
-
         return (
             <GridToolbarContainer
                 sx={{
@@ -165,25 +110,10 @@ export default function Support({
                                 console.log('Error refreshing')
                             );
                             postSnackbar({
-                                children: 'Support refreshed',
+                                children: 'Support requests refreshed',
                                 severity: 'success',
                             });
                         }}
-                        sx={{
-                            backgroundColor: 'black',
-                            color: 'white',
-                            '&:hover': {
-                                backgroundColor: '#2a2a2a',
-                            },
-                        }}
-                    />
-                    <Button
-                        type='button'
-                        text='Add record'
-                        startIcon={
-                            <AddIcon sx={{ fontSize: '25px !important' }} />
-                        }
-                        onClick={handleClick}
                         sx={{
                             backgroundColor: 'black',
                             color: 'white',
@@ -226,22 +156,16 @@ export default function Support({
             field: 'description',
             headerName: 'Description',
             type: 'string',
+            editable: false,
             flex: 1,
-            editable: false,
-            renderCell: (params: { value: string }) => (
-                <ExpandableCell value={params.value} />
-            ),
-        },
-        {
-            field: 'createdAt',
-            headerName: 'Created At',
-            editable: false,
             width: 0,
         },
         {
-            field: 'updatedAt',
-            headerName: 'Updated At',
+            field: 'reply',
+            headerName: 'Reply',
+            type: 'string',
             editable: false,
+            flex: 1,
             width: 0,
         },
         {
@@ -251,137 +175,94 @@ export default function Support({
             width: 0,
             cellClassName: 'actions',
             getActions: ({ id }: { id: number }) => {
-                const [dropdown, setDropdown] = useState(false);
-                const buttons = [
-                    {
-                        name: 'Edit',
-                        action: () => handleOpenEditModal(id),
-                        icon: <EditIcon />,
-                    },
-                    {
-                        name: 'Delete',
-                        action: handleDeleteClick(id),
-                        icon: <DeleteIcon />,
-                    },
-                ];
+                const handleOpenEditModal = () => {
+                    const data = supportData?.find(
+                        (row: SelectedRow) => row?.id === id
+                    ) as SelectedRow;
 
-                const handleOpenDropdown = () => {
-                    setDropdown(!dropdown);
+                    if (data) {
+                        setOpenEditModal(true);
+                        setSelectedRow(data);
+                        setReply(data.reply ?? '');
+                    } else {
+                        postSnackbar({
+                            children: `Support request with ID ${id} not found.`,
+                            severity: 'error',
+                        });
+                    }
                 };
 
-                const handleWhenMouseLeave = () => {
-                    setDropdown(false);
+                const handleDeleteClick = () => {
+                    deleteSupportMutation.mutate(id, {
+                        onSuccess: () => {
+                            postSnackbar({
+                                children: `Support request (${id}) has been deleted successfully`,
+                                severity: 'success',
+                            });
+                            refetchSupport().catch(() =>
+                                postSnackbar({
+                                    children: 'Error refreshing',
+                                    severity: 'error',
+                                })
+                            );
+                        },
+                        onError: (error) => {
+                            postSnackbar({
+                                children: error.message,
+                                severity: 'error',
+                            });
+                        },
+                    });
                 };
 
                 return [
-                    <div key={'dropdown'}>
-                        <IconButton
-                            key={'IconButton'}
-                            onClick={handleOpenDropdown}
-                            sx={{
-                                '&:focus': {
-                                    outline: 'none',
-                                },
-                                '&:hover': {
-                                    outline: 'none',
-                                },
-                            }}
-                        >
-                            <MoreHoriz />
-                        </IconButton>
-                        <Dropdown
-                            key={'More'}
-                            dropdown={dropdown}
-                            onMouseDown={handleOpenDropdown}
-                            onMouseLeave={handleWhenMouseLeave}
-                            subitems={buttons}
-                            style={{
-                                transform: 'translateX(-50%)',
-                            }}
-                        />
-                    </div>,
+                    <IconButton
+                        key={'edit'}
+                        onClick={handleOpenEditModal}
+                        sx={{
+                            '&:focus': {
+                                outline: 'none',
+                            },
+                            '&:hover': {
+                                outline: 'none',
+                            },
+                        }}
+                    >
+                        <EditIcon />
+                    </IconButton>,
+                    <IconButton
+                        key={'delete'}
+                        onClick={handleDeleteClick}
+                        sx={{
+                            '&:focus': {
+                                outline: 'none',
+                            },
+                            '&:hover': {
+                                outline: 'none',
+                            },
+                        }}
+                    >
+                        <DeleteIcon />
+                    </IconButton>,
                 ];
             },
         },
     ];
 
-    const handleOpenEditModal = (id: number) => {
-        const data = supportData?.find(
-            (row: SelectedRow) => row?.id === id
-        ) as SelectedRow;
-
-        if (data) {
-            setOpenEditModal(true);
-            setSelectedRow(data);
-            setLocation(data.location ?? '');
-            setUrgency(data.urgency ?? '');
-            setDescription(data.description ?? '');
-        } else {
-            postSnackbar({
-                children: `Support with ID ${id} not found.`,
-                severity: 'error',
-            });
-        }
-    };
-
     const handleCloseModal = () => {
         setOpenEditModal(false);
-        setOpenAddModal(false);
         setSelectedRow({
             id: 0,
             location: '',
             urgency: '',
             description: '',
-            createdAt: '',
-            updatedAt: '',
+            reply: '',
         });
-        setLocation('');
-        setUrgency('');
-        setDescription('');
+        setReply('');
     };
 
-    const handleLocationChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        setLocation(event.target.value);
-    };
-
-    const handleUrgencyChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        setUrgency(event.target.value);
-    };
-
-    const handleDescriptionChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        setDescription(event.target.value);
-    };
-
-    const handleDeleteClick = (id: number) => () => {
-        deleteSupportMutation.mutate(
-            { id },
-            {
-                onSuccess: () => {
-                    postSnackbar({
-                        children: `SupportID (${id}) has been deleted successfully`,
-                        severity: 'success',
-                    });
-                    refetchSupport().catch(() =>
-                        postSnackbar({
-                            children: 'Error refreshing',
-                            severity: 'error',
-                        })
-                    );
-                },
-                onError: (error) => {
-                    postSnackbar({
-                        children: error.message,
-                        severity: 'error',
-                    });
-                },
-            }
-        );
+    const handleReplyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setReply(event.target.value);
     };
 
     const handleSubmitUpdate = (event: React.FormEvent) => {
@@ -389,77 +270,35 @@ export default function Support({
 
         const data: SelectedRow = {
             id: selectedRow.id,
-            location,
-            urgency,
-            description,
+            location: selectedRow.location,
+            urgency: selectedRow.urgency,
+            description: selectedRow.description,
+            reply: reply,
         };
 
-        if (selectedRow.id === 0) {
-            createSupportMutation.mutate(data, {
-                onSuccess: () => {
+        updateSupportMutation.mutate(data, {
+            onSuccess: () => {
+                postSnackbar({
+                    children: 'Support request updated successfully',
+                    severity: 'success',
+                });
+                refetchSupport().catch(() =>
                     postSnackbar({
-                        children: 'Support created successfully',
-                        severity: 'success',
-                    });
-                    refetchSupport().catch(() =>
-                        postSnackbar({
-                            children: 'Error refreshing',
-                            severity: 'error',
-                        })
-                    );
-                },
-                onError: (error) => {
-                    postSnackbar({
-                        children: error.message,
+                        children: 'Error refreshing',
                         severity: 'error',
-                    });
-                },
-            });
-        } else {
-            updateSupportMutation.mutate(data, {
-                onSuccess: () => {
-                    postSnackbar({
-                        children: 'Support updated successfully',
-                        severity: 'success',
-                    });
-                    refetchSupport().catch(() =>
-                        postSnackbar({
-                            children: 'Error refreshing',
-                            severity: 'error',
-                        })
-                    );
-                },
-                onError: (error) => {
-                    postSnackbar({
-                        children: error.message,
-                        severity: 'error',
-                    });
-                },
-            });
-        }
+                    })
+                );
+            },
+            onError: (error) => {
+                postSnackbar({
+                    children: error.message,
+                    severity: 'error',
+                });
+            },
+        });
 
         handleCloseModal();
     };
-
-    function ExpandableCell({ value }) {
-        const [expanded, setExpanded] = useState(false);
-        const length = 300;
-        return (
-            <div>
-                {expanded ? value : value.slice(0, length)}&nbsp;
-                {value.length > length && (
-                    <Link
-                        type='button'
-                        component='button'
-                        sx={{ fontSize: 'inherit' }}
-                        onClick={() => setExpanded(!expanded)}
-                    >
-                        {expanded ? 'view less' : 'view more'}
-                    </Link>
-                )}
-            </div>
-        );
-    }
 
     return (
         <>
@@ -510,7 +349,7 @@ export default function Support({
             )}
 
             <PopupModal
-                open={openEditModal || openAddModal}
+                open={openEditModal}
                 handleClose={handleCloseModal}
                 sxBox={{
                     backgroundColor: 'background.paper',
@@ -522,40 +361,22 @@ export default function Support({
                         textTransform: 'capitalize',
                     }}
                 >
-                    {openEditModal
-                        ? `Update Support Request`
-                        : 'Add Support Request'}
+                    {`Update Support Request ID: ${selectedRow.id}`}
                 </p>
 
-                <FormControl onSubmit={handleSubmitUpdate}>
+                <form onSubmit={handleSubmitUpdate}>
                     <Stack spacing={2} sx={{ width: '100%' }}>
                         <TextField
-                            label='Location'
+                            label='Reply'
                             variant='outlined'
                             fullWidth
                             size='small'
-                            value={location}
-                            onChange={handleLocationChange}
+                            value={reply}
+                            onChange={handleReplyChange}
                             autoFocus={true}
                         />
-                        <TextField
-                            label='Urgency'
-                            variant='outlined'
-                            fullWidth
-                            size='small'
-                            value={urgency}
-                            onChange={handleUrgencyChange}
-                        />
-                        <TextField
-                            label='Description'
-                            variant='outlined'
-                            fullWidth
-                            size='small'
-                            value={description}
-                            onChange={handleDescriptionChange}
-                        />
                         <Button
-                            text={openEditModal ? 'Update' : 'Add'}
+                            text='Update'
                             type='submit'
                             fullWidth={true}
                             onClick={handleSubmitUpdate}
@@ -568,7 +389,7 @@ export default function Support({
                             }}
                         />
                     </Stack>
-                </FormControl>
+                </form>
             </PopupModal>
         </>
     );

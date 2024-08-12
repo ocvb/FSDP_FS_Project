@@ -1,17 +1,15 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
-
-// components
 import Footer from '@components/Footer/Footer';
 import CustomButton from '@components/Button/CustomButton';
-
 import enquiryIMG from '@/assets/Support/enquiries.png';
 import styles from './css/Support.module.css';
+import { createSupportRequest } from '@api/EndpointsQueries'; // Import the function
 
 interface FormData {
     location: string;
     urgency: string;
     description: string;
+    senderId?: number | null; // Optional senderId field
 }
 
 const EnquiriesPage: React.FC = () => {
@@ -19,6 +17,7 @@ const EnquiriesPage: React.FC = () => {
         location: '',
         urgency: '',
         description: '',
+        senderId: null, // Initialize senderId as null
     });
 
     const handleChange = (
@@ -32,10 +31,16 @@ const EnquiriesPage: React.FC = () => {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Form Data:', formData);
+
         try {
-            await axios.post('http://localhost:3001/api/enquiries', formData);
-            setFormData({ location: '', urgency: '', description: '' });
+            // Use the createSupportRequest method from EndpointsQueries.tsx
+            await createSupportRequest(formData);
+            setFormData({
+                location: '',
+                urgency: '',
+                description: '',
+                senderId: null,
+            });
         } catch (error) {
             console.error('There was an error submitting the form!', error);
         }
