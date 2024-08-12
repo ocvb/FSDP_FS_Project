@@ -156,7 +156,7 @@ export default function SkillShare() {
                                         <div className={css.col} key={index}>
                                             <p>
                                                 {item.numberOfResponded}{' '}
-                                                requested help
+                                                responed
                                             </p>
                                             <div>
                                                 <p
