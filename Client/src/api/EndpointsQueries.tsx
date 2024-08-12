@@ -112,6 +112,19 @@ export const deleteReward = async (id: number) => {
     return response.data;
 };
 
+export const redeemReward = async (userId: number, rewardId: number) => {
+    const response = await callAPI.post('/rewards/redeem', {
+        userId,
+        rewardId,
+    });
+    return response.data;
+};
+
+export const fetchRedeemedRewards = async (userId: number) => {
+    const response = await callAPI.get(`/user/${userId}/rewards`);
+    return response.data;
+};
+
 // Support APIs
 // Fetch all support requests
 export const fetchSupportRequests = async (): Promise<

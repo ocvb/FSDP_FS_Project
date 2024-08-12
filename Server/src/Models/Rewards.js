@@ -2,6 +2,11 @@ const db = require('@models/db');
 const { DataTypes } = require('sequelize');
 
 const Rewards = db.define('rewards', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
     title: {
         type: DataTypes.STRING,
         allowNull: false,

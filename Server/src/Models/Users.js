@@ -20,6 +20,11 @@ const Users = db.define('users', {
         defaultValue: 'member',
         allowNull: false,
     },
+    points: {
+        type: DataTypes.INTEGER,
+        defaultValue: 500,
+        allowNull: false,
+    },
 });
 
 module.exports = Users;

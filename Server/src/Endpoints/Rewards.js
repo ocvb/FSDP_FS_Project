@@ -155,4 +155,58 @@ router.delete('/:id', TokenAuthentication, async (req, res) => {
     }
 });
 
+// Redeem a reward
+router.post('/redeem', async (req, res) => {
+    const { userId, rewardId } = req.body;
+
+    try {
+        const user = await User.findByPk(userId);
+        const reward = await Reward.findByPk(rewardId);
+
+        if (!user || !reward) {
+            return res
+                .status(404)
+                .json({ message: 'User or reward not found' });
+        }
+
+        if (user.points < reward.points_required) {
+            return res.status(400).json({ message: 'Not enough points' });
+        }
+
+        user.points -= reward.points_required;
+        await user.save();
+
+        const redeemedReward = await RedeemedReward.create({
+            userId: user.id,
+            rewardId: reward.id,
+            claimed: false,
+        });
+
+        res.status(200).json({
+            message: 'Reward redeemed successfully',
+            redeemedReward,
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error redeeming reward', error });
+    }
+});
+
+// Get redeemed rewards for a user
+router.get('/user/:userId/rewards', async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const redeemedRewards = await RedeemedReward.findAll({
+            where: { userId },
+            include: Reward,
+        });
+        res.status(200).json(redeemedRewards);
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error fetching redeemed rewards',
+            error,
+        });
+    }
+});
+
 module.exports = router;
