@@ -17,9 +17,6 @@ router.use('/api/admin', adminAPI);
 const facilitiesAPI = require('@endpoints/Facilities');
 router.use('/api/facilities', facilitiesAPI);
 
-const eventsSearchAPI = require('@endpoints/EventsSearch');
-router.use('/api/eventsSearch', eventsSearchAPI);
-
 const skillshareAPI = require('@endpoints/SkillShare');
 router.use('/api/skillshare', skillshareAPI);
 
@@ -32,5 +29,10 @@ router.use('/api/support', supportAPI);
 const rewardAPI = require('@endpoints/Rewards');
 router.use('/api/rewards', rewardAPI);
 
+const donationAPI = require('@endpoints/Donation');
+router.use('/api/donation', donationAPI);
+
+const volunteerAPI = require('@endpoints/Volunteer');
+router.use('/api/volunteer', volunteerAPI);
 
 module.exports = router;

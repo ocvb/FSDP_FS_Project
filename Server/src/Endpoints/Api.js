@@ -1,6 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { Users, Events, Courses, SkillShares } = require('@models/index');
+const {
+    Users,
+    Events,
+    Courses,
+    SkillShares,
+    Rewards,
+    Support,
+    UserEvents,
+    UserRewards,
+} = require('@models/index');
 const bcrypt = require('bcrypt');
 const process = require('process');
 
@@ -16,7 +25,7 @@ let userType = {
 
 // Check if the server API is running
 router.get('/', async (req, res) => {
-    const presetUsers = await Users.bulkCreate([
+    await Users.bulkCreate([
         {
             username: 'admin',
             password: genHash('admin'),
@@ -28,7 +37,7 @@ router.get('/', async (req, res) => {
         },
     ]);
 
-    const presetEvents = await Events.bulkCreate([
+    await Events.bulkCreate([
         {
             title: 'Event 1',
             description:
@@ -56,7 +65,7 @@ router.get('/', async (req, res) => {
         },
     ]);
 
-    const presetSkillshare = await SkillShares.bulkCreate([
+    await SkillShares.bulkCreate([
         {
             title: 'How do i start coding',
             description:
@@ -83,28 +92,62 @@ router.get('/', async (req, res) => {
         },
     ]);
 
-    const presetCourses = await Courses.bulkCreate([
+    await Courses.bulkCreate([
         {
             title: 'Makeup and Skincare',
             category: 'Health & Wellness',
-            description: 'Learn the different types of makeup and how to take care of your skin',
+            description:
+                'Learn the different types of makeup and how to take care of your skin',
         },
         {
             title: 'Healthy Cooking',
             category: 'Health & Wellness',
-            description: 'Learn how to cook healthy, delicious meals that can contribute to overall wellness and a balanced diet.'
+            description:
+                'Learn how to cook healthy, delicious meals that can contribute to overall wellness and a balanced diet.',
         },
         {
             title: 'Cardio Workout',
             category: 'Sports & Fitness',
-            description: 'This course offers a variety of cardio exercises to help you improve your cardiovascular health and fitness.'
-        }
+            description:
+                'This course offers a variety of cardio exercises to help you improve your cardiovascular health and fitness.',
+        },
     ]);
 
-    presetUsers;
-    presetEvents;
-    presetSkillshare;
-    presetCourses;
+    // const presetRewards = await Rewards.bulkCreate([
+    //     {
+
+    //     }
+    // ])
+
+    await UserEvents.bulkCreate([
+        {
+            userId: 1,
+            eventId: 1,
+        },
+        {
+            userId: 1,
+            eventId: 2,
+        },
+        {
+            userId: 2,
+            eventId: 1,
+        },
+        {
+            userId: 2,
+            eventId: 2,
+        },
+    ]);
+
+    // const presetUserReward = await UserRewards.bulkCreate([
+    //     {
+    //         userId: 2,
+    //         rewardId: 1,
+    //     },
+    //     {
+    //         userId: 2,
+    //         rewardId: 2,
+    //     },
+    // ]);
 
     res.send('API is running, preset data have been loaded.');
 });

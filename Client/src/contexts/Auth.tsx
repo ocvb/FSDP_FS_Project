@@ -19,6 +19,7 @@ interface fetchAuthType {
     };
     isAuthenticated?: boolean;
     userRole?: string | null;
+    AccessToken?: string | null;
 }
 
 export interface AuthType {
@@ -74,15 +75,18 @@ export default function AuthProvider({ children }: AuthContextType) {
         }
     }, [isAuthenticated, userRole, location, loginInEffect, navigate]);
 
+    const AccessToken = localStorage.getItem('token');
+
     const fetchAuth = {
         User: user,
         isAuthenticated: isAuthenticated,
         userRole: userRole,
+        AccessToken,
     } as fetchAuthType;
 
     const checkTokenIsValid = async (token: string) => {
         return await callAPI
-            .get<UsersDataResponse>('/api/user/auth', {
+            .get<UsersDataResponse>('/user/auth', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -110,7 +114,7 @@ export default function AuthProvider({ children }: AuthContextType) {
         data: object
     ): Promise<{ result: boolean; path: string }> => {
         return await callAPI
-            .post<UsersDataResponse>('/api/user/login', data)
+            .post<UsersDataResponse>('/user/login', data)
             .then((response) => {
                 if (response.status === 200) {
                     const responseData = response?.data;

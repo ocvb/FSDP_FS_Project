@@ -15,6 +15,15 @@ const db = new Sequelize({
     password: process.env.MYSQL_PASSWORD,
     host: process.env.MYSQL_HOST,
     port: process.env.MYSQL_PORT,
+    dialectOptions: {
+        connectTimeout: 60000,
+    },
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000,
+    },
     logging: false,
 });
 

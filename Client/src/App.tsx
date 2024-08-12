@@ -9,6 +9,8 @@ import { UseAuth } from '@contexts/Auth';
 // Routes
 import Home from '@routes/Home/Home';
 import Events from '@routes/Events/Events';
+import EventsSearch from '@routes/Events/EventsSearch';
+import EventDetails from '@routes/Events/EventDetails';
 import Courses from '@routes/Courses/Courses';
 import {
     EducationEnrichment,
@@ -21,6 +23,9 @@ import {
 import Account from '@routes/Account/Account';
 import SkillShare from '@routes/SkillShare/SkillShare';
 import Rewards from '@routes/Rewards/Rewards';
+import UserRewards from '@routes/Rewards/UserRewards';
+import Support from '@routes/Support/Support';
+import Donation from '@routes/Donation/Donation';
 import Profile from '@routes/Account/Profile/Profile';
 import Admin from '@routes/Account/Admin/Admin';
 
@@ -34,10 +39,14 @@ import {
     PaletteMode,
     ThemeProvider,
 } from '@mui/material';
-import { useState } from 'react';
+import SkillShareView from '@routes/SkillShare/SkillShareView';
+import { useEffect, useState } from 'react';
+import Facilities from '@routes/Facilities/Facilities';
+import Volunteer from '@routes/Volunteer/Volunteer';
 
 export default function App() {
     const { fetchAuth } = UseAuth();
+    const { isAuthenticated } = fetchAuth;
     const location = useLocation();
     const checkIfAdmin = fetchAuth.userRole === 'Admin';
     const isAdminRoute = location.pathname.includes('admin');
@@ -68,6 +77,11 @@ export default function App() {
                 <Routes>
                     <Route path='/' element={<Home />} />
                     <Route path='/events' element={<Events />} />
+                    <Route path='/events/*' element={<Outlet />}>
+                        <Route path='search' element={<EventsSearch />} />
+                        <Route path='details' element={<EventDetails />} />
+                    </Route>
+                    {/* <Route path='/facilities' element={<Facilities />} /> */}
                     <Route path='/courses/*' element={<Courses />} />
                     <Route path='/courses/*' element={<Outlet />}>
                         <Route
@@ -95,8 +109,21 @@ export default function App() {
                             element={<CourseBooking />}
                         />
                     </Route>
-                    <Route path='/rewards' element={<Rewards />} />
+                    <Route
+                        path='/rewards'
+                        element={
+                            isAuthenticated ? <UserRewards /> : <Rewards />
+                        }
+                    />
+                    <Route path='/support' element={<Support />} />
+                    <Route path='/support/*' element={<Outlet />}>
+                        <Route path='volunteer' element={<Volunteer />}></Route>
+                        <Route path='donate' element={<Donation />} />
+                    </Route>
                     <Route path='/skill-share' element={<SkillShare />} />
+                    <Route path='/skill-share/*' element={<Outlet />}>
+                        <Route path=':id' element={<SkillShareView />} />
+                    </Route>
                     <Route path='/account' element={<Account />} />
                     <Route path='/account/*' element={<ProtectedRoute />}>
                         <Route path='admin' element={<Admin />} />

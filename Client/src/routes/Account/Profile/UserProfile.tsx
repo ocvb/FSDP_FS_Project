@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import { UseAuth } from '@contexts/Auth';
-import { TextField, useTheme } from '@mui/material';
+import { Box, TextField, useTheme } from '@mui/material';
 import PasswordVisibility from '@components/PasswordVIsibility/PasswordVisibility';
 import Button from '@components/Button/CustomButton';
 
@@ -10,13 +10,21 @@ import './css/Profile.module.css';
 import './css/UserProfile.module.css';
 import { useMutation } from '@tanstack/react-query';
 import { UsersDataResponse } from '@api/ApiType';
+import { callAPI } from '@api/EndpointsQueries';
 
 export default function UserProfile() {
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [userId, setUserId] = useState(0);
-    const [Message, setMessage] = useState('');
+
+    interface MessageProps {
+        message?: string;
+        error?: string;
+    }
+    const [Message, setMessage] = useState<MessageProps>({
+        message: 'Save' ?? '',
+        error: '',
+    });
     const { fetchAuth, checkTokenIsValid } = UseAuth();
     const [success, setSuccess] = useState(false);
 
@@ -47,8 +55,8 @@ export default function UserProfile() {
 
     const userMutation = useMutation({
         mutationFn: async (data: DataResponses['data']) => {
-            const r = await axios.put<DataResponses>(
-                `http://localhost:3001/api/user/update/${userId}`,
+            const r = await callAPI.put<DataResponses>(
+                `/user/update/${userId}`,
                 data,
                 {
                     headers: {
@@ -65,7 +73,9 @@ export default function UserProfile() {
         setSuccess(false);
 
         if (password.length > 0 && password.length < 6) {
-            setMessage('Password must be at least 6 characters');
+            setMessage(() => ({
+                error: 'Password must be at least 6 characters',
+            }));
             return;
         }
 
@@ -78,8 +88,7 @@ export default function UserProfile() {
         userMutation.mutate(userData, {
             onSuccess: (data) => {
                 // Handle success response
-                console.log('Updated Data', data);
-                setMessage('Updated');
+                // console.log('Updated Data', data);
                 setPassword('');
                 setSuccess(true);
                 checkTokenIsValid(data?.token ?? '')
@@ -93,13 +102,17 @@ export default function UserProfile() {
                 // Visual feedback
                 let timeoutId = null;
                 timeoutId = setTimeout(() => {
-                    setMessage('Save changes');
-                }, 2000);
+                    setMessage(() => ({
+                        message: 'Your information has updated',
+                    }));
+                }, 800);
                 return () => clearTimeout(timeoutId);
             },
             onError: () => {
                 // Handle error response
-                setMessage('Failed to update');
+                setMessage(() => ({
+                    error: 'Error updating user information',
+                }));
                 setSuccess(false);
             },
         });
@@ -107,7 +120,7 @@ export default function UserProfile() {
 
     return (
         <>
-            <div
+            <Box
                 style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -153,7 +166,7 @@ export default function UserProfile() {
                     </div>
 
                     <Button
-                        text={success ? Message : 'Save Changes'}
+                        text={Message.message ?? 'Save'}
                         type='submit'
                         sx={{
                             fontSize: '0.8rem',
@@ -176,10 +189,10 @@ export default function UserProfile() {
                             textAlign: 'center',
                         }}
                     >
-                        {!success ? Message : ''}
+                        {Message.error}
                     </p>
                 </form>
-            </div>
+            </Box>
         </>
     );
 }

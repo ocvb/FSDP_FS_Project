@@ -6,11 +6,26 @@ import { Box, Stack } from '@mui/material';
 import MuiButton from '@mui/material/Button';
 import UserProfile from './UserProfile';
 import Notifications from './Notifications';
+import Bookings from './Booking';
 import Events from './Events';
 
 import styles from './css/Profile.module.css';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Award, Bell, Calendar, Ticket, User } from 'lucide-react';
+import {
+    Award,
+    Bell,
+    Calendar,
+    Ticket,
+    User,
+    HandHelping,
+    Hand,
+} from 'lucide-react';
+import Rewards from './Reward';
+import Support from './Support';
+
+import { motion } from 'framer-motion';
+import { AccountCircle } from '@mui/icons-material';
+import { render } from 'react-dom';
 
 export default function Profile() {
     const [navigationTab, setNavigationTab] = useState(-1);
@@ -35,23 +50,35 @@ export default function Profile() {
             desc: 'View and edit your profile',
             render: <UserProfile />,
         },
-        {
-            name: 'Notifications',
-            icon: <Bell />,
-            desc: 'View your notifications',
-            // render: <Notifications />,
-        },
+        // {
+        //     name: 'Notifications',
+        //     icon: <Bell />,
+        //     desc: 'View your notifications',
+        //     // render: <Notifications />,
+        // },
         {
             name: 'Participated Events',
             icon: <Calendar />,
             desc: 'View your participated events',
             render: <Events />,
         },
-        { name: 'Bookings', icon: <Ticket />, desc: 'View your bookings' },
+        // {
+        //     name: 'Bookings',
+        //     icon: <Ticket />,
+        //     desc: 'View your bookings',
+        //     render: <Bookings />,
+        // },
         {
             name: 'Rewards',
             icon: <Award />,
             desc: 'View and redeem your rewards points',
+            render: <Rewards />,
+        },
+        {
+            name: 'Support',
+            icon: <HandHelping />,
+            desc: 'View your support tickets',
+            render: <Support />,
         },
         {
             skip: true,
@@ -77,10 +104,18 @@ export default function Profile() {
                 maxWidth: '460px',
             }}
         >
-            <Stack alignItems={'start'}>
-                <p>Dashboard</p>
-                <Stack flexDirection={'row'} gap={'1rem'} alignItems={'start'}>
-                    <img
+            <Stack alignItems={'start'} gap={'0.7rem'}>
+                <Box
+                    sx={{
+                        fontSize: '1.5rem',
+                        fontWeight: '600',
+                        color: (theme) => theme.palette.text.primary,
+                    }}
+                >
+                    Dashboard
+                </Box>
+                <Stack flexDirection={'row'} gap={'1rem'} alignItems={'center'}>
+                    {/* <img
                         src='https://via.placeholder.com/80'
                         alt='profile'
                         style={{
@@ -88,12 +123,21 @@ export default function Profile() {
                             width: '80px',
                             height: '80px',
                         }}
-                    />
+                    /> */}
+                    <AccountCircle sx={{ fontSize: '4rem' }} />
+
                     <Stack alignItems={'start'}>
-                        <p style={{ fontSize: '1.5rem', fontWeight: '500' }}>
+                        <Box
+                            sx={{
+                                fontSize: '1.5rem',
+                                fontWeight: '500',
+                                color: (theme) => theme.palette.text.primary,
+                                textTransform: 'capitalize',
+                            }}
+                        >
                             {fetchAuth.User?.username}
-                        </p>
-                        <p style={{ fontSize: '1.1rem' }}>email@email.com</p>
+                        </Box>
+                        {/* <p style={{ fontSize: '1.1rem' }}>email@email.com</p> */}
                     </Stack>
                 </Stack>
             </Stack>
@@ -105,7 +149,6 @@ export default function Profile() {
                 className={styles.awdawdaw}
                 width={'100%'}
             >
-                {navigationTab}
                 {tabs.map((tab, index) => (
                     <MuiButton
                         data-name={tab.name}
@@ -152,15 +195,30 @@ export default function Profile() {
                                 {tab.icon}
                                 <b>{tab.name}</b>
                             </Stack>
-                            {navigationTab === index
-                                ? tab.render
-                                : tab.skip != true && (
-                                      <Stack alignItems={'start'}>
-                                          <p style={{ fontSize: '1rem' }}>
-                                              {tab.desc}
-                                          </p>
-                                      </Stack>
-                                  )}
+
+                            {navigationTab === index ? (
+                                <motion.div
+                                    initial={{ maxHeight: '0vh' }}
+                                    animate={{
+                                        maxHeight: '100vh',
+                                    }}
+                                    transition={{
+                                        duration: 1.6,
+                                        ease: [0.55, 0.02, -0.15, 1.7],
+                                    }}
+                                    style={{ overflow: 'hidden' }}
+                                >
+                                    {tab.render}
+                                </motion.div>
+                            ) : (
+                                tab.skip != true && (
+                                    <Stack alignItems={'start'}>
+                                        <p style={{ fontSize: '1rem' }}>
+                                            {tab.desc}
+                                        </p>
+                                    </Stack>
+                                )
+                            )}
                         </Stack>
                     </MuiButton>
                 ))}

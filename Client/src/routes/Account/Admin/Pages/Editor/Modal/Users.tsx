@@ -20,7 +20,7 @@ import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
 import { MoreHoriz } from '@mui/icons-material';
 import Dropdown from '@components/Dropdown/Dropdown';
 import PopupModal from '@components/PopupModal/PopupModal';
-import { fetchUsers } from '@api/EndpointsQueries';
+import { callAPI, fetchUsers } from '@api/EndpointsQueries';
 import { UsersDataResponse } from '@api/ApiType';
 import EditorSelector from '@components/Admin/EditorSelector';
 
@@ -74,8 +74,8 @@ export default function Users({
     const usersMutation = useMutation({
         mutationKey: ['users'],
         mutationFn: async (data: UsersDataResponse['data']) => {
-            const r = await axios.put<UsersDataResponse>(
-                `http://localhost:3001/api/admin/user/${data?.id}`,
+            const r = await callAPI.put<UsersDataResponse>(
+                `/admin/user/${data?.id}`,
                 data,
                 {
                     headers: {
@@ -90,8 +90,8 @@ export default function Users({
     const userDeleteMutation = useMutation({
         mutationKey: ['users'],
         mutationFn: async (data: UsersDataResponse['data']) => {
-            const r = await axios.delete<UsersDataResponse>(
-                `http://localhost:3001/api/admin/user/${data?.id}`,
+            const r = await callAPI.delete<UsersDataResponse>(
+                `/admin/user/${data?.id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,

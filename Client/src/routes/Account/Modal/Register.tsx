@@ -165,6 +165,15 @@ export default function Register({ passToChangeModal }: RegisterProps) {
                     width: '100%',
                 }}
             >
+                <p
+                    style={{
+                        color: StatusSuccess ? 'green' : 'red',
+                        fontSize: '1rem',
+                        textAlign: 'center',
+                    }}
+                >
+                    {Message != '' ? Message : ''}
+                </p>
                 <Button
                     text='Register'
                     type='submit'
@@ -194,14 +203,6 @@ export default function Register({ passToChangeModal }: RegisterProps) {
                     </span>
                 </p>
             </div>
-            <p
-                style={{
-                    color: StatusSuccess ? 'green' : 'red',
-                    fontSize: '1rem',
-                }}
-            >
-                {Message != '' ? Message : ''}
-            </p>
         </form>
     );
 }

@@ -17,5 +17,4 @@ exports.SkillshareSchema = yup.object().shape({
         .string()
         .required()
         .min(3, 'Category must be at least 3 characters long'),
-    numberOfResponded: yup.number().optional(),
 });

@@ -1,31 +1,46 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-
-// components
-import Footer from '@/components/Footer/Footer.module';
-import CustomButton from '@/components/Button/CustomButton.module';
-
+import React, { useState, ChangeEvent, FormEvent } from 'react';
+import Footer from '@components/Footer/Footer';
+import CustomButton from '@components/Button/CustomButton';
 import enquiryIMG from '@/assets/Support/enquiries.png';
 import styles from './css/Support.module.css';
+import { createSupportRequest } from '@api/EndpointsQueries'; // Import the function
 
-const EnquiriesPage = () => {
-    const [formData, setFormData] = useState({
+interface FormData {
+    location: string;
+    urgency: string;
+    description: string;
+    senderId?: number | null; // Optional senderId field
+}
+
+const EnquiriesPage: React.FC = () => {
+    const [formData, setFormData] = useState<FormData>({
         location: '',
         urgency: '',
         description: '',
+        senderId: null, // Initialize senderId as null
     });
 
-    const handleChange = (e) => {
+    const handleChange = (
+        e: ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Form Data:', formData);
+
         try {
-            await axios.post('http://localhost:3001/api/enquiries', formData);
-            setFormData({ location: '', urgency: '', description: '' });
+            // Use the createSupportRequest method from EndpointsQueries.tsx
+            await createSupportRequest(formData);
+            setFormData({
+                location: '',
+                urgency: '',
+                description: '',
+                senderId: null,
+            });
         } catch (error) {
             console.error('There was an error submitting the form!', error);
         }

@@ -26,24 +26,60 @@ export interface EventsDataResponse {
     };
     message?: string;
 }
+export interface SkillShareDataResponse {
+    id: number;
+    title: string;
+    description: string;
+    category: string;
+    postedBy: string;
+    numberOfResponded: number;
+    createdAt?: string;
+    updatedAt?: string;
 
-export interface CoursesDataResponse {
-    status?: string;
-    data?: {
-        id?: number;
-        title?: string;
-        description?: string;
-        category?: string;
-    };
+    message: string;
+}
+
+export interface SkillShareRepliesDataResponse {
+    id?: number;
+    response?: string | undefined | null;
+    userId?: number;
+    skillShareId?: number;
+    createdAt?: string;
+    updatedAt?: string;
+    respondentUsername?: string;
+    message?: string;
 }
 
 export interface CoursesDataResponse {
-    status?: string;
-    data?: {
-        id?: number;
-        title?: string;
-        category?: string;
-        description?: string;
-    };
-    token?: string;
+    id?: number;
+    title?: string;
+    category?: string;
+    description?: string;
+}
+
+export interface RewardsDataResponse {
+    id?: number;
+    title?: string;
+    description?: string;
+    points?: number;
+    claimed?: boolean;
+    popular?: boolean;
+    endDate?: string | null;
+    imageUrl?: string;
+    category?: string;
+    createdAt?: string;
+    updatedAt?: string;
+
+    message?: string;
+}
+
+export interface SupportDataResponse {
+    id?: number;
+    location?: string;
+    urgency?: string;
+    description?: string;
+    reply?: string;
+    senderID?: number;
+    createdAt?: string;
+    updatedAt?: string;
 }

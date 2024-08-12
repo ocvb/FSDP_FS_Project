@@ -9,6 +9,7 @@ import ChangeThemeModeButton from '@components/ThemeMode/ChangeThemeModeButton';
 export const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Events', href: '/events' },
+    { name: 'Facilities', href: '/facilities' },
     {
         name: 'Courses',
         href: '/courses',
@@ -16,14 +17,24 @@ export const navigation = [
             { name: 'Health & Wellness', href: '/courses/health&wellness' },
             { name: 'Lifestyle & Leisure', href: '/courses/lifestyle&leisure' },
             { name: 'Sports & Fitness', href: '/courses/sports&fitness' },
-            { name: 'Education & Enrichment', href: '/courses/education&enrichment' },
+            {
+                name: 'Education & Enrichment',
+                href: '/courses/education&enrichment',
+            },
             { name: 'Lifelong Learning', href: '/courses/lifelonglearning' },
             { name: 'Interest Groups', href: '/interest-groups' },
         ],
     },
     { name: 'Rewards', href: '/rewards' },
     { name: 'Skill-share', href: '/skill-share' },
-    { name: 'FAQ', href: '/faq' },
+    {
+        name: 'Support',
+        href: '/support',
+        submenu: [
+            { name: 'Volunteer', href: '/support/volunteer' },
+            { name: 'Donate', href: '/support/donate' },
+        ],
+    },
     { name: 'Account', href: '/account' },
 ];
 

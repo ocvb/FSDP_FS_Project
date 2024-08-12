@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import {
     Stack,
     TextField,
@@ -7,8 +6,6 @@ import {
     Link,
     Alert,
     Box,
-    Select,
-    MenuItem,
     SelectChangeEvent,
     FormControl,
 } from '@mui/material';
@@ -25,7 +22,7 @@ import { MoreHoriz } from '@mui/icons-material';
 import Dropdown from '@components/Dropdown/Dropdown';
 import PopupModal from '@components/PopupModal/PopupModal';
 
-import { fetchCourses } from '@api/EndpointsQueries';
+import { callAPI, fetchCourses } from '@api/EndpointsQueries';
 import { CoursesDataResponse } from '@api/ApiType';
 import EditorSelector from '@components/Admin/EditorSelector';
 
@@ -64,7 +61,7 @@ export default function Course({
     const [category, setCategory] = useState('');
 
     const {
-        data: eventsData,
+        data: courseData,
         isFetching,
         isError,
         refetch: refetchCourses,
@@ -75,10 +72,10 @@ export default function Course({
 
     const courseUpdateMutation = useMutation({
         mutationKey: ['courses'],
-        mutationFn: async (data: CoursesDataResponse['data']) => {
+        mutationFn: async (data: CoursesDataResponse) => {
             console.log(data);
-            const response = await axios.put<CoursesDataResponse>(
-                `http://localhost:3001/api/admin/course/${data?.id}`,
+            const response = await callAPI.put<CoursesDataResponse[]>(
+                `/admin/course/${data?.id}`,
                 data,
                 {
                     headers: {
@@ -92,9 +89,9 @@ export default function Course({
 
     const courseDeleteMutation = useMutation({
         mutationKey: ['courses'],
-        mutationFn: async (data: CoursesDataResponse['data']) => {
-            const response = await axios.delete<CoursesDataResponse>(
-                `http://localhost:3001/api/admin/course/${data?.id}`,
+        mutationFn: async (data: CoursesDataResponse) => {
+            const response = await callAPI.delete<CoursesDataResponse[]>(
+                `/admin/course/${data?.id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -112,7 +109,7 @@ export default function Course({
                     children: 'Please wait for the data to load',
                     severity: 'info',
                 });
-            const rowsIds = eventsData?.map((value) => value?.id);
+            const rowsIds = courseData.map((value) => value?.id);
             const id = Math.max(0, ...rowsIds) + 1;
             setOpenAddModal(true);
 
@@ -322,7 +319,7 @@ export default function Course({
     ];
 
     const handleOpenEditModal = (id: number) => {
-        const row = eventsData?.find(
+        const row = courseData?.find(
             (value) => value?.id === id
         ) as SelectedRow;
         if (row === undefined || row === null) {
@@ -353,7 +350,7 @@ export default function Course({
 
     const handleSubmitUpdate = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const formData = new FormData(event.currentTarget);
+        const formData = new FormData(event.target as HTMLFormElement);
 
         interface data {
             id: number;
@@ -393,7 +390,7 @@ export default function Course({
                 <Alert severity='error'>Error fetching data</Alert>
             ) : (
                 <DataGrid
-                    rows={eventsData ?? []}
+                    rows={courseData ?? []}
                     columns={columns}
                     disableSelectionOnClick
                     disableColumnResize
@@ -409,6 +406,7 @@ export default function Course({
                     slots={{
                         toolbar: EditToolbar,
                         pagination: () => null,
+                        footer: () => null,
                     }}
                     sx={{
                         '& .MuiDataGrid-main': {
@@ -456,10 +454,16 @@ export default function Course({
                     {openEditModal ? `Update "${title}"` : 'Add Event'}
                 </p>
 
-                <FormControl onSubmit={handleSubmitUpdate}>
+                <FormControl
+                    component={'form'}
+                    onSubmit={(e) => {
+                        handleSubmitUpdate(e);
+                    }}
+                >
                     <Stack spacing={2} sx={{ width: '100%' }}>
                         <TextField
                             label='Title'
+                            name='title'
                             variant='outlined'
                             fullWidth
                             size='small'
@@ -469,6 +473,7 @@ export default function Course({
                         />
                         <TextField
                             label='Description'
+                            name='description'
                             variant='outlined'
                             fullWidth
                             multiline
@@ -478,6 +483,7 @@ export default function Course({
                         />
                         <TextField
                             label='Category'
+                            name='category'
                             variant='outlined'
                             fullWidth
                             size='small'
@@ -489,7 +495,6 @@ export default function Course({
                                 text='Update'
                                 type='submit'
                                 fullWidth
-                                onClick={handleSubmitUpdate}
                                 sx={{
                                     backgroundColor: 'black',
                                     color: 'white',
@@ -503,7 +508,6 @@ export default function Course({
                                 text='Add'
                                 type='submit'
                                 fullWidth
-                                onClick={handleSubmitUpdate}
                                 sx={{
                                     backgroundColor: 'black',
                                     color: 'white',

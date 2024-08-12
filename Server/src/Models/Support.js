@@ -14,8 +14,12 @@ const Support = db.define('support', {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    sender: {
-        type: DataTypes.STRING,
+    senderID: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    reply: {
+        type: DataTypes.TEXT,
         allowNull: true,
     },
 });

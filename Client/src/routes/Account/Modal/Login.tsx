@@ -126,6 +126,15 @@ export default function Login({ passToChangeModal }: LoginProps) {
                     width: '100%',
                 }}
             >
+                <p
+                    style={{
+                        color: 'red',
+                        fontSize: '1rem',
+                        textAlign: 'center',
+                    }}
+                >
+                    {!loginStatus ? message : ''}
+                </p>
                 <Button
                     text={loginStatus ? message : 'login'}
                     type='submit'
@@ -149,6 +158,7 @@ export default function Login({ passToChangeModal }: LoginProps) {
                         },
                     }}
                 />
+
                 <p
                     style={{
                         color: colors.grey[700],
@@ -163,9 +173,6 @@ export default function Login({ passToChangeModal }: LoginProps) {
                     </span>
                 </p>
             </div>
-            <p style={{ color: 'red', fontSize: '1rem' }}>
-                {!loginStatus ? message : ''}
-            </p>
         </form>
     );
 }

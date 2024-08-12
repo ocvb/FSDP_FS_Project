@@ -18,7 +18,7 @@
     /* color: white; */
 }
 
-.navbar .buttonWrapper:nth-child(-n + 7)::after {
+.navbar .buttonWrapper:nth-child(-n + 8)::after {
     /* content: "|"; */
     content: '';
     position: relative;
