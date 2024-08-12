@@ -1,23 +1,19 @@
-const db = require('@models/db');
 const { DataTypes } = require('sequelize');
+const db = require('@models/db');
 
-const SkillShares = db.define('skillshares', {
-    title: {
+const Volunteer = db.define('volunteers', {
+    name: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    description: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-    },
-    postedBy: {
+    number: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    category: {
+    email: {
         type: DataTypes.STRING,
         allowNull: false,
     },
 });
 
-module.exports = SkillShares;
+module.exports = Volunteer;

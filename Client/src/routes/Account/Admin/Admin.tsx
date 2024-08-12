@@ -209,6 +209,7 @@ export default function Admin() {
                 </IconButton>
             </motion.div>
             <motion.div
+                className={'presentContent'}
                 initial={{ width: '100%' }}
                 animate={{
                     width: collapse ? '100%' : 'calc(100% - 150px)',

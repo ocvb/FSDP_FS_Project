@@ -4,15 +4,15 @@ import { UseAuth } from '@contexts/Auth';
 import { Box, Stack } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
-export default function Rewards() {
+export default function Bookings() {
     const { fetchAuth } = UseAuth();
 
     const { data: userData } = useQuery({
         queryKey: ['rewards'],
         queryFn: async () => {
             console.log(fetchAuth.User.id);
-            const response = await callAPI.post<RewardsDataResponse[]>(
-                '/user/rewards',
+            const response = await callAPI.post(
+                '/user/booked',
                 {
                     userId: fetchAuth.User.id,
                 },
@@ -29,7 +29,7 @@ export default function Rewards() {
 
     return (
         <Stack alignItems={'start'}>
-            <p style={{ fontSize: '1rem' }}>Rewards you have redeemed</p>
+            <p style={{ fontSize: '1rem' }}>Events you have par</p>
             <Stack
                 flexDirection={'column'}
                 gap={'1rem'}

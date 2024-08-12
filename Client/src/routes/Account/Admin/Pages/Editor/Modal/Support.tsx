@@ -44,6 +44,7 @@ export default function SupportEditor({
     handleOnChangeSelect,
     selectedCategory,
 }: SupportProps) {
+    const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState<SelectedRow>({
         id: 0,

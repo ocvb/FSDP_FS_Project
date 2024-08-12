@@ -29,5 +29,10 @@ router.use('/api/support', supportAPI);
 const rewardAPI = require('@endpoints/Rewards');
 router.use('/api/rewards', rewardAPI);
 
+const donationAPI = require('@endpoints/Donation');
+router.use('/api/donation', donationAPI);
+
+const volunteerAPI = require('@endpoints/Volunteer');
+router.use('/api/volunteer', volunteerAPI);
 
 module.exports = router;

@@ -25,7 +25,7 @@ let userType = {
 
 // Check if the server API is running
 router.get('/', async (req, res) => {
-    const presetUsers = await Users.bulkCreate([
+    await Users.bulkCreate([
         {
             username: 'admin',
             password: genHash('admin'),
@@ -37,7 +37,7 @@ router.get('/', async (req, res) => {
         },
     ]);
 
-    const presetEvents = await Events.bulkCreate([
+    await Events.bulkCreate([
         {
             title: 'Event 1',
             description:
@@ -65,7 +65,7 @@ router.get('/', async (req, res) => {
         },
     ]);
 
-    const presetSkillshare = await SkillShares.bulkCreate([
+    await SkillShares.bulkCreate([
         {
             title: 'How do i start coding',
             description:
@@ -92,7 +92,7 @@ router.get('/', async (req, res) => {
         },
     ]);
 
-    const presetCourses = await Courses.bulkCreate([
+    await Courses.bulkCreate([
         {
             title: 'Makeup and Skincare',
             category: 'Health & Wellness',
@@ -119,7 +119,7 @@ router.get('/', async (req, res) => {
     //     }
     // ])
 
-    const presetUserEvent = await UserEvents.bulkCreate([
+    await UserEvents.bulkCreate([
         {
             userId: 1,
             eventId: 1,
@@ -138,23 +138,16 @@ router.get('/', async (req, res) => {
         },
     ]);
 
-    const presetUserReward = await UserRewards.bulkCreate([
-        {
-            userId: 2,
-            rewardId: 1,
-        },
-        {
-            userId: 2,
-            rewardId: 2,
-        },
-    ]);
-
-    presetUsers;
-    presetEvents;
-    presetSkillshare;
-    presetCourses;
-    // presetUserEvent;
-    // presetUserReward;
+    // const presetUserReward = await UserRewards.bulkCreate([
+    //     {
+    //         userId: 2,
+    //         rewardId: 1,
+    //     },
+    //     {
+    //         userId: 2,
+    //         rewardId: 2,
+    //     },
+    // ]);
 
     res.send('API is running, preset data have been loaded.');
 });

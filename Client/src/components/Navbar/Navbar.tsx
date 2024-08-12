@@ -27,7 +27,14 @@ export const navigation = [
     },
     { name: 'Rewards', href: '/rewards' },
     { name: 'Skill-share', href: '/skill-share' },
-    { name: 'Support', href: '/support' },
+    {
+        name: 'Support',
+        href: '/support',
+        submenu: [
+            { name: 'Volunteer', href: '/support/volunteer' },
+            { name: 'Donate', href: '/support/donate' },
+        ],
+    },
     { name: 'Account', href: '/account' },
 ];
 

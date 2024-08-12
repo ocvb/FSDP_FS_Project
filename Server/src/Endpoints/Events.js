@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Events, Users } = require('@models/index');
+const { Events, Users, UserEvents } = require('@models/index');
 const { TokenAuthentication } = require('@middleware/TokenAuthentication');
 const { EventValidation } = require('@validations/EventValidation');
 const { Op } = require('sequelize');
@@ -178,34 +178,67 @@ router.post('/details', async (req, res) => {
 });
 
 router.post('/signup', TokenAuthentication, async (req, res) => {
-    const { username, password, eventId } = req.body;
+    console.log('hello');
 
-    if (!username || !password || !eventId) {
-        return res
-            .status(400)
-            .json({ message: 'Username, password, and event ID are required' });
-    }
+    // code: 1100 - User signed up for event successfully
+    // code: 1110 - User already signed up
+    // code: 1112 - Event not found
+    // code: 1113 - User not found
 
     try {
-        const event = await Event.findByPk(eventId);
+        const { eventId, userId } = req.body;
+
+        const event = await Events.findByPk(eventId);
         if (!event) {
-            return res.status(404).json({ message: 'Event not found' });
+            return res.status(200).json({
+                message: 'Event not found',
+                success: false,
+                code: 1112,
+            });
         }
 
-        const [user] = await Users.findOne({
-            where: { username },
-            defaults: { password },
+        const user = await Users.findOne({
+            where: { id: userId },
         });
 
-        await event.addUser(user);
+        if (!user) {
+            return res.status(200).json({
+                message: 'User not found',
+                success: false,
+                code: 1113,
+            });
+        }
 
-        res.status(201).json({
+        const checkIfBooked = await UserEvents.findOne({
+            where: { userId, eventId },
+        });
+
+        if (checkIfBooked) {
+            return res.status(200).json({
+                message: 'User already signed up',
+                success: false,
+                code: 1110,
+            });
+        }
+
+        const userEvent = await UserEvents.create({
+            userId,
+            eventId,
+        });
+
+        if (!userEvent) {
+            return res
+                .status(200)
+                .json({ message: 'User signup failed', success: false });
+        }
+
+        return res.status(200).json({
+            ...event,
             message: 'User signed up for event successfully',
-            event,
+            code: 1100,
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Error' });
     }
 });
 

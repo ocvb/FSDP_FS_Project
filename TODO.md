@@ -1,10 +1,5 @@
 # TODO:
 
-### Kai Jie
-
-1. Forget password
-2. Skillshare not finished
-
 ### EH
 
 1. Connect Support backend

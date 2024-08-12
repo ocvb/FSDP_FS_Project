@@ -61,7 +61,7 @@ export default function Course({
     const [category, setCategory] = useState('');
 
     const {
-        data: eventsData,
+        data: courseData,
         isFetching,
         isError,
         refetch: refetchCourses,
@@ -72,9 +72,9 @@ export default function Course({
 
     const courseUpdateMutation = useMutation({
         mutationKey: ['courses'],
-        mutationFn: async (data: CoursesDataResponse['data']) => {
+        mutationFn: async (data: CoursesDataResponse) => {
             console.log(data);
-            const response = await callAPI.put<CoursesDataResponse>(
+            const response = await callAPI.put<CoursesDataResponse[]>(
                 `/admin/course/${data?.id}`,
                 data,
                 {
@@ -89,8 +89,8 @@ export default function Course({
 
     const courseDeleteMutation = useMutation({
         mutationKey: ['courses'],
-        mutationFn: async (data: CoursesDataResponse['data']) => {
-            const response = await callAPI.delete<CoursesDataResponse>(
+        mutationFn: async (data: CoursesDataResponse) => {
+            const response = await callAPI.delete<CoursesDataResponse[]>(
                 `/admin/course/${data?.id}`,
                 {
                     headers: {
@@ -109,7 +109,7 @@ export default function Course({
                     children: 'Please wait for the data to load',
                     severity: 'info',
                 });
-            const rowsIds = eventsData?.map((value) => value?.id);
+            const rowsIds = courseData.map((value) => value?.id);
             const id = Math.max(0, ...rowsIds) + 1;
             setOpenAddModal(true);
 
@@ -319,7 +319,7 @@ export default function Course({
     ];
 
     const handleOpenEditModal = (id: number) => {
-        const row = eventsData?.find(
+        const row = courseData?.find(
             (value) => value?.id === id
         ) as SelectedRow;
         if (row === undefined || row === null) {
@@ -390,7 +390,7 @@ export default function Course({
                 <Alert severity='error'>Error fetching data</Alert>
             ) : (
                 <DataGrid
-                    rows={eventsData ?? []}
+                    rows={courseData ?? []}
                     columns={columns}
                     disableSelectionOnClick
                     disableColumnResize
@@ -406,6 +406,7 @@ export default function Course({
                     slots={{
                         toolbar: EditToolbar,
                         pagination: () => null,
+                        footer: () => null,
                     }}
                     sx={{
                         '& .MuiDataGrid-main': {
@@ -454,14 +455,15 @@ export default function Course({
                 </p>
 
                 <FormControl
+                    component={'form'}
                     onSubmit={(e) => {
-                        console.log(e);
                         handleSubmitUpdate(e);
                     }}
                 >
                     <Stack spacing={2} sx={{ width: '100%' }}>
                         <TextField
                             label='Title'
+                            name='title'
                             variant='outlined'
                             fullWidth
                             size='small'
@@ -471,6 +473,7 @@ export default function Course({
                         />
                         <TextField
                             label='Description'
+                            name='description'
                             variant='outlined'
                             fullWidth
                             multiline
@@ -480,6 +483,7 @@ export default function Course({
                         />
                         <TextField
                             label='Category'
+                            name='category'
                             variant='outlined'
                             fullWidth
                             size='small'
@@ -491,7 +495,6 @@ export default function Course({
                                 text='Update'
                                 type='submit'
                                 fullWidth
-                                // onClick={(e) => handleSubmitUpdate(e)}
                                 sx={{
                                     backgroundColor: 'black',
                                     color: 'white',
@@ -505,7 +508,6 @@ export default function Course({
                                 text='Add'
                                 type='submit'
                                 fullWidth
-                                // onClick={handleSubmitUpdate}
                                 sx={{
                                     backgroundColor: 'black',
                                     color: 'white',

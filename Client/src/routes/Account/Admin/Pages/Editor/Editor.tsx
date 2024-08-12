@@ -77,8 +77,14 @@ export default function Editor() {
                         handleOnChangeSelect={handleOnChangeSelect}
                         selectedCategory={selected}
                     />
-                ) : (
+                ) : selected == 4 ? (
                     <Support
+                        postSnackbar={handleSnackbarFromModal}
+                        handleOnChangeSelect={handleOnChangeSelect}
+                        selectedCategory={selected}
+                    />
+                ) : (
+                    <Users
                         postSnackbar={handleSnackbarFromModal}
                         handleOnChangeSelect={handleOnChangeSelect}
                         selectedCategory={selected}
