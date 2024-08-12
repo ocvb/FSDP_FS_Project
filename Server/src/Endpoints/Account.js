@@ -181,7 +181,7 @@ router.post('/event', TokenAuthentication, async (req, res) => {
         where: { userId },
     });
 
-    const eventId = await checkUser.map((event) => event.eventId);
+    const eventId =  checkUser.map((event) => event.eventId);
 
     const retrieveEvent = await Events.findAll({
         where: { id: eventId },

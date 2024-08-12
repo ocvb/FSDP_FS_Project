@@ -5,8 +5,13 @@ import RewardDetailsModal from './Modal/RewardDetails';
 import style from './css/UserRewards.module.css';
 import CustomButton from '@components/Button/CustomButton';
 import Footer from '@components/Footer/Footer';
-import { fetchRewards, fetchPopularRewards } from '@api/EndpointsQueries';
+import {
+    fetchRewards,
+    fetchPopularRewards,
+    callAPI,
+} from '@api/EndpointsQueries';
 import { RewardsDataResponse } from '@api/ApiType';
+import { UseAuth } from '@contexts/Auth';
 
 const UserRewards: React.FC = () => {
     const [rewards, setRewards] = useState<RewardsDataResponse[]>([]);
@@ -19,6 +24,8 @@ const UserRewards: React.FC = () => {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(
         null
     );
+
+    const { fetchAuth } = UseAuth();
 
     const categories = [
         'Health & Lifestyle',
@@ -91,7 +98,12 @@ const UserRewards: React.FC = () => {
                     </p>
                 </div>
             </header>
-            <div className={style.categories}>
+            <div
+                className={style.categories}
+                style={{
+                    background: 'black',
+                }}
+            >
                 {categories.map((category) => (
                     <button
                         key={category}

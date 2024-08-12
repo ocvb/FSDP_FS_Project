@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Rewards } = require('@models/index');
+const { Rewards, UserRewards } = require('@models/index');
 const { TokenAuthentication } = require('@middleware/TokenAuthentication');
 
 // Retrieve all rewards
@@ -85,6 +85,32 @@ router.post('/', TokenAuthentication, async (req, res) => {
         return res
             .status(400)
             .json({ message: 'Error creating reward', error });
+    }
+});
+
+router.post('/claim', TokenAuthentication, async (req, res) => {
+    const { userId, rewardId } = req.body;
+    if (!userId || !rewardId) {
+        returnres.status(400).json({
+            message: 'Please provide all the required fields',
+        });
+    }
+
+    try {
+        const reward = await Rewards.findByPk(rewardId);
+        if (reward) {
+            const claimed = await reward.update({ claimed: true });
+            await UserRewards.create({ userId, rewardId });
+            res.status(200).json({
+                ...claimed,
+                message: 'Reward claimed successfully',
+            });
+        } else {
+            res.status(404).json({ message: 'Reward not found' });
+        }
+    } catch (error) {
+        console.error('Error claiming reward:', error);
+        res.status(500).json({ message: 'Error claiming reward', error });
     }
 });
 

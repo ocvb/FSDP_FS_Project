@@ -14,7 +14,7 @@ const UserEvents = db.define(
         },
     },
     {
-        timestamps: true,
+        timestamps: false,
     }
 );
 

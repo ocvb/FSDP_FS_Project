@@ -81,7 +81,7 @@ export default function App() {
                         <Route path='search' element={<EventsSearch />} />
                         <Route path='details' element={<EventDetails />} />
                     </Route>
-                    {/* <Route path='/facilities' element={<Facilities />} /> */}
+                    <Route path='/facilities' element={<Facilities />} />
                     <Route path='/courses/*' element={<Courses />} />
                     <Route path='/courses/*' element={<Outlet />}>
                         <Route

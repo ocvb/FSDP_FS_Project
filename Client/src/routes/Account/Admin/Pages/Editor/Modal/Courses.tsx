@@ -451,7 +451,7 @@ export default function Course({
                         textTransform: 'capitalize',
                     }}
                 >
-                    {openEditModal ? `Update "${title}"` : 'Add Event'}
+                    {openEditModal ? `Update "${title}"` : 'Add Courses'}
                 </p>
 
                 <FormControl

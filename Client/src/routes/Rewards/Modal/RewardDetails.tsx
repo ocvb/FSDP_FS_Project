@@ -1,5 +1,7 @@
 import { Modal, Box, Typography, Button } from '@mui/material';
 import styles from '../css/RewardDetails.module.css';
+import { callAPI } from '@api/EndpointsQueries';
+import { UseAuth } from '@contexts/Auth';
 
 interface Reward {
     id: number;
@@ -24,6 +26,23 @@ const RewardDetailsModal: React.FC<RewardDetailsModalProps> = ({
     handleClose,
     reward,
 }) => {
+    const { fetchAuth } = UseAuth();
+
+    const handleRewards = async () => {
+        const response = await callAPI.post(
+            '/rewards/claim',
+            {
+                userId: fetchAuth.User.id,
+                rewardId: reward?.id,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${fetchAuth.AccessToken}`,
+                },
+            }
+        );
+    };
+
     if (!reward) return null;
 
     return (
@@ -48,7 +67,12 @@ const RewardDetailsModal: React.FC<RewardDetailsModalProps> = ({
                 <Button
                     variant='contained'
                     color='primary'
-                    onClick={handleClose}
+                    onClick={() => {
+                        handleRewards().catch((error) => {
+                            console.log(error);
+                        });
+                        handleClose();
+                    }}
                     className={styles.redeemButton}
                 >
                     Redeem
