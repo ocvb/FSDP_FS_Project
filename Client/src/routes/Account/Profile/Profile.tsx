@@ -6,6 +6,7 @@ import { Box, Stack } from '@mui/material';
 import MuiButton from '@mui/material/Button';
 import UserProfile from './UserProfile';
 import Notifications from './Notifications';
+import Bookings from './Booking';
 import Events from './Events';
 
 import styles from './css/Profile.module.css';
@@ -15,6 +16,7 @@ import Rewards from './Reward';
 
 import { motion } from 'framer-motion';
 import { AccountCircle } from '@mui/icons-material';
+import { render } from 'react-dom';
 
 export default function Profile() {
     const [navigationTab, setNavigationTab] = useState(-1);
@@ -39,19 +41,24 @@ export default function Profile() {
             desc: 'View and edit your profile',
             render: <UserProfile />,
         },
-        {
-            name: 'Notifications',
-            icon: <Bell />,
-            desc: 'View your notifications',
-            // render: <Notifications />,
-        },
+        // {
+        //     name: 'Notifications',
+        //     icon: <Bell />,
+        //     desc: 'View your notifications',
+        //     // render: <Notifications />,
+        // },
         {
             name: 'Participated Events',
             icon: <Calendar />,
             desc: 'View your participated events',
             render: <Events />,
         },
-        { name: 'Bookings', icon: <Ticket />, desc: 'View your bookings' },
+        // {
+        //     name: 'Bookings',
+        //     icon: <Ticket />,
+        //     desc: 'View your bookings',
+        //     render: <Bookings />,
+        // },
         {
             name: 'Rewards',
             icon: <Award />,
